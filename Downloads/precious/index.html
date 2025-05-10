@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Will You Marry Me?</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <h1 id="headline"></h1>
+    <p class="fade-in">Masiyadong mahirap gawin tong website nato bi kaya ngayon mo sabihing may mahal pakong iba HAHAHAH</p>
+  </header>
+
+    <section class="timeline">
+    <div class="memory fade-in" onclick="togglePhoto(this)">
+      <h3>2020 — WHERE DID WE ALL START</h3>
+      <p>Tinuro mo sakin sa mga panahon nato kung paano ba magmahal ng tao at masaya akong sayo ko napa exprience yung pure love and real intension ko sana naman ikaw na talaga</p>
+      <p class="clickme">CLICK THIS BABY</p>
+      <div class="photo">
+        <img src="20201.jpg" alt="2019 memory" />
+        <img src="20202.jpg" alt="2019 memory" />
+        <img src="20203.jpg" alt="2019 memory" />
+      </div>
+    </div>
+
+    <div class="memory fade-in" onclick="togglePhoto(this)">
+      <h3>2021 — I STILL LOVE YOU EVEN IN THE HARDEST STAGE</h3>
+      <p>Hindi kona alam gagawin ko ng mga panahon nato pero naniniwala ako sayo non na kaya naten mga challanged sa relasyon naten at hanggang ngayon naging aral sakin lahat yun at still naniniwala akong ikaw at ako parin kahit anong mangyare satin ngayon </p>
+       <p class="clickme">CLICK THIS BABY</p>
+      <div class="photo">
+        <img src="202201.jpg" alt="2020 memory" />
+        <img src="202202.jpg" alt="2020 memory" />
+        <img src="202203.jpg" alt="2020 memory" />
+      </div>
+    </div>
+
+    <div class="memory fade-in" onclick="togglePhoto(this)">
+      <h3>2022-2023 — START TO MAKE MORE OUR RELATIONSHIP BETTER </h3>
+      <p>Honestly parang bago sakin lahat ng mga to bi feel ko ng mga panahon nato ngayon palang kita nakilala pero mas nag enjoy ako ng mga panahon nato mas nakilala ko kung sino ka ano kung ano ka marami din nangyare pero iba talaga pag plano ni lord salamat kase nagstay ka sakin kahit di naman lahat nabibigay ko noon</p>
+       <p class="clickme">CLICK THIS BABY</p>
+      <div class="photo">
+        <img src="2023.jpg" alt="2021 memory" />
+        <img src="20233.jpg" alt="2021 memory" />
+        <img src="202333.jpg" alt="2021 memory" />
+      </div>
+    </div>
+
+    <div class="memory fade-in" onclick="togglePhoto(this)">
+      <h3>2024-2025 — THE BEST PART OF EVERYTHING </h3>
+      <p>Salamat sa pag sama sakin baby sana tuloy tuloy lang naten lahat ng pangarap natin ng magkasama kase mas kaya ko kapag nandyan kasa tabi ko hindi ko kaya ng wala kapa I'LL PROMISE I WILL BE MORE BETTER THAN BEFORE TO YOU BABY ILOVEYOUUSOMUCH</p>
+      <div class="photo">
+        <img src="pre1.jpg" alt="2024 memory" />
+        <img src="pre2.jpg" alt="2024 memory" />
+        <img src="pre3.jpg" alt="2024 memory" />
+      </div>
+    </div>
+  </section>
+
+ <section class="proposal">
+  <h2 class="fade-in">Will You Marry Me?</h2>
+  
+  <button class="btn fade-in" onclick="revealAnswer('yes')">Yes</button>
+  <button class="btn fade-in" onclick="revealAnswer('no')">No</button>
+
+  <p id="answer"></p>
+</section>
+
+
+  <script src="confetti.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
