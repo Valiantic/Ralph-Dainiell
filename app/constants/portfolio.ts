@@ -8,7 +8,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
     roles: ["Data Analyst", "Vlogger"],
     contact: {
         email: "gonzagaralphdainiell@gmail.com",
-        phone: "+63 956 357 5817",
+        phone: "+63 945 289 3949",
         university: "Lyceum of the Philippines University - Cavite",
     },
     socials: {
