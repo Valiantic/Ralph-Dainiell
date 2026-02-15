@@ -140,17 +140,25 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     border: '1.5px solid #000',
                     background: '#fff'
                 }}>
-                    <Link href={data.socials.facebook || '#'} target="_blank" style={{ background: '#1877F2', color: '#fff', padding: '10px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '12px', fontWeight: 800, justifyContent: 'center' }}>
-                        <span style={{ background: '#fff', color: '#1877F2', borderRadius: '3px', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 900 }}>f</span> Facebook
+                    <Link href={data.socials.facebook || '#'} target="_blank" style={{ background: '#1877F2', padding: '8px 12px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '11px', color: '#fff', fontWeight: 800, justifyContent: 'center' }}>
+                        <div style={{ width: '18px', height: '18px', position: 'relative' }}>
+                            <Image src="/Images/Icons/facebook.png" alt="FB" fill style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+                        </div> Facebook
                     </Link>
-                    <Link href={data.socials.instagram || '#'} target="_blank" style={{ background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', color: '#fff', padding: '10px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '12px', fontWeight: 800, justifyContent: 'center' }}>
-                        📸 Instagram
+                    <Link href={data.socials.instagram || '#'} target="_blank" style={{ background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', padding: '8px 12px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '11px', color: '#fff', fontWeight: 800, justifyContent: 'center' }}>
+                        <div style={{ width: '18px', height: '18px', position: 'relative' }}>
+                            <Image src="/Images/Icons/instagram.png" alt="IG" fill style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+                        </div> Instagram
                     </Link>
-                    <Link href={data.socials.youtube || '#'} target="_blank" style={{ background: '#FF0000', color: '#fff', padding: '10px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '12px', fontWeight: 800, justifyContent: 'center' }}>
-                        ▶ Youtube
+                    <Link href={data.socials.youtube || '#'} target="_blank" style={{ background: '#FF0000', padding: '8px 12px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '11px', color: '#fff', fontWeight: 800, justifyContent: 'center' }}>
+                        <div style={{ width: '18px', height: '18px', position: 'relative' }}>
+                            <Image src="/Images/Icons/youtube.png" alt="YT" fill style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+                        </div> Youtube
                     </Link>
-                    <Link href={data.socials.linkedin || '#'} target="_blank" style={{ background: '#0077B5', color: '#fff', padding: '10px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '12px', fontWeight: 800, justifyContent: 'center' }}>
-                        <span style={{ background: '#fff', color: '#0077B5', borderRadius: '3px', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 900 }}>in</span> LinkedIn
+                    <Link href={data.socials.linkedin || '#'} target="_blank" style={{ background: '#0077B5', padding: '8px 12px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '11px', color: '#fff', fontWeight: 800, justifyContent: 'center' }}>
+                        <div style={{ width: '18px', height: '18px', position: 'relative' }}>
+                            <Image src="/Images/Icons/linkedin.png" alt="LI" fill style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+                        </div> LinkedIn
                     </Link>
                 </div>
             </div>
