@@ -2,7 +2,7 @@
 import { PortfolioData } from '../types/portfolio';
 
 export const PORTFOLIO_DATA: PortfolioData = {
-    name: "Ralph Dainiel Gonzaga",
+    name: "Ralph Dainiell Gonzaga",
     location: "Cavite, Philippines",
     profileImage: "/Images/profile.jpg",
     roles: ["Data Analyst", "Vlogger"],
@@ -45,7 +45,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
             description: [
                 "Planned and managed the creative and technical aspects of university events, from structuring event flow to operating cameras, lighting, and sound systems during live productions."
             ],
-            logo: "/Images/experience/police.png"
+            logo: "/Images/experience/lpu.jpg"
         },
         {
             id: "2",
@@ -59,11 +59,11 @@ export const PORTFOLIO_DATA: PortfolioData = {
         },
         {
             id: "3",
-            role: "Student",
-            company: "LPU Cavite",
-            duration: "Present",
+            role: "Police Clerk",
+            company: "Silang Cavite",
+            duration: "Nov 2023 - Jan 2024",
             description: ["Delivered frontline administrative support for police clearance services by assisting citizens with registration and application processing. Managed payment collection, verified applicant information, and conducted biometric data capture. Ensured accurate record keeping, proper documentation, and efficient processing of police clearance requests in accordance with standard procedures."],
-            logo: "/Images/experience/lpu.jpg"
+            logo: "/Images/experience/police.png"
         }
     ],
     certificates: [

@@ -51,7 +51,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
                 <h1 style={{ fontSize: '42px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#666', fontSize: '15px' }}>
-                    <span style={{ fontSize: '18px' }}>📍</span> {data.location}
+                    <div style={{ width: '18px', height: '18px', position: 'relative' }}>
+                        <Image src="/Images/Icons/location icon.png" alt="Location" fill style={{ objectFit: 'contain' }} />
+                    </div> {data.location}
                 </div>
                 <div style={{ fontSize: '24px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
                     {data.roles.join(' \\ ')}
@@ -77,7 +79,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             boxSizing: 'border-box'
                         }}
                     >
-                        <div style={{ background: '#fff', color: '#2b6ef2', borderRadius: '4px', padding: '1px 3px', fontSize: '10px', fontWeight: 900 }}>PDF</div>
+                        <div style={{ width: '20px', height: '20px', position: 'relative' }}>
+                            <Image src="/Images/Icons/pdf icon.png" alt="PDF" fill style={{ objectFit: 'contain' }} />
+                        </div>
                         Download CV
                     </Link>
                     <div className="card phone-card" style={{
@@ -92,7 +96,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         boxSizing: 'border-box',
                         border: '1.5px solid #000'
                     }}>
-                        <span style={{ fontSize: '18px' }}>📞</span> {data.contact.phone}
+                        <div style={{ width: '18px', height: '18px', position: 'relative' }}>
+                            <Image src="/Images/Icons/cellphone icon.png" alt="Phone" fill style={{ objectFit: 'contain' }} />
+                        </div> {data.contact.phone}
                     </div>
                 </div>
             </div>
@@ -110,11 +116,15 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     justifyContent: 'center'
                 }}>
                     <div className="pill" style={{ width: '100%', justifyContent: 'flex-start', border: '1.5px solid #000', borderRadius: '14px', padding: '10px 16px', height: 'auto' }}>
-                        <span style={{ marginRight: '10px' }}>✉️</span>
+                        <div style={{ width: '16px', height: '16px', position: 'relative', marginRight: '10px' }}>
+                            <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
+                        </div>
                         <span style={{ fontSize: '12px', fontWeight: 700, borderBottom: '1.5px solid #000', wordBreak: 'break-all' }}>{data.contact.email}</span>
                     </div>
                     <div className="pill" style={{ width: '100%', justifyContent: 'flex-start', border: '1.5px solid #000', borderRadius: '14px', padding: '10px 16px', height: 'auto' }}>
-                        <span style={{ marginRight: '10px' }}>🎓</span>
+                        <div style={{ width: '16px', height: '16px', position: 'relative', marginRight: '10px' }}>
+                            <Image src="/Images/Icons/school icon.png" alt="Uni" fill style={{ objectFit: 'contain' }} />
+                        </div>
                         <span style={{ fontSize: '10px', fontWeight: 600, lineHeight: 1.2 }}>{data.contact.university}</span>
                     </div>
                 </div>

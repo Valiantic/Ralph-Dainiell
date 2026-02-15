@@ -27,7 +27,9 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     return (
         <section className="card" style={{ width: '100%', background: '#fff' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-                <span style={{ fontSize: '24px' }}>📜</span>
+                <div style={{ width: '24px', height: '24px', position: 'relative' }}>
+                    <Image src="/Images/Icons/certificate icon.png" alt="Certificates" fill style={{ objectFit: 'contain' }} />
+                </div>
                 <h2 style={{ fontSize: '32px', fontWeight: 800 }}>Certificates</h2>
             </div>
 
