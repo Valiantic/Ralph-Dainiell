@@ -1,0 +1,60 @@
+
+import { Skill } from '../types/portfolio';
+
+interface SkillsSectionProps {
+    skills: Skill[];
+}
+
+export const SkillsSection = ({ skills }: SkillsSectionProps) => {
+    const categories: Skill['category'][] = ['Programming Language', 'Analytics Software', 'Editing Software'];
+
+    return (
+        <div className="card no-scrollbar" style={{
+            height: 'var(--bento-height, 650px)',
+            background: '#fff',
+            overflowY: 'auto'
+        }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+                <span style={{ fontSize: '20px' }}>⚙️</span>
+                <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800 }}>Skills</h2>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                {categories.map((category) => (
+                    <div key={category}>
+                        <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#666', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            {category}
+                        </h3>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                            {skills
+                                .filter((s) => s.category === category)
+                                .map((skill) => (
+                                    <span key={skill.name} className="pill" style={{
+                                        borderRadius: '12px',
+                                        fontSize: '12px',
+                                        fontWeight: 600,
+                                        border: '1.5px solid #000',
+                                        padding: '6px 14px',
+                                        background: '#fff'
+                                    }}>
+                                        {skill.name}
+                                    </span>
+                                ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <style jsx>{`
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                @media (max-width: 1024px) {
+                    div.card {
+                        height: auto !important;
+                        padding: 20px !important;
+                    }
+                }
+            `}</style>
+        </div>
+    );
+};
