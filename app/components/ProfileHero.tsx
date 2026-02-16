@@ -79,7 +79,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             boxSizing: 'border-box'
                         }}
                     >
-                        <div style={{ width: '20px', height: '20px', position: 'relative' }}>
+                        <div style={{ width: '26px', height: '26px', position: 'relative' }}>
                             <Image src="/Images/Icons/pdf icon.png" alt="PDF" fill style={{ objectFit: 'contain' }} />
                         </div>
                         Download CV
@@ -91,7 +91,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         alignItems: 'center',
                         gap: '10px',
                         fontWeight: 700,
-                        fontSize: '14px',
+                        fontSize: '16px',
                         height: '48px',
                         boxSizing: 'border-box',
                         border: '1.5px solid #000'
@@ -125,7 +125,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         <div style={{ width: '16px', height: '16px', position: 'relative', marginRight: '10px' }}>
                             <Image src="/Images/Icons/school icon.png" alt="Uni" fill style={{ objectFit: 'contain' }} />
                         </div>
-                        <span style={{ fontSize: '10px', fontWeight: 600, lineHeight: 1.2 }}>{data.contact.university}</span>
+                        <span style={{ fontSize: '13px', fontWeight: 600, lineHeight: 1.2 }}>{data.contact.university}</span>
                     </div>
                 </div>
 

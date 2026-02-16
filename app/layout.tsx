@@ -16,9 +16,9 @@ export const metadata: Metadata = {
   title: "Ralph Dainiell",
   description: "Ralph Dainiell's Portfolio",
   icons: {
-    icon: "/Images/profile.jpg",
-    shortcut: "/Images/profile.jpg",
-    apple: "/Images/profile.jpg",
+    icon: "/Images/logo.png",
+    shortcut: "/Images/logo.png",
+    apple: "/Images/logo.png",
   },
 };
 

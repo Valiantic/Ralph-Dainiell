@@ -24,33 +24,27 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
                 <h2 style={{ fontSize: 'clamp(20px, 5vw, 28px)', fontWeight: 800 }}>Experience</h2>
             </div>
 
-            {/* Scrollable Container */}
-            <div className="no-scrollbar" style={{
+            {/* Static Container */}
+            <div style={{
                 flex: 1,
-                overflowY: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
-                scrollSnapType: 'y mandatory',
-                height: '0',
-                minHeight: '0'
-            }}>
+                gap: '20px',
+                overflowY: 'auto' // Still allow scroller if content overflows the card, but show all items in sequence
+            }} className="custom-scrollbar">
                 {experiences.map((exp) => (
                     <div key={exp.id} style={{
                         width: '100%',
-                        height: '100%',
-                        minHeight: '100%',
-                        flexShrink: 0,
-                        scrollSnapAlign: 'start',
                         display: 'flex',
                         flexDirection: 'column',
-                        paddingBottom: '12px'
+                        flexShrink: 0
                     }}>
-                        <div style={{ display: 'flex', gap: '12px', marginBottom: '12px', flexShrink: 0 }}>
+                        <div style={{ display: 'flex', gap: '12px', marginBottom: '8px', flexShrink: 0 }}>
                             {exp.logo && (
                                 <div style={{
-                                    width: '44px',
-                                    height: '44px',
-                                    borderRadius: '10px',
+                                    width: '40px',
+                                    height: '40px',
+                                    borderRadius: '8px',
                                     border: '1px solid #eee',
                                     position: 'relative',
                                     flexShrink: 0,
@@ -66,36 +60,33 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
                                 </div>
                             )}
                             <div style={{ flex: 1 }}>
-                                <h3 style={{ fontSize: '15px', fontWeight: 800, lineHeight: 1.2, marginBottom: '2px' }}>
+                                <h3 style={{ fontSize: '14px', fontWeight: 800, lineHeight: 1.2, marginBottom: '1px' }}>
                                     {exp.role}
                                 </h3>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
-                                    <p style={{ fontSize: '12px', fontWeight: 600, color: '#000' }}>{exp.company}</p>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                    <p style={{ fontSize: '11px', fontWeight: 600, color: '#000' }}>{exp.company}</p>
                                     <p style={{ fontSize: '10px', fontWeight: 600, color: '#888' }}>{exp.duration}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div style={{
-                            flex: 1,
-                            overflowY: 'auto',
-                            paddingRight: '6px',
                             border: '1.5px solid #000',
-                            borderRadius: '18px',
-                            padding: '12px 16px',
+                            borderRadius: '12px',
+                            padding: '10px 14px',
                             boxSizing: 'border-box',
-                            background: '#fff'
-                        }} className="custom-scrollbar">
+                            background: '#fcfcfc'
+                        }}>
                             <ul style={{
-                                paddingLeft: '16px',
-                                fontSize: '12.5px',
+                                paddingLeft: '14px',
+                                fontSize: '12px',
                                 color: '#333',
-                                lineHeight: 1.5,
+                                lineHeight: 1.4,
                                 margin: 0,
                                 listStyleType: 'disc'
                             }}>
                                 {exp.description.map((item, i) => (
-                                    <li key={i} style={{ marginBottom: '6px', wordBreak: 'break-word' }}>
+                                    <li key={i} style={{ wordBreak: 'break-word' }}>
                                         {item}
                                     </li>
                                 ))}
