@@ -7,7 +7,7 @@ import { GoFileZip } from 'react-icons/go';
 import { LuPhone } from 'react-icons/lu';
 import { IoLocationOutline } from 'react-icons/io5';
 import { FaFacebookSquare, FaLinkedin } from 'react-icons/fa';
-import { AiFillInstagram } from 'react-icons/ai';
+import { FiInstagram } from 'react-icons/fi';
 import { IoLogoYoutube } from 'react-icons/io';
 
 interface ProfileHeroProps {
@@ -165,7 +165,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         Facebook
                     </Link>
                     <Link href={data.socials.instagram || '#'} target="_blank" style={{ background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', padding: '8px 12px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '11px', color: '#fff', fontWeight: 700, justifyContent: 'center' }}>
-                        <AiFillInstagram size={16} color="#fff" />
+                        <FiInstagram size={16} color="#fff" />
                         Instagram
                     </Link>
                     <Link href={data.socials.youtube || '#'} target="_blank" style={{ background: '#FF0000', padding: '8px 12px', borderRadius: '24px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', fontSize: '11px', color: '#fff', fontWeight: 700, justifyContent: 'center' }}>
