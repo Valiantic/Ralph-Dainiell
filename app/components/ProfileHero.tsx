@@ -157,44 +157,33 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     border: '1.5px solid #000',
                     background: '#fff'
                 }}>
-                    {/* Facebook - #1877F2 official */}
+                    {/* Facebook */}
                     <Link href={data.socials.facebook || '#'} target="_blank" style={{
                         display: 'flex', alignItems: 'center', gap: '10px',
                         padding: '10px 14px', border: 'none',
                         borderRadius: '14px', textDecoration: 'none',
                         background: '#1877F2'
                     }}>
-                        <div style={{ width: '28px', height: '28px', background: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <svg width="18" height="18" viewBox="0 0 10 18" fill="#1877F2"><path d="M6.5 3H9V0H6.5C4.57 0 3 1.57 3 3.5V5H1V8H3V18H6V8H8.5L9 5H6V3.5C6 3.22 6.22 3 6.5 3Z"/></svg>
-                        </div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+                            <path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.313 0 2.686.236 2.686.236v2.971h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+                        </svg>
                         <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff', flex: 1 }}>Facebook</span>
                     </Link>
 
-                     {/* Instagram - official gradient #833AB4 #FD1D1D #F77737 */}
+                    {/* Instagram */}
                     <Link href={data.socials.instagram || '#'} target="_blank" style={{
                         display: 'flex', alignItems: 'center', gap: '10px',
                         padding: '10px 14px', border: 'none',
                         borderRadius: '14px', textDecoration: 'none',
                         background: 'linear-gradient(45deg, #F77737, #FD1D1D, #833AB4)'
                     }}>
-                        <div style={{ width: '28px', height: '28px', background: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="igG" x1="0%" y1="100%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#F77737"/>
-                                        <stop offset="50%" stopColor="#FD1D1D"/>
-                                        <stop offset="100%" stopColor="#833AB4"/>
-                                    </linearGradient>
-                                </defs>
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="url(#igG)" strokeWidth="2" fill="none"/>
-                                <circle cx="12" cy="12" r="4" stroke="url(#igG)" strokeWidth="2" fill="none"/>
-                                <circle cx="17.5" cy="6.5" r="1.5" fill="url(#igG)"/>
-                            </svg>
-                        </div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                        </svg>
                         <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff', flex: 1 }}>Instagram</span>
                     </Link>
 
-                    {/* YouTube - #FF0000 official */}
+                    {/* YouTube */}
                     <Link href={data.socials.youtube || '#'} target="_blank" style={{
                         display: 'flex', alignItems: 'center', gap: '10px',
                         padding: '10px 14px', border: 'none',
@@ -207,7 +196,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff', flex: 1 }}>Youtube</span>
                     </Link>
 
-                    {/* LinkedIn - #0A66C2 official */}
+                    {/* LinkedIn */}
                     <Link href={data.socials.linkedin || '#'} target="_blank" style={{
                         display: 'flex', alignItems: 'center', gap: '10px',
                         padding: '10px 14px', border: 'none',
