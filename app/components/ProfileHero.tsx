@@ -139,7 +139,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         alignItems: 'center',
                         boxSizing: 'border-box'
                     }}>
-                        <div style={{ width: '30px', height: '24px', position: 'relative', marginRight: '11px', flexShrink: 0 }}>
+                        <div style={{ width: '28px', height: '24px', position: 'relative', marginRight: '11px', flexShrink: 0 }}>
                             <Image src="/Images/Icons/school icon.png" alt="Uni" fill style={{ objectFit: 'contain' }} />
                         </div>
                         <span style={{ fontSize: '14px', fontWeight: 600, lineHeight: 1.2 }}>{data.contact.university}</span>
