@@ -12,9 +12,9 @@ export const metadata: Metadata = {
   title: "Ralph Gonzaga - Data Analyst",
   description: "Ralph Dainiell's Portfolio",
   icons: {
-    icon: "/Images/NEWfavicon.jpg",
-    shortcut: "/Images/NEWfavicon.jpg",
-    apple: "/Images/NEWfavicon.jpg",
+    icon: "/Images/FaviconPFP.jpg",
+    shortcut: "/Images/FaviconPFP.jpg",
+    apple: "/Images/FaviconPFP.jpg",
   },
 };
 
