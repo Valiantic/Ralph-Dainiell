@@ -229,7 +229,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         background: '#e8f5e9', borderRadius: '20px', padding: '4px 12px', width: 'fit-content'
                     }}>
                         <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4caf50', flexShrink: 0 }} />
-                        <span style={{ fontSize: '12px', fontWeight: 700, color: '#2e7d32' }}>Open to Opportunities</span>
+                        <span style={{ fontSize: '12px', fontWeight: 700, color: '#2e7d32' }}>Open to Work</span>
                     </div>
 
                     <p style={{ fontSize: '18px', fontWeight: 800, color: '#000', margin: 0, lineHeight: 1.3 }}>
@@ -255,7 +255,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             transform: hoveredContact ? 'translateY(-2px)' : 'translateY(0)'
                         }}
                     >
-                        Contact me
+                        CONTACT ME
                     </Link>
                 </div>
             </div>
