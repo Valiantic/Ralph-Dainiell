@@ -131,6 +131,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         <Link
                             href={`https://mail.google.com/mail/?view=cm&to=${data.contact.email}`}
                             target="_blank"
+                            className="send-email-btn"
                             style={{
                                 fontSize: '11px',
                                 fontWeight: 700,
@@ -140,7 +141,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 padding: '4px 10px',
                                 textDecoration: 'none',
                                 whiteSpace: 'nowrap',
-                                flexShrink: 0
+                                flexShrink: 0,
+                                transition: 'all 0.3s ease'
                             }}
                         >
                             SEND EMAIL
@@ -230,6 +232,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             </div>
 
             <style jsx>{`
+                .send-email-btn:hover {
+                    background: #000 !important;
+                    color: #fff !important;
+                    transform: scale(1.05);
+                }
                 @media (max-width: 1024px) {
                     .profile-hero {
                         flex-direction: column !important;
