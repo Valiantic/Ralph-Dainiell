@@ -207,7 +207,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             width: 'fit-content', transition: 'all 0.3s ease'
                         }}
                     >
-                        Contact
+                        Contact me
                     </Link>
                 </div>
             </div>
