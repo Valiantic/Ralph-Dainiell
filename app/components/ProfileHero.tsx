@@ -111,62 +111,64 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </Link>
                     </div>
 
-                    {/* Social Media — 4 in a row, no colors */}
+                    {/* Social Media — 2x2 gray style */}
                     <div style={{
-                        border: '1.5px solid #000', borderRadius: '14px', padding: '10px 14px',
-                        display: 'flex', alignItems: 'center', gap: '8px', boxSizing: 'border-box'
+                        border: '1.5px solid #000', borderRadius: '14px', padding: '12px 14px',
+                        display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px',
+                        boxSizing: 'border-box'
                     }}>
                         <Link href={data.socials.facebook || '#'} target="_blank" className="social-pill" style={{
-                            display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 10px',
-                            border: '1px solid #e0e0e0', borderRadius: '10px', textDecoration: 'none',
-                            background: '#f5f5f5', flex: 1, justifyContent: 'center'
+                            display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
+                            border: '1px solid #e5e5e5', borderRadius: '12px', textDecoration: 'none',
+                            background: '#fff'
                         }}>
-                            <svg width="14" height="14" viewBox="0 0 10 18" fill="#1877F2" style={{ flexShrink: 0 }}>
-                                <path d="M6.5 3H9V0H6.5C4.57 0 3 1.57 3 3.5V5H1V8H3V18H6V8H8.5L9 5H6V3.5C6 3.22 6.22 3 6.5 3Z"/>
-                            </svg>
-                            <span style={{ fontSize: '11px', fontWeight: 600, color: '#333' }}>Facebook</span>
+                            <div style={{ width: '28px', height: '28px', background: '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="14" height="14" viewBox="0 0 10 18" fill="white">
+                                    <path d="M6.5 3H9V0H6.5C4.57 0 3 1.57 3 3.5V5H1V8H3V18H6V8H8.5L9 5H6V3.5C6 3.22 6.22 3 6.5 3Z"/>
+                                </svg>
+                            </div>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#333' }}>Facebook</span>
                         </Link>
 
                         <Link href={data.socials.instagram || '#'} target="_blank" className="social-pill" style={{
-                            display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 10px',
-                            border: '1px solid #e0e0e0', borderRadius: '10px', textDecoration: 'none',
-                            background: '#f5f5f5', flex: 1, justifyContent: 'center'
+                            display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
+                            border: '1px solid #e5e5e5', borderRadius: '12px', textDecoration: 'none',
+                            background: '#fff'
                         }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
-                                <defs>
-                                    <linearGradient id="igS" x1="0%" y1="100%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#F77737"/>
-                                        <stop offset="50%" stopColor="#FD1D1D"/>
-                                        <stop offset="100%" stopColor="#833AB4"/>
-                                    </linearGradient>
-                                </defs>
-                                <rect x="2" y="2" width="20" height="20" rx="5" stroke="url(#igS)" strokeWidth="2" fill="none"/>
-                                <circle cx="12" cy="12" r="4" stroke="url(#igS)" strokeWidth="2" fill="none"/>
-                                <circle cx="17.5" cy="6.5" r="1.5" fill="url(#igS)"/>
-                            </svg>
-                            <span style={{ fontSize: '11px', fontWeight: 600, color: '#333' }}>Instagram</span>
+                            <div style={{ width: '28px', height: '28px', background: '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="5"/>
+                                    <circle cx="12" cy="12" r="4"/>
+                                    <circle cx="17.5" cy="6.5" r="1.5" fill="white" stroke="none"/>
+                                </svg>
+                            </div>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#333' }}>Instagram</span>
                         </Link>
 
                         <Link href={data.socials.youtube || '#'} target="_blank" className="social-pill" style={{
-                            display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 10px',
-                            border: '1px solid #e0e0e0', borderRadius: '10px', textDecoration: 'none',
-                            background: '#f5f5f5', flex: 1, justifyContent: 'center'
+                            display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
+                            border: '1px solid #e5e5e5', borderRadius: '12px', textDecoration: 'none',
+                            background: '#fff'
                         }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#FF0000" style={{ flexShrink: 0 }}>
-                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                            </svg>
-                            <span style={{ fontSize: '11px', fontWeight: 600, color: '#333' }}>YouTube</span>
+                            <div style={{ width: '28px', height: '28px', background: '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                            </div>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#333' }}>YouTube</span>
                         </Link>
 
                         <Link href={data.socials.linkedin || '#'} target="_blank" className="social-pill" style={{
-                            display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 10px',
-                            border: '1px solid #e0e0e0', borderRadius: '10px', textDecoration: 'none',
-                            background: '#f5f5f5', flex: 1, justifyContent: 'center'
+                            display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
+                            border: '1px solid #e5e5e5', borderRadius: '12px', textDecoration: 'none',
+                            background: '#fff'
                         }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#0A66C2" style={{ flexShrink: 0 }}>
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                            <span style={{ fontSize: '11px', fontWeight: 600, color: '#333' }}>LinkedIn</span>
+                            <div style={{ width: '28px', height: '28px', background: '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </div>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#333' }}>LinkedIn</span>
                         </Link>
                     </div>
                 </div>
@@ -221,7 +223,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 }
                 .social-pill:hover {
                     border-color: #bbb !important;
-                    background: #ececec !important;
+                    background: #f0f0f0 !important;
                 }
                 @media (max-width: 1024px) {
                     .profile-hero {
