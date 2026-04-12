@@ -222,7 +222,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         {/* Title bar */}
                         <div style={{
                             padding: '16px 20px',
-                            borderBottom: '1.5px solid #000'
+                            borderBottom: 'none'
                         }}>
                             <h3 style={{ fontSize: '16px', fontWeight: 700 }}>{selectedCert.title}</h3>
                             <p style={{ fontSize: '12px', color: '#666', marginTop: '2px' }}>{selectedCert.issuer}</p>
