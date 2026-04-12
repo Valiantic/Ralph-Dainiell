@@ -121,12 +121,30 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         padding: '12px 16px',
                         display: 'flex',
                         alignItems: 'center',
-                        boxSizing: 'border-box'
+                        boxSizing: 'border-box',
+                        gap: '10px'
                     }}>
-                        <div style={{ width: '24px', height: '24px', position: 'relative', marginRight: '12px', flexShrink: 0 }}>
+                        <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
                             <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
                         </div>
-                        <span style={{ fontSize: '14px', fontWeight: 700, wordBreak: 'break-all' }}>{data.contact.email}</span>
+                        <span style={{ fontSize: '14px', fontWeight: 700, wordBreak: 'break-all', flex: 1 }}>{data.contact.email}</span>
+                        <Link
+                            href={`https://mail.google.com/mail/?view=cm&to=${data.contact.email}`}
+                            target="_blank"
+                            style={{
+                                fontSize: '11px',
+                                fontWeight: 700,
+                                color: '#000',
+                                border: '1.5px solid #000',
+                                borderRadius: '20px',
+                                padding: '4px 10px',
+                                textDecoration: 'none',
+                                whiteSpace: 'nowrap',
+                                flexShrink: 0
+                            }}
+                        >
+                            SEND EMAIL
+                        </Link>
                     </div>
 
                     {/* University */}
