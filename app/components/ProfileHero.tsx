@@ -163,10 +163,10 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', background: hoveredSocial === 'instagram' ? 'rgba(255,255,255,0.2)' : '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.3s ease' }}>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={hoveredSocial === 'instagram' ? 'white' : '#555'} strokeWidth="2" style={{ flexShrink: 0, transition: 'all 0.3s ease' }}>
                                     <rect x="2" y="2" width="20" height="20" rx="5"/>
                                     <circle cx="12" cy="12" r="4"/>
-                                    <circle cx="17.5" cy="6.5" r="1.5" fill="white" stroke="none"/>
+                                    <circle cx="17.5" cy="6.5" r="1.5" fill={hoveredSocial === 'instagram' ? 'white' : '#555'} stroke="none"/>
                                 </svg>
                             </div>
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Instagram</span>
