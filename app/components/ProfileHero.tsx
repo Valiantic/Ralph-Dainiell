@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { PortfolioData } from '../types/portfolio';
 import { GoFileZip } from 'react-icons/go';
 import { LuPhone } from 'react-icons/lu';
@@ -12,6 +13,10 @@ interface ProfileHeroProps {
 }
 
 export const ProfileHero = ({ data }: ProfileHeroProps) => {
+    const [hoveredSocial, setHoveredSocial] = useState<string | null>(null);
+    const [hoveredSendEmail, setHoveredSendEmail] = useState(false);
+    const [hoveredContact, setHoveredContact] = useState(false);
+
     return (
         <section className="profile-hero" style={{
             display: 'flex',
@@ -99,76 +104,116 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         <Link
                             href={`https://mail.google.com/mail/?view=cm&to=${data.contact.email}`}
                             target="_blank"
-                            className="send-email-btn"
+                            onMouseEnter={() => setHoveredSendEmail(true)}
+                            onMouseLeave={() => setHoveredSendEmail(false)}
                             style={{
-                                fontSize: '11px', fontWeight: 700, color: '#000',
+                                fontSize: '11px', fontWeight: 700,
+                                color: hoveredSendEmail ? '#fff' : '#000',
+                                background: hoveredSendEmail ? '#000' : 'transparent',
                                 border: '1.5px solid #000', borderRadius: '20px',
                                 padding: '4px 10px', textDecoration: 'none',
-                                whiteSpace: 'nowrap', flexShrink: 0, transition: 'all 0.3s ease'
+                                whiteSpace: 'nowrap', flexShrink: 0,
+                                transition: 'all 0.3s ease'
                             }}
                         >
                             SEND EMAIL
                         </Link>
                     </div>
 
-                    {/* Social Media — 2x2 gray style */}
+                    {/* Social Media — 2x2 gray style with hover */}
                     <div style={{
                         border: '1.5px solid #000', borderRadius: '14px', padding: '12px 14px',
                         display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px',
                         boxSizing: 'border-box'
                     }}>
-                        <Link href={data.socials.facebook || '#'} target="_blank" className="social-pill" style={{
-                            display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
-                            border: '1px solid #e5e5e5', borderRadius: '12px', textDecoration: 'none',
-                            background: '#fff'
-                        }}>
-                            <div style={{ width: '28px', height: '28px', background: '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {/* Facebook */}
+                        <Link
+                            href={data.socials.facebook || '#'}
+                            target="_blank"
+                            onMouseEnter={() => setHoveredSocial('facebook')}
+                            onMouseLeave={() => setHoveredSocial(null)}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
+                                border: hoveredSocial === 'facebook' ? '1px solid transparent' : '1px solid #e5e5e5',
+                                borderRadius: '12px', textDecoration: 'none',
+                                background: hoveredSocial === 'facebook' ? '#1877F2' : '#fff',
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', background: hoveredSocial === 'facebook' ? 'rgba(255,255,255,0.2)' : '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.3s ease' }}>
                                 <svg width="14" height="14" viewBox="0 0 10 18" fill="white">
                                     <path d="M6.5 3H9V0H6.5C4.57 0 3 1.57 3 3.5V5H1V8H3V18H6V8H8.5L9 5H6V3.5C6 3.22 6.22 3 6.5 3Z"/>
                                 </svg>
                             </div>
-                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#333' }}>Facebook</span>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'facebook' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Facebook</span>
                         </Link>
 
-                        <Link href={data.socials.instagram || '#'} target="_blank" className="social-pill" style={{
-                            display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
-                            border: '1px solid #e5e5e5', borderRadius: '12px', textDecoration: 'none',
-                            background: '#fff'
-                        }}>
-                            <div style={{ width: '28px', height: '28px', background: '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {/* Instagram */}
+                        <Link
+                            href={data.socials.instagram || '#'}
+                            target="_blank"
+                            onMouseEnter={() => setHoveredSocial('instagram')}
+                            onMouseLeave={() => setHoveredSocial(null)}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
+                                border: hoveredSocial === 'instagram' ? '1px solid transparent' : '1px solid #e5e5e5',
+                                borderRadius: '12px', textDecoration: 'none',
+                                background: hoveredSocial === 'instagram' ? 'linear-gradient(45deg, #F77737, #FD1D1D, #833AB4)' : '#fff',
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', background: hoveredSocial === 'instagram' ? 'rgba(255,255,255,0.2)' : '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.3s ease' }}>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
                                     <rect x="2" y="2" width="20" height="20" rx="5"/>
                                     <circle cx="12" cy="12" r="4"/>
                                     <circle cx="17.5" cy="6.5" r="1.5" fill="white" stroke="none"/>
                                 </svg>
                             </div>
-                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#333' }}>Instagram</span>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Instagram</span>
                         </Link>
 
-                        <Link href={data.socials.youtube || '#'} target="_blank" className="social-pill" style={{
-                            display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
-                            border: '1px solid #e5e5e5', borderRadius: '12px', textDecoration: 'none',
-                            background: '#fff'
-                        }}>
-                            <div style={{ width: '28px', height: '28px', background: '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {/* YouTube */}
+                        <Link
+                            href={data.socials.youtube || '#'}
+                            target="_blank"
+                            onMouseEnter={() => setHoveredSocial('youtube')}
+                            onMouseLeave={() => setHoveredSocial(null)}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
+                                border: hoveredSocial === 'youtube' ? '1px solid transparent' : '1px solid #e5e5e5',
+                                borderRadius: '12px', textDecoration: 'none',
+                                background: hoveredSocial === 'youtube' ? '#FF0000' : '#fff',
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', background: hoveredSocial === 'youtube' ? 'rgba(255,255,255,0.2)' : '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.3s ease' }}>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
                                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                                 </svg>
                             </div>
-                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#333' }}>YouTube</span>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'youtube' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>YouTube</span>
                         </Link>
 
-                        <Link href={data.socials.linkedin || '#'} target="_blank" className="social-pill" style={{
-                            display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
-                            border: '1px solid #e5e5e5', borderRadius: '12px', textDecoration: 'none',
-                            background: '#fff'
-                        }}>
-                            <div style={{ width: '28px', height: '28px', background: '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {/* LinkedIn */}
+                        <Link
+                            href={data.socials.linkedin || '#'}
+                            target="_blank"
+                            onMouseEnter={() => setHoveredSocial('linkedin')}
+                            onMouseLeave={() => setHoveredSocial(null)}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
+                                border: hoveredSocial === 'linkedin' ? '1px solid transparent' : '1px solid #e5e5e5',
+                                borderRadius: '12px', textDecoration: 'none',
+                                background: hoveredSocial === 'linkedin' ? '#0A66C2' : '#fff',
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', background: hoveredSocial === 'linkedin' ? 'rgba(255,255,255,0.2)' : '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.3s ease' }}>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
                                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                                 </svg>
                             </div>
-                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#333' }}>LinkedIn</span>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'linkedin' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>LinkedIn</span>
                         </Link>
                     </div>
                 </div>
@@ -199,12 +244,15 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     <Link
                         href={`https://mail.google.com/mail/?view=cm&to=${data.contact.email}`}
                         target="_blank"
-                        className="contact-btn"
+                        onMouseEnter={() => setHoveredContact(true)}
+                        onMouseLeave={() => setHoveredContact(false)}
                         style={{
                             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                            background: '#1a1a1a', color: '#fff', fontWeight: 700, fontSize: '14px',
+                            background: hoveredContact ? '#333' : '#1a1a1a',
+                            color: '#fff', fontWeight: 700, fontSize: '14px',
                             padding: '12px 28px', borderRadius: '12px', textDecoration: 'none',
-                            width: 'fit-content', transition: 'all 0.3s ease'
+                            width: 'fit-content', transition: 'all 0.3s ease',
+                            transform: hoveredContact ? 'translateY(-2px)' : 'translateY(0)'
                         }}
                     >
                         Contact me
@@ -213,18 +261,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             </div>
 
             <style jsx>{`
-                .send-email-btn:hover {
-                    background: #000 !important;
-                    color: #fff !important;
-                }
-                .contact-btn:hover {
-                    background: #333 !important;
-                    transform: translateY(-2px);
-                }
-                .social-pill:hover {
-                    border-color: #bbb !important;
-                    background: #f0f0f0 !important;
-                }
                 @media (max-width: 1024px) {
                     .profile-hero {
                         flex-direction: column !important;
