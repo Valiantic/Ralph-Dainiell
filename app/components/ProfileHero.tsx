@@ -237,8 +237,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </p>
 
                     <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
-                        Available for internships and freelance work.<br />
-                        Let&apos;s build something impactful together.
+                        Open to internships and work opportunities.<br />
+                        I’m ready to contribute, learn, and deliver real impact.
                     </p>
 
                     <Link
