@@ -194,7 +194,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             maxWidth: '800px',
                             width: '100%',
                             position: 'relative',
-                            border: '1.5px solid #000'
+                            border: 'none'
                         }}
                     >
                         {/* Close button */}
