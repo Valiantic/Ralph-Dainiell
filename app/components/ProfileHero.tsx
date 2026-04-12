@@ -162,11 +162,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 transition: 'all 0.3s ease'
                             }}
                         >
-                            <div style={{ width: '28px', height: '28px', background: hoveredSocial === 'instagram' ? 'rgba(255,255,255,0.2)' : '#555', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.3s ease' }}>
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={hoveredSocial === 'instagram' ? 'white' : '#555'} strokeWidth="2" style={{ flexShrink: 0, transition: 'all 0.3s ease' }}>
-                                    <rect x="2" y="2" width="20" height="20" rx="5"/>
-                                    <circle cx="12" cy="12" r="4"/>
-                                    <circle cx="17.5" cy="6.5" r="1.5" fill={hoveredSocial === 'instagram' ? 'white' : '#555'} stroke="none"/>
+                            <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transition: 'all 0.3s ease' }}>
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none"/>
+                                    <circle cx="12" cy="12" r="4" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none"/>
+                                    <circle cx="17.5" cy="6.5" r="1.5" fill={hoveredSocial === 'instagram' ? '#fff' : '#555'}/>
                                 </svg>
                             </div>
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Instagram</span>
