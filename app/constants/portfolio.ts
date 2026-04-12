@@ -51,7 +51,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
         {
             id: "2",
             role: "Police Clerk",
-            company: "Silang Cavite",
+            company: "NPC Silang Cavite",
             duration: "Nov 2022 - Jan 2023",
             description: ["Delivered frontline administrative support for police clearance services by assisting citizens with registration and application processing. Managed payment collection, verified applicant information, and conducted biometric data capture. Ensured accurate record keeping, proper documentation, and efficient processing of police clearance requests in accordance with standard procedures."],
             logo: "/Images/experience/police.png"
