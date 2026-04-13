@@ -66,9 +66,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         style={{
                             background: '#2b6ef2', color: '#fff', padding: '12px 24px',
                             borderRadius: '16px', fontWeight: 700, display: 'flex',
-                            alignItems: 'center', justifyContent: 'center', gap: '10px',
-                            textDecoration: 'none', fontSize: '15px', height: '52px',
-                            boxSizing: 'border-box'
+                            alignItems: 'center', gap: '10px', textDecoration: 'none',
+                            fontSize: '15px', height: '52px', boxSizing: 'border-box'
                         }}
                     >
                         <GoFileZip size={18} color="#fff" />
@@ -76,9 +75,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </Link>
                     <div className="card phone-card" style={{
                         padding: '12px 20px', borderRadius: '16px', display: 'flex',
-                        alignItems: 'center', justifyContent: 'center', gap: '10px',
-                        fontWeight: 700, fontSize: '16px', height: '52px',
-                        boxSizing: 'border-box', border: '1.5px solid #000'
+                        alignItems: 'center', gap: '10px', fontWeight: 700, fontSize: '16px',
+                        height: '52px', boxSizing: 'border-box', border: '1.5px solid #000'
                     }}>
                         <LuPhone size={18} color="#000" />
                         {data.contact.phone}
@@ -165,7 +163,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ transition: 'all 0.3s ease' }}>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transition: 'all 0.3s ease' }}>
                                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none"/>
                                     <circle cx="12" cy="12" r="4" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none"/>
                                     <circle cx="17.5" cy="6.5" r="1.5" fill={hoveredSocial === 'instagram' ? '#fff' : '#555'}/>
@@ -210,7 +208,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 transition: 'all 0.3s ease'
                             }}
                         >
-                            <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                           <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'linkedin' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
                                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                                 </svg>
@@ -240,11 +238,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
                     <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
                         Open to internships and work opportunities.<br />
-                        I'm ready to contribute, learn, and deliver real impact.
+                        I’m ready to contribute, learn, and deliver real impact.
                     </p>
 
                     <Link
                         href={`mailto:${data.contact.email}`}
+                        target="_blank"
                         onMouseEnter={() => setHoveredContact(true)}
                         onMouseLeave={() => setHoveredContact(false)}
                         style={{
@@ -265,31 +264,25 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 @media (max-width: 1024px) {
                     .profile-hero {
                         flex-direction: column !important;
-                        align-items: center !important;
+                        align-items: stretch !important;
                         gap: 16px !important;
                     }
                     .hero-img-container {
-                        width: 120px !important;
-                        height: 120px !important;
+                        width: 100% !important;
+                        height: 220px !important;
                         border-radius: 24px !important;
-                        align-self: center !important;
                     }
                     .hero-info {
                         width: 100% !important;
                         min-width: 0 !important;
                         flex: none !important;
-                        text-align: center !important;
                     }
                     .hero-info h1 {
-                        font-size: 28px !important;
-                    }
-                    .hero-info > div {
-                        justify-content: center !important;
+                        font-size: 32px !important;
                     }
                     .hero-buttons {
                         flex-direction: column !important;
                         gap: 10px !important;
-                        align-items: center !important;
                     }
                     .cv-button {
                         width: 100% !important;
