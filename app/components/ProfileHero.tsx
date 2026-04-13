@@ -242,7 +242,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </p>
 
                     <Link
-                        href={`https://mail.google.com/mail/?view=cm&to=${data.contact.email}`}
+                        href={`mailto:${data.contact.email}`}
                         target="_blank"
                         onMouseEnter={() => setHoveredContact(true)}
                         onMouseLeave={() => setHoveredContact(false)}
