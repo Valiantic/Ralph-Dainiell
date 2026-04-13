@@ -11,7 +11,7 @@ interface CertificatesSectionProps {
 
 const getIssuerColor = (issuer: string) => {
     if (issuer.toLowerCase().includes('datacamp')) return '#30d158';
-    if (issuer.toLowerCase().includes('hackerrank')) return '#bf5af2';
+    if (issuer.toLowerCase().includes('hackerrank')) return '#2EC866';
     if (issuer.toLowerCase().includes('cisco')) return '#0a84ff';
     return '#636366';
 };
