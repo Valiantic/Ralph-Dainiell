@@ -199,18 +199,32 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             border: 'none'
                         }}
                     >
-                        {/* Close button */}
                         <button
                             onClick={() => setSelectedCert(null)}
+                            onMouseEnter={e => {
+                                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.15)';
+                            }}
+                            onMouseLeave={e => {
+                                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.06)';
+                            }}
+                            onMouseDown={e => {
+                                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.25)';
+                                (e.currentTarget as HTMLButtonElement).style.transform = 'scale(0.92)';
+                            }}
+                            onMouseUp={e => {
+                                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.15)';
+                                (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+                            }}
                             style={{
                                 position: 'absolute', top: '16px', right: '16px',
                                 background: 'rgba(0,0,0,0.06)', border: 'none',
                                 borderRadius: '50%', width: '32px', height: '32px',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                cursor: 'pointer', zIndex: 10
+                                cursor: 'pointer', zIndex: 10,
+                                transition: 'background 0.2s ease, transform 0.15s ease'
                             }}
                         >
-                            <FiX size={16} color="#1c1c1e" />
+                            <FiX size={16} color="#3a3a3c" />
                         </button>
 
                         {/* Title bar */}
