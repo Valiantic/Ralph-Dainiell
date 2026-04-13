@@ -145,15 +145,16 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 }}>
                                     {cert.title}
                                 </span>
-                                <span style={{
-                                    fontSize: '11px', fontWeight: 500,
-                                    color: '#8e8e93',
-                                    background: '#f2f2f7',
-                                    padding: '3px 8px', borderRadius: '20px',
-                                    whiteSpace: 'nowrap', flexShrink: 0
-                                }}>
-                                    {cert.issuer}
-                                </span>
+                                                        <span style={{
+                                fontSize: '11px', fontWeight: 600,
+                                color: '#000',
+                                background: '#fff',
+                                border: '1.5px solid #000',
+                                padding: '4px 10px', borderRadius: '20px',
+                                whiteSpace: 'nowrap', flexShrink: 0
+                            }}>
+                                {cert.issuer}
+                            </span>
                             </div>
                         </div>
                     ))}
