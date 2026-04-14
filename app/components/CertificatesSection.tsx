@@ -4,6 +4,7 @@ import { Certificate } from '../types/portfolio';
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
+import { createPortal } from 'react-dom';
 
 interface CertificatesSectionProps {
     certificates: Certificate[];
@@ -41,6 +42,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         }
     }, []);
 
+    // ESC close
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') setSelectedCert(null);
@@ -48,6 +50,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
+
+    // 🔥 Scroll Lock (PRO UX)
+    useEffect(() => {
+        if (selectedCert) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    }, [selectedCert]);
 
     const scroll = (direction: 'left' | 'right') => {
         if (scrollRef.current) {
@@ -60,6 +71,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
     return (
         <section className="card" style={{ width: '100%', background: '#fff' }}>
+            {/* HEADER */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
                 <div style={{ width: '32px', height: '32px', position: 'relative' }}>
                     <Image src="/Images/Icons/certificate icon.png" alt="Certificates" fill style={{ objectFit: 'contain' }} />
@@ -67,19 +79,14 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 <h2 style={{ fontSize: '32px', fontWeight: 800 }}>Certificates</h2>
             </div>
 
+            {/* SCROLL */}
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 {showNav && (
-                    <button
-                        onClick={() => scroll('left')}
-                        style={{
-                            background: 'none', border: 'none', display: 'flex',
-                            alignItems: 'center', justifyContent: 'center',
-                            zIndex: 2, flexShrink: 0,
-                            cursor: atStart ? 'default' : 'pointer', padding: '0',
-                            opacity: atStart ? 0.2 : 1, transition: 'opacity 0.3s ease'
-                        }}
-                    >
-                        <FiChevronLeft size={32} color="#000" strokeWidth={1.5} />
+                    <button onClick={() => scroll('left')} style={{
+                        background: 'none', border: 'none', zIndex: 2,
+                        opacity: atStart ? 0.2 : 1, cursor: 'pointer'
+                    }}>
+                        <FiChevronLeft size={32} />
                     </button>
                 )}
 
@@ -87,9 +94,12 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     ref={scrollRef}
                     className="no-scrollbar"
                     style={{
-                        display: 'flex', gap: '16px', overflowX: 'auto',
-                        padding: '10px 4px', flex: 1,
-                        scrollBehavior: 'smooth', scrollSnapType: 'x mandatory'
+                        display: 'flex',
+                        gap: '16px',
+                        overflowX: 'auto',
+                        padding: '10px 4px',
+                        flex: 1,
+                        scrollSnapType: 'x mandatory'
                     }}
                 >
                     {certificates.map((cert) => (
@@ -98,168 +108,178 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             onClick={() => setSelectedCert(cert)}
                             style={{
                                 minWidth: 'clamp(260px, 75vw, 340px)',
-                                overflow: 'hidden',
                                 borderRadius: '20px',
                                 border: '0.5px solid rgba(0,0,0,0.1)',
-                                flexShrink: 0,
                                 background: '#fff',
-                                scrollSnapAlign: 'start',
                                 cursor: 'pointer',
-                                transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
                             }}
                             onMouseEnter={e => {
-                                (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.025) translateY(-3px)';
+                                e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
                             }}
                             onMouseLeave={e => {
-                                (e.currentTarget as HTMLDivElement).style.transform = 'scale(1) translateY(0)';
+                                e.currentTarget.style.transform = 'scale(1)';
                             }}
                         >
-                            {/* Certificate Image */}
-                            <div style={{
-                                position: 'relative', width: '100%', height: '220px',
-                                background: '#f2f2f7', overflow: 'hidden'
-                            }}>
-                                <Image
-                                    src={cert.imageUrl}
-                                    alt={cert.title}
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                    unoptimized
-                                />
+                            <div style={{ position: 'relative', height: '220px' }}>
+                                <Image src={cert.imageUrl} alt={cert.title} fill style={{ objectFit: 'cover' }} />
                             </div>
 
-                            {/* Footer */}
-                            <div style={{
-                                padding: '12px 14px',
-                                display: 'flex', alignItems: 'center', gap: '8px',
-                                borderTop: '0.5px solid rgba(0,0,0,0.06)',
-                                background: '#fff'
-                            }}>
+                            <div style={{ padding: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <div style={{
-                                    width: '8px', height: '8px', borderRadius: '50%',
-                                    background: getIssuerColor(cert.issuer), flexShrink: 0
+                                    width: '8px',
+                                    height: '8px',
+                                    borderRadius: '50%',
+                                    background: getIssuerColor(cert.issuer)
                                 }} />
-                                <span style={{
-                                    fontSize: '13px', fontWeight: 600,
-                                    color: '#1c1c1e', flex: 1, lineHeight: 1.3
-                                }}>
-                                    {cert.title}
-                                </span>
-                                                        <span style={{
-                                fontSize: '11px', fontWeight: 600,
-                                color: '#000',
-                                background: '#fff',
-                                border: '1.5px solid #000',
-                                padding: '4px 10px', borderRadius: '20px',
-                                whiteSpace: 'nowrap', flexShrink: 0
-                            }}>
-                                {cert.issuer}
-                            </span>
+                                <span style={{ fontSize: '13px', fontWeight: 600 }}>{cert.title}</span>
                             </div>
                         </div>
                     ))}
                 </div>
 
                 {showNav && (
-                    <button
-                        onClick={() => scroll('right')}
-                        style={{
-                            background: 'none', border: 'none', display: 'flex',
-                            alignItems: 'center', justifyContent: 'center',
-                            zIndex: 2, flexShrink: 0,
-                            cursor: atEnd ? 'default' : 'pointer', padding: '0',
-                            opacity: atEnd ? 0.2 : 1, transition: 'opacity 0.3s ease'
-                        }}
-                    >
-                        <FiChevronRight size={32} color="#000" strokeWidth={1.5} />
+                    <button onClick={() => scroll('right')} style={{
+                        background: 'none', border: 'none', zIndex: 2,
+                        opacity: atEnd ? 0.2 : 1, cursor: 'pointer'
+                    }}>
+                        <FiChevronRight size={32} />
                     </button>
                 )}
             </div>
 
-            {/* LIGHTBOX */}
-            {selectedCert && (
-                <div
-                    onClick={() => setSelectedCert(null)}
-                    style={{
-                        position: 'fixed', top: 0, left: 0,
-                        width: '100vw', height: '100vh',
-                        background: 'rgba(0,0,0,0.6)',
-                        backdropFilter: 'blur(12px)',
-                        WebkitBackdropFilter: 'blur(12px)',
-                        zIndex: 1000, display: 'flex',
-                        alignItems: 'center', justifyContent: 'center', padding: '20px'
-                    }}
-                >
+            {/* 🔥 PORTAL MODAL */}
+            {selectedCert && typeof window !== 'undefined' &&
+                createPortal(
                     <div
-                        onClick={e => e.stopPropagation()}
-                        style={{
-                            background: '#fff', borderRadius: '28px',
-                            overflow: 'hidden', maxWidth: '780px',
-                            width: '100%', position: 'relative',
-                            border: 'none'
-                        }}
+                        onClick={() => setSelectedCert(null)}
+                        className="modal-overlay"
                     >
-                        <button
-                            onClick={() => setSelectedCert(null)}
-                            onMouseEnter={e => {
-                                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.15)';
-                            }}
-                            onMouseLeave={e => {
-                                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.06)';
-                            }}
-                            onMouseDown={e => {
-                                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.25)';
-                                (e.currentTarget as HTMLButtonElement).style.transform = 'scale(0.92)';
-                            }}
-                            onMouseUp={e => {
-                                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.15)';
-                                (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
-                            }}
-                            style={{
-                                position: 'absolute', top: '16px', right: '16px',
-                                background: 'rgba(0,0,0,0.06)', border: 'none',
-                                borderRadius: '50%', width: '32px', height: '32px',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                cursor: 'pointer', zIndex: 10,
-                                transition: 'background 0.2s ease, transform 0.15s ease'
-                            }}
+                        <div
+                            onClick={e => e.stopPropagation()}
+                            className="modal-content"
                         >
-                            <FiX size={16} color="#3a3a3c" />
-                        </button>
+                            <button
+                                onClick={() => setSelectedCert(null)}
+                                className="close-btn"
+                            >
+                                <FiX size={16} />
+                            </button>
 
-                        {/* Title bar */}
-                        <div style={{ padding: '20px 24px 16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <div style={{
-                                width: '10px', height: '10px', borderRadius: '50%',
-                                background: getIssuerColor(selectedCert.issuer), flexShrink: 0
-                            }} />
-                            <div>
-                                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#1c1c1e' }}>{selectedCert.title}</h3>
-                                <p style={{ fontSize: '12px', color: '#8e8e93', marginTop: '2px' }}>{selectedCert.issuer}</p>
+                            <div className="modal-header">
+                                <div className="dot" style={{
+                                    background: getIssuerColor(selectedCert.issuer)
+                                }} />
+                                <div>
+                                    <h3>{selectedCert.title}</h3>
+                                    <p>{selectedCert.issuer}</p>
+                                </div>
+                            </div>
+
+                            <div className="modal-image">
+                                <Image
+                                    src={selectedCert.imageUrl}
+                                    alt={selectedCert.title}
+                                    fill
+                                    style={{ objectFit: 'contain', padding: '24px' }}
+                                />
                             </div>
                         </div>
+                    </div>,
+                    document.getElementById('modal-root')!
+                )
+            }
 
-                        {/* Certificate Image */}
-                        <div style={{
-                            position: 'relative', width: '100%', height: '480px',
-                            background: '#f2f2f7'
-                        }}>
-                            <Image
-                                src={selectedCert.imageUrl}
-                                alt={selectedCert.title}
-                                fill
-                                style={{ objectFit: 'contain', padding: '24px' }}
-                                unoptimized
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
-
+            {/* 🔥 APPLE STYLE ANIMATION */}
             <style jsx>{`
                 .no-scrollbar::-webkit-scrollbar { display: none; }
-                @media (max-width: 600px) {
-                    .card { padding: 20px !important; }
+
+                .modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: rgba(0,0,0,0.55);
+                    backdrop-filter: blur(12px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 9999;
+                    animation: fadeIn 0.25s ease;
+                }
+
+                .modal-content {
+                    background: #fff;
+                    border-radius: 28px;
+                    max-width: 780px;
+                    width: 100%;
+                    overflow: hidden;
+                    position: relative;
+                    transform: scale(0.96);
+                    animation: zoomIn 0.25s ease forwards;
+                    box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+                }
+
+                .close-btn {
+                    position: absolute;
+                    top: 16px;
+                    right: 16px;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    border: none;
+                    background: rgba(0,0,0,0.06);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                }
+
+                .modal-header {
+                    padding: 20px 24px;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                .modal-header h3 {
+                    font-size: 16px;
+                    font-weight: 700;
+                }
+
+                .modal-header p {
+                    font-size: 12px;
+                    color: #8e8e93;
+                }
+
+                .dot {
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                }
+
+                .modal-image {
+                    position: relative;
+                    width: 100%;
+                    height: 480px;
+                    background: #f2f2f7;
+                }
+
+                @keyframes zoomIn {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.92);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
                 }
             `}</style>
         </section>

@@ -20,13 +20,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={`${roboto.variable} antialiased`}>
         {children}
+
+        {/* 🔥 THIS IS THE FIX */}
+        <div id="modal-root"></div>
       </body>
     </html>
   );
