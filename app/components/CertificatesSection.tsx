@@ -49,16 +49,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-    // Prevent background scroll when lightbox is open
-    useEffect(() => {
-        if (selectedCert) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => { document.body.style.overflow = ''; };
-    }, [selectedCert]);
-
     const scroll = (direction: 'left' | 'right') => {
         if (scrollRef.current) {
             scrollRef.current.scrollBy({
@@ -155,16 +145,16 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 }}>
                                     {cert.title}
                                 </span>
-                                <span style={{
-                                    fontSize: '11px', fontWeight: 600,
-                                    color: '#000',
-                                    background: '#fff',
-                                    border: '1.5px solid #000',
-                                    padding: '4px 10px', borderRadius: '20px',
-                                    whiteSpace: 'nowrap', flexShrink: 0
-                                }}>
-                                    {cert.issuer}
-                                </span>
+                                                        <span style={{
+                                fontSize: '11px', fontWeight: 600,
+                                color: '#000',
+                                background: '#fff',
+                                border: '1.5px solid #000',
+                                padding: '4px 10px', borderRadius: '20px',
+                                whiteSpace: 'nowrap', flexShrink: 0
+                            }}>
+                                {cert.issuer}
+                            </span>
                             </div>
                         </div>
                     ))}
@@ -193,34 +183,22 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     style={{
                         position: 'fixed', top: 0, left: 0,
                         width: '100vw', height: '100vh',
-                        background: 'rgba(0,0,0,0.65)',
+                        background: 'rgba(0,0,0,0.6)',
                         backdropFilter: 'blur(12px)',
                         WebkitBackdropFilter: 'blur(12px)',
-                        zIndex: 9999,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '16px',
-                        boxSizing: 'border-box',
-                        overflowY: 'auto',
+                        zIndex: 1000, display: 'flex',
+                        alignItems: 'center', justifyContent: 'center', padding: '20px'
                     }}
                 >
                     <div
                         onClick={e => e.stopPropagation()}
                         style={{
-                            background: '#fff',
-                            borderRadius: '28px',
-                            overflow: 'hidden',
-                            width: '100%',
-                            maxWidth: '780px',
-                            position: 'relative',
-                            /* Let modal height be natural — no fixed height */
-                            maxHeight: 'calc(100vh - 32px)',
-                            display: 'flex',
-                            flexDirection: 'column',
+                            background: '#fff', borderRadius: '28px',
+                            overflow: 'hidden', maxWidth: '780px',
+                            width: '100%', position: 'relative',
+                            border: 'none'
                         }}
                     >
-                        {/* Close Button */}
                         <button
                             onClick={() => setSelectedCert(null)}
                             onMouseEnter={e => {
@@ -243,39 +221,34 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 borderRadius: '50%', width: '32px', height: '32px',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 cursor: 'pointer', zIndex: 10,
-                                transition: 'background 0.2s ease, transform 0.15s ease',
-                                flexShrink: 0,
+                                transition: 'background 0.2s ease, transform 0.15s ease'
                             }}
                         >
                             <FiX size={16} color="#3a3a3c" />
                         </button>
 
                         {/* Title bar */}
-                        <div style={{ padding: '20px 24px 16px', display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+                        <div style={{ padding: '20px 24px 16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <div style={{
                                 width: '10px', height: '10px', borderRadius: '50%',
                                 background: getIssuerColor(selectedCert.issuer), flexShrink: 0
                             }} />
                             <div>
-                                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#1c1c1e', margin: 0 }}>{selectedCert.title}</h3>
-                                <p style={{ fontSize: '12px', color: '#8e8e93', marginTop: '2px', marginBottom: 0 }}>{selectedCert.issuer}</p>
+                                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#1c1c1e' }}>{selectedCert.title}</h3>
+                                <p style={{ fontSize: '12px', color: '#8e8e93', marginTop: '2px' }}>{selectedCert.issuer}</p>
                             </div>
                         </div>
 
-                        {/* Certificate Image — flex: 1 fills remaining space, min-height prevents collapse */}
+                        {/* Certificate Image */}
                         <div style={{
-                            position: 'relative',
-                            width: '100%',
-                            flex: '1 1 auto',
-                            minHeight: '200px',
-                            maxHeight: '60vh',
-                            background: '#f2f2f7',
+                            position: 'relative', width: '100%', height: '480px',
+                            background: '#f2f2f7'
                         }}>
                             <Image
                                 src={selectedCert.imageUrl}
                                 alt={selectedCert.title}
                                 fill
-                                style={{ objectFit: 'contain', padding: '20px' }}
+                                style={{ objectFit: 'contain', padding: '24px' }}
                                 unoptimized
                             />
                         </div>
