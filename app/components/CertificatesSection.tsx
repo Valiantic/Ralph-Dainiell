@@ -194,7 +194,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     src={selectedCert.imageUrl}
                                     alt={selectedCert.title}
                                     fill
-                                    style={{ objectFit: 'contain', padding: '24px' }}
+                                    style={{ objectFit: 'contain', padding: '12px' }}
                                     unoptimized
                                 />
                             </div>
