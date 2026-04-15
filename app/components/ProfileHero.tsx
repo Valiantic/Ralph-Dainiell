@@ -21,34 +21,34 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         <section className="profile-hero" style={{
             display: 'flex',
             gap: '24px',
-            alignItems: 'flex-start',
+            alignItems: 'center',
             width: '100%',
             flexWrap: 'wrap'
         }}>
-            {/* 1. Profile Pic — desktop: separate; mobile: inside hero-info */}
-                <div className="hero-img-container" style={{
-                    width: '180px',
-                    height: '180px',
-                    borderRadius: '32px',
-                    background: '#000',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-                    flexShrink: 0,
-                    position: 'relative',
-                    overflow: 'hidden',
-                    border: '1.5px solid #000'
-                }}>
-                    {data.profileImage ? (
-                        <Image src={data.profileImage} alt={data.name} fill style={{ objectFit: 'cover' }} />
-                    ) : (
-                        <span style={{ fontSize: '12px', opacity: 0.5 }}>image here</span>
-                    )}
-                </div>
+            {/* 1. Profile Pic */}
+            <div className="hero-img-container" style={{
+                width: '180px',
+                height: '180px',
+                borderRadius: '32px',
+                background: '#000',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                flexShrink: 0,
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1.5px solid #000'
+            }}>
+                {data.profileImage ? (
+                    <Image src={data.profileImage} alt={data.name} fill style={{ objectFit: 'cover' }} />
+                ) : (
+                    <span style={{ fontSize: '12px', opacity: 0.5 }}>image here</span>
+                )}
+            </div>
 
             {/* 2. Main Bio Info */}
-            <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '0' }}>
+            <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
                 <h1 style={{ fontSize: '42px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#000', fontSize: '15px' }}>
                     <IoLocationOutline size={18} color="#000" />
@@ -267,46 +267,32 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         align-items: stretch !important;
                         gap: 16px !important;
                     }
+                    .hero-img-container {
+                        width: 100% !important;
+                        height: 220px !important;
+                        border-radius: 24px !important;
+                    }
                     .hero-info {
-                        display: flex !important;
-                        flex-direction: row !important;
-                        align-items: center !important;
-                        gap: 14px !important;
                         width: 100% !important;
                         min-width: 0 !important;
                         flex: none !important;
-                        flex-wrap: nowrap !important;
-                    }
-                    .hero-img-container {
-                        width: 90px !important;
-                        height: 90px !important;
-                        border-radius: 20px !important;
-                        flex-shrink: 0 !important;
                     }
                     .hero-info h1 {
-                        font-size: 20px !important;
-                        letter-spacing: -0.5px !important;
+                        font-size: 32px !important;
                     }
                     .hero-buttons {
-                        flex-direction: row !important;
-                        gap: 8px !important;
-                        flex-wrap: wrap !important;
+                        flex-direction: column !important;
+                        gap: 10px !important;
                     }
                     .cv-button {
-                        flex: 1 !important;
+                        width: 100% !important;
                         justify-content: center !important;
-                        min-width: 110px !important;
-                        font-size: 13px !important;
-                        padding: 10px 14px !important;
-                        height: 44px !important;
                     }
                     .phone-card {
-                        flex: 1 !important;
+                        width: 100% !important;
                         justify-content: center !important;
-                        height: 44px !important;
-                        padding: 10px 14px !important;
-                        min-width: 110px !important;
-                        font-size: 13px !important;
+                        height: auto !important;
+                        padding: 10px !important;
                     }
                     .hero-cards-wrapper {
                         width: 100% !important;
