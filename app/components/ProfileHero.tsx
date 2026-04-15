@@ -41,7 +41,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 border: '1.5px solid #000'
             }}>
                 {data.profileImage ? (
-                    <Image src={data.profileImage} alt={data.name} fill style={{ objectFit: 'cover' }} />
+                    <Image src={data.profileImage} alt={data.name} fill style={{ objectFit: 'cover', objectPosition: 'center top' }} />
                 ) : (
                     <span style={{ fontSize: '12px', opacity: 0.5 }}>image here</span>
                 )}
@@ -238,7 +238,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
                     <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
                         Open to internships and work opportunities.<br />
-                        I’m ready to contribute, learn, and deliver real impact.
+                        I'm ready to contribute, learn, and deliver real impact.
                     </p>
 
                     <Link
@@ -268,9 +268,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         gap: 16px !important;
                     }
                     .hero-img-container {
-                        width: 100% !important;
-                        height: 220px !important;
-                        border-radius: 24px !important;
+                        width: 90px !important;
+                        height: 90px !important;
+                        border-radius: 20px !important;
+                        flex-shrink: 0 !important;
+                        align-self: flex-start !important;
                     }
                     .hero-info {
                         width: 100% !important;
