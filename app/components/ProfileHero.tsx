@@ -267,32 +267,44 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         align-items: stretch !important;
                         gap: 16px !important;
                     }
+
+                    /* Top row: small square pic + name side by side */
                     .hero-img-container {
-                        width: 100% !important;
-                        height: 220px !important;
-                        border-radius: 24px !important;
+                        width: 80px !important;
+                        height: 80px !important;
+                        border-radius: 20px !important;
+                        flex-shrink: 0 !important;
+                        align-self: flex-start !important;
                     }
                     .hero-info {
+                        display: flex !important;
+                        flex-direction: row !important;
+                        align-items: flex-start !important;
+                        gap: 14px !important;
                         width: 100% !important;
                         min-width: 0 !important;
                         flex: none !important;
+                        flex-wrap: nowrap !important;
                     }
                     .hero-info h1 {
-                        font-size: 32px !important;
+                        font-size: 24px !important;
                     }
                     .hero-buttons {
-                        flex-direction: column !important;
+                        flex-direction: row !important;
                         gap: 10px !important;
+                        flex-wrap: wrap !important;
                     }
                     .cv-button {
-                        width: 100% !important;
+                        flex: 1 !important;
                         justify-content: center !important;
+                        min-width: 120px !important;
                     }
                     .phone-card {
-                        width: 100% !important;
+                        flex: 1 !important;
                         justify-content: center !important;
                         height: auto !important;
                         padding: 10px !important;
+                        min-width: 120px !important;
                     }
                     .hero-cards-wrapper {
                         width: 100% !important;
