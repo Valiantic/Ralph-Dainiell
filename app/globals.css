@@ -49,7 +49,6 @@ main {
   gap: 20px;
 }
 
-/* Card — subtle lift on hover */
 .card {
   background: var(--card-bg);
   border: 1.5px solid var(--card-border);
@@ -63,7 +62,6 @@ main {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
-/* Skill pills — lift + bg change on hover */
 .pill {
   display: inline-flex;
   align-items: center;
@@ -83,29 +81,15 @@ main {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Links and buttons — pointer cursor */
 a, button, [role="button"] {
   cursor: pointer;
 }
 
-/* Smooth image load */
 img {
   transition: opacity 0.3s ease;
 }
 
-h1 {
-  font-family: 'Roboto', var(--font-roboto), sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-h2 {
-  font-family: 'Roboto', var(--font-roboto), sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-h3 {
+h1, h2, h3 {
   font-family: 'Roboto', var(--font-roboto), sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -123,7 +107,6 @@ button {
   font-family: 'Roboto', var(--font-roboto), sans-serif;
 }
 
-/* Download CV button hover */
 .cv-button {
   transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
 }
@@ -134,13 +117,11 @@ button {
   box-shadow: 0 6px 20px rgba(43, 110, 242, 0.3) !important;
 }
 
-/* Phone card hover */
 .phone-card:hover {
   background: #f5f5f5 !important;
   transform: translateY(-2px) !important;
 }
 
-/* Section fade-in on load */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -163,10 +144,6 @@ button {
 .bento-grid > *:nth-child(5) { animation-delay: 0.25s; }
 
 @media (max-width: 1024px) {
-  .card {
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  }
   .mobile-span-12 {
     grid-column: span 1 !important;
   }
@@ -177,4 +154,3 @@ button {
     display: block;
   }
 }
-
