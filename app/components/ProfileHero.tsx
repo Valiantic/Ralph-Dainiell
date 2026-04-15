@@ -25,86 +25,66 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             width: '100%',
             flexWrap: 'wrap'
         }}>
-            {/* TOP ROW: Photo + Bio — always side by side, never stacks */}
-            <div style={{
+            {/* 1. Profile Pic */}
+            <div className="hero-img-container" style={{
+                width: '180px',
+                height: '180px',
+                borderRadius: '32px',
+                background: '#000',
                 display: 'flex',
-                flexDirection: 'row',
-                gap: '16px',
                 alignItems: 'center',
-                width: '100%',
-                flexWrap: 'nowrap',
+                justifyContent: 'center',
+                color: '#fff',
+                flexShrink: 0,
+                position: 'relative',
+                overflow: 'hidden',
+                border: '1.5px solid #000'
             }}>
-                {/* 1. Profile Pic */}
-                <div className="hero-img-container" style={{
-                    width: '120px',
-                    height: '120px',
-                    borderRadius: '24px',
-                    background: '#000',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-                    flexShrink: 0,
-                    position: 'relative',
-                    overflow: 'hidden',
-                    border: '1.5px solid #000'
-                }}>
-                    {data.profileImage ? (
-                        <Image src={data.profileImage} alt={data.name} fill style={{ objectFit: 'cover', objectPosition: 'center top' }} />
-                    ) : (
-                        <span style={{ fontSize: '12px', opacity: 0.5 }}>image here</span>
-                    )}
-                </div>
+                {data.profileImage ? (
+                    <Image src={data.profileImage} alt={data.name} fill style={{ objectFit: 'cover', objectPosition: 'center top' }} />
+                ) : (
+                    <span style={{ fontSize: '12px', opacity: 0.5 }}>image here</span>
+                )}
+            </div>
 
-                {/* 2. Main Bio Info */}
-                <div className="hero-info" style={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '4px',
-                    minWidth: 0,
-                }}>
-                    <h1 className="hero-name" style={{ fontWeight: 800, letterSpacing: '-1px', lineHeight: 1.1, color: '#000', margin: 0 }}>
-                        {data.name}
-                    </h1>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#000' }}>
-                        <IoLocationOutline size={15} color="#000" />
-                        <span className="hero-location">{data.location}</span>
-                    </div>
-                    <div className="hero-role" style={{ fontWeight: 500, color: '#000' }}>
-                        {data.roles.join(' \\ ')}
-                    </div>
-                    <div className="hero-buttons" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '4px' }}>
-                        <Link
-                            href="/resume/GonzagaRalphDainiellCVresume_.pdf"
-                            target="_blank"
-                            download
-                            className="cv-button"
-                            style={{
-                                background: '#2b6ef2', color: '#fff',
-                                borderRadius: '14px', fontWeight: 700, display: 'flex',
-                                alignItems: 'center', gap: '8px', textDecoration: 'none',
-                                boxSizing: 'border-box', whiteSpace: 'nowrap',
-                            }}
-                        >
-                            <GoFileZip size={16} color="#fff" />
-                            Download CV
-                        </Link>
-                        <div className="card phone-card" style={{
-                            borderRadius: '14px', display: 'flex',
-                            alignItems: 'center', gap: '8px', fontWeight: 700,
-                            boxSizing: 'border-box', border: '1.5px solid #000',
-                            whiteSpace: 'nowrap',
-                        }}>
-                            <LuPhone size={16} color="#000" />
-                            <span className="phone-text">{data.contact.phone}</span>
-                        </div>
+            {/* 2. Main Bio Info */}
+            <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
+                <h1 style={{ fontSize: '42px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#000', fontSize: '15px' }}>
+                    <IoLocationOutline size={18} color="#000" />
+                    {data.location}
+                </div>
+                <div style={{ fontSize: '24px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
+                    {data.roles.join(' \\ ')}
+                </div>
+                <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                    <Link
+                        href="/resume/GonzagaRalphDainiellCVresume_.pdf"
+                        target="_blank"
+                        download
+                        className="cv-button"
+                        style={{
+                            background: '#2b6ef2', color: '#fff', padding: '12px 24px',
+                            borderRadius: '16px', fontWeight: 700, display: 'flex',
+                            alignItems: 'center', gap: '10px', textDecoration: 'none',
+                            fontSize: '15px', height: '52px', boxSizing: 'border-box'
+                        }}
+                    >
+                        <GoFileZip size={18} color="#fff" />
+                        Download CV
+                    </Link>
+                    <div className="card phone-card" style={{
+                        padding: '12px 20px', borderRadius: '16px', display: 'flex',
+                        alignItems: 'center', gap: '10px', fontWeight: 700, fontSize: '16px',
+                        height: '52px', boxSizing: 'border-box', border: '1.5px solid #000'
+                    }}>
+                        <LuPhone size={18} color="#000" />
+                        {data.contact.phone}
                     </div>
                 </div>
             </div>
 
-            {/* BOTTOM: Cards — email/socials + opportunities */}
-            <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', width: '100%', flexWrap: 'wrap', alignItems: 'stretch' }}>
+            <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'stretch' }}>
 
                 {/* 3. LEFT CARD — Email + Socials */}
                 <div className="card contact-card" style={{
@@ -140,14 +120,16 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </Link>
                     </div>
 
-                    {/* Social Media — 2x2 */}
+                    {/* Social Media — 2x2 gray style with hover */}
                     <div style={{
                         border: '1.5px solid #000', borderRadius: '14px', padding: '12px 14px',
                         display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px',
                         boxSizing: 'border-box'
                     }}>
                         {/* Facebook */}
-                        <Link href={data.socials.facebook || '#'} target="_blank"
+                        <Link
+                            href={data.socials.facebook || '#'}
+                            target="_blank"
                             onMouseEnter={() => setHoveredSocial('facebook')}
                             onMouseLeave={() => setHoveredSocial(null)}
                             style={{
@@ -156,15 +138,20 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'facebook' ? '#1877F2' : '#fff',
                                 transition: 'all 0.3s ease'
-                            }}>
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'facebook' ? '#fff' : '#555'}>
-                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-                            </svg>
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'facebook' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                                </svg>
+                            </div>
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'facebook' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Facebook</span>
                         </Link>
 
                         {/* Instagram */}
-                        <Link href={data.socials.instagram || '#'} target="_blank"
+                        <Link
+                            href={data.socials.instagram || '#'}
+                            target="_blank"
                             onMouseEnter={() => setHoveredSocial('instagram')}
                             onMouseLeave={() => setHoveredSocial(null)}
                             style={{
@@ -173,17 +160,22 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'instagram' ? 'linear-gradient(45deg, #F77737, #FD1D1D, #833AB4)' : '#fff',
                                 transition: 'all 0.3s ease'
-                            }}>
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none"/>
-                                <circle cx="12" cy="12" r="4" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none"/>
-                                <circle cx="17.5" cy="6.5" r="1.5" fill={hoveredSocial === 'instagram' ? '#fff' : '#555'}/>
-                            </svg>
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transition: 'all 0.3s ease' }}>
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none"/>
+                                    <circle cx="12" cy="12" r="4" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none"/>
+                                    <circle cx="17.5" cy="6.5" r="1.5" fill={hoveredSocial === 'instagram' ? '#fff' : '#555'}/>
+                                </svg>
+                            </div>
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Instagram</span>
                         </Link>
 
                         {/* YouTube */}
-                        <Link href={data.socials.youtube || '#'} target="_blank"
+                        <Link
+                            href={data.socials.youtube || '#'}
+                            target="_blank"
                             onMouseEnter={() => setHoveredSocial('youtube')}
                             onMouseLeave={() => setHoveredSocial(null)}
                             style={{
@@ -192,15 +184,20 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'youtube' ? '#FF0000' : '#fff',
                                 transition: 'all 0.3s ease'
-                            }}>
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'youtube' ? '#fff' : '#555'}>
-                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                            </svg>
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'youtube' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                            </div>
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'youtube' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>YouTube</span>
                         </Link>
 
                         {/* LinkedIn */}
-                        <Link href={data.socials.linkedin || '#'} target="_blank"
+                        <Link
+                            href={data.socials.linkedin || '#'}
+                            target="_blank"
                             onMouseEnter={() => setHoveredSocial('linkedin')}
                             onMouseLeave={() => setHoveredSocial(null)}
                             style={{
@@ -209,10 +206,13 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'linkedin' ? '#0A66C2' : '#fff',
                                 transition: 'all 0.3s ease'
-                            }}>
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'linkedin' ? '#fff' : '#555'}>
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
+                            }}
+                        >
+                           <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'linkedin' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </div>
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'linkedin' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>LinkedIn</span>
                         </Link>
                     </div>
@@ -231,13 +231,16 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4caf50', flexShrink: 0 }} />
                         <span style={{ fontSize: '12px', fontWeight: 700, color: '#2e7d32' }}>Available For Opportunities</span>
                     </div>
+
                     <p style={{ fontSize: '18px', fontWeight: 800, color: '#000', margin: 0, lineHeight: 1.3 }}>
                         Turning Data into Actionable Insights
                     </p>
+
                     <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
                         Open to internships and work opportunities.<br />
                         I'm ready to contribute, learn, and deliver real impact.
                     </p>
+
                     <Link
                         href={`mailto:${data.contact.email}`}
                         target="_blank"
@@ -258,51 +261,53 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             </div>
 
             <style jsx>{`
-                /* DESKTOP */
-                .hero-img-container {
-                    width: 180px !important;
-                    height: 180px !important;
-                    border-radius: 32px !important;
-                }
-                .hero-name { font-size: 42px; }
-                .hero-location { font-size: 15px; }
-                .hero-role { font-size: 24px; margin-bottom: 4px; }
-                .cv-button { padding: 12px 24px; font-size: 15px; height: 52px; }
-                .phone-card { padding: 12px 20px; font-size: 16px; height: 52px; }
-                .phone-text { display: inline; }
-
-                /* TABLET (iPad) */
-                @media (max-width: 1024px) and (min-width: 601px) {
-                    .hero-img-container {
-                        width: 120px !important;
-                        height: 120px !important;
-                        border-radius: 24px !important;
+                @media (max-width: 1024px) {
+                    .profile-hero {
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        gap: 16px !important;
                     }
-                    .hero-name { font-size: 32px; }
-                    .hero-location { font-size: 13px; }
-                    .hero-role { font-size: 18px; }
-                    .cv-button { padding: 10px 18px !important; font-size: 14px !important; height: 44px !important; }
-                    .phone-card { padding: 10px 16px !important; font-size: 14px !important; height: 44px !important; }
-                    .hero-cards-wrapper { flex-direction: column !important; }
-                    .contact-card, .opportunities-card { flex: none !important; width: 100% !important; }
-                }
-
-                /* MOBILE (smartphone) */
-                @media (max-width: 600px) {
                     .hero-img-container {
                         width: 90px !important;
                         height: 90px !important;
-                        border-radius: 18px !important;
+                        border-radius: 20px !important;
+                        flex-shrink: 0 !important;
+                        align-self: flex-start !important;
                     }
-                    .hero-name { font-size: 22px; letter-spacing: -0.5px; }
-                    .hero-location { font-size: 12px; }
-                    .hero-role { font-size: 14px; }
-                    .cv-button { padding: 8px 12px !important; font-size: 13px !important; height: 38px !important; gap: 6px !important; }
-                    .phone-card { padding: 8px 10px !important; font-size: 13px !important; height: 38px !important; gap: 6px !important; }
-                    .phone-text { display: none; }
-                    .hero-buttons { gap: 6px !important; }
-                    .hero-cards-wrapper { flex-direction: column !important; }
-                    .contact-card, .opportunities-card { flex: none !important; width: 100% !important; }
+                    .hero-info {
+                        width: 100% !important;
+                        min-width: 0 !important;
+                        flex: none !important;
+                    }
+                    .hero-info h1 {
+                        font-size: 32px !important;
+                    }
+                    .hero-buttons {
+                        flex-direction: column !important;
+                        gap: 10px !important;
+                    }
+                    .cv-button {
+                        width: 100% !important;
+                        justify-content: center !important;
+                    }
+                    .phone-card {
+                        width: 100% !important;
+                        justify-content: center !important;
+                        height: auto !important;
+                        padding: 10px !important;
+                    }
+                    .hero-cards-wrapper {
+                        width: 100% !important;
+                        flex: none !important;
+                        flex-direction: column !important;
+                        gap: 12px !important;
+                    }
+                    .contact-card, .opportunities-card {
+                        width: 100% !important;
+                        flex: none !important;
+                        height: auto !important;
+                        padding: 16px !important;
+                    }
                 }
             `}</style>
         </section>
