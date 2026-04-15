@@ -277,8 +277,8 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     position: relative;
                     width: 100%;
                     flex: 1 1 auto;
-                    min-height: 200px;
-                    max-height: 60vh;
+                    min-height: 480px;
+                    max-height: 70vh;
                     background: #f2f2f7;
                 }
 
