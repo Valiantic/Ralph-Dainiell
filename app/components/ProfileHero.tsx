@@ -21,7 +21,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         <section className="profile-hero" style={{
             display: 'flex',
             gap: '24px',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             width: '100%',
             flexWrap: 'wrap'
         }}>
@@ -48,7 +48,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             </div>
 
             {/* 2. Main Bio Info */}
-            <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
+            <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '0' }}>
                 <h1 style={{ fontSize: '42px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#000', fontSize: '15px' }}>
                     <IoLocationOutline size={18} color="#000" />
@@ -267,11 +267,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         align-items: stretch !important;
                         gap: 16px !important;
                     }
-
-                    /* Top row: small square pic + name side by side */
                     .hero-img-container {
-                        width: 80px !important;
-                        height: 80px !important;
+                        width: 90px !important;
+                        height: 90px !important;
                         border-radius: 20px !important;
                         flex-shrink: 0 !important;
                         align-self: flex-start !important;
@@ -287,24 +285,30 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         flex-wrap: nowrap !important;
                     }
                     .hero-info h1 {
-                        font-size: 24px !important;
+                        font-size: 20px !important;
+                        letter-spacing: -0.5px !important;
                     }
                     .hero-buttons {
                         flex-direction: row !important;
-                        gap: 10px !important;
+                        gap: 8px !important;
                         flex-wrap: wrap !important;
+                        margin-top: 4px !important;
                     }
                     .cv-button {
                         flex: 1 !important;
                         justify-content: center !important;
-                        min-width: 120px !important;
+                        min-width: 110px !important;
+                        font-size: 13px !important;
+                        padding: 10px 14px !important;
+                        height: 44px !important;
                     }
                     .phone-card {
                         flex: 1 !important;
                         justify-content: center !important;
-                        height: auto !important;
-                        padding: 10px !important;
-                        min-width: 120px !important;
+                        height: 44px !important;
+                        padding: 10px 14px !important;
+                        min-width: 110px !important;
+                        font-size: 13px !important;
                     }
                     .hero-cards-wrapper {
                         width: 100% !important;
