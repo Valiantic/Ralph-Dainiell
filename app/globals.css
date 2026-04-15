@@ -178,31 +178,3 @@ button {
   }
 }
 
-@media (max-width: 1024px) {
-  main {
-    padding: 16px;
-    gap: 16px;
-  }
-
-  .bento-grid {
-    grid-template-columns: 1fr !important;
-    gap: 16px;
-  }
-
-  .card {
-    padding: 18px !important;
-    border-radius: 22px !important;
-  }
-}
-
-@media (max-width: 640px) {
-  main {
-    padding: 12px;
-    gap: 14px;
-  }
-
-  .card {
-    padding: 16px !important;
-    border-radius: 20px !important;
-  }
-}
