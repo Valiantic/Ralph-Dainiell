@@ -5,298 +5,384 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { PortfolioData } from '../types/portfolio';
 import { GoFileZip } from 'react-icons/go';
-import { LuPhone, LuMail, LuMapPin } from 'react-icons/lu';
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa';
+import { LuPhone } from 'react-icons/lu';
+import { IoLocationOutline } from 'react-icons/io5';
 
 interface ProfileHeroProps {
   data: PortfolioData;
 }
 
-type SocialKey = 'facebook' | 'instagram' | 'youtube' | 'linkedin';
-
-const socialItems: {
-  key: SocialKey;
-  label: string;
-  href?: string;
-  icon: React.ReactNode;
-}[] = [
-  {
-    key: 'facebook',
-    label: 'Facebook',
-    href: '',
-    icon: <FaFacebookF size={18} />,
-  },
-  {
-    key: 'instagram',
-    label: 'Instagram',
-    href: '',
-    icon: <FaInstagram size={18} />,
-  },
-  {
-    key: 'youtube',
-    label: 'YouTube',
-    href: '',
-    icon: <FaYoutube size={18} />,
-  },
-  {
-    key: 'linkedin',
-    label: 'LinkedIn',
-    href: '',
-    icon: <FaLinkedinIn size={18} />,
-  },
-];
-
 export const ProfileHero = ({ data }: ProfileHeroProps) => {
   const [hoveredSocial, setHoveredSocial] = useState<string | null>(null);
-
-  const socials = [
-    { ...socialItems[0], href: data.socials.facebook || '#' },
-    { ...socialItems[1], href: data.socials.instagram || '#' },
-    { ...socialItems[2], href: data.socials.youtube || '#' },
-    { ...socialItems[3], href: data.socials.linkedin || '#' },
-  ];
+  const [hoveredSendEmail, setHoveredSendEmail] = useState(false);
+  const [hoveredContact, setHoveredContact] = useState(false);
 
   return (
-    <section className="profileHero">
-      <div className="heroShell">
-        {/* Top Profile Card */}
-        <div className="topCard">
-          <div className="topRow">
-            <div className="avatarWrap">
-              {data.profileImage ? (
-                <Image
-                  src={data.profileImage}
-                  alt={data.name}
-                  fill
-                  sizes="120px"
-                  style={{ objectFit: 'cover', objectPosition: 'center top' }}
-                />
-              ) : (
-                <span className="avatarFallback">Image</span>
-              )}
+    <section className="profile-hero">
+      {/* TOP ROW */}
+      <div className="top-row">
+        {/* PROFILE CARD */}
+        <div className="profile-main-card">
+          <div className="hero-img-container">
+            {data.profileImage ? (
+              <Image
+                src={data.profileImage}
+                alt={data.name}
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center top' }}
+              />
+            ) : (
+              <span className="image-placeholder">image here</span>
+            )}
+          </div>
+
+          <div className="hero-info">
+            <h1>{data.name}</h1>
+
+            <div className="location-row">
+              <IoLocationOutline size={18} color="#000" />
+              <span>{data.location}</span>
             </div>
 
-            <div className="topInfo">
-              <h1>{data.name}</h1>
-
-              <div className="locationRow">
-                <LuMapPin size={15} />
-                <span>{data.location}</span>
-              </div>
-
-              <p className="roleText">{data.roles?.[0] || 'Data Analyst'}</p>
+            <div className="role-text">
+              {data.roles?.length ? data.roles.join(' \\ ') : 'Data Analyst'}
             </div>
           </div>
         </div>
 
-        {/* Download CV */}
-        <Link
-          href="/resume/GonzagaRalphDainiellCVresume_.pdf"
-          target="_blank"
-          download
-          className="primaryButton"
-        >
-          <GoFileZip size={18} />
-          <span>Download CV</span>
-        </Link>
+        {/* RIGHT SIDE BUTTONS ON DESKTOP / STACKED ON MOBILE */}
+        <div className="hero-buttons-block">
+          <Link
+            href="/resume/GonzagaRalphDainiellCVresume_.pdf"
+            target="_blank"
+            download
+            className="cv-button"
+          >
+            <GoFileZip size={18} color="#fff" />
+            <span>Download CV</span>
+          </Link>
 
-        {/* Phone */}
-        <div className="phoneCard">
-          <LuPhone size={20} />
-          <span>{data.contact.phone}</span>
+          <div className="phone-card">
+            <LuPhone size={20} color="#000" />
+            <span>{data.contact.phone}</span>
+          </div>
         </div>
+      </div>
 
-        {/* Contact + Social */}
-        <div className="mainCard">
-          <div className="emailCard">
-            <div className="emailLeft">
-              <LuMail size={20} />
-              <span>{data.contact.email}</span>
+      {/* SECOND ROW */}
+      <div className="bottom-row">
+        {/* CONTACT CARD */}
+        <div className="contact-card">
+          <div className="email-box">
+            <div className="email-left">
+              <div className="email-icon-wrap">
+                <Image
+                  src="/Images/Icons/email icon.png"
+                  alt="Email"
+                  fill
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+
+              <span className="email-text">{data.contact.email}</span>
             </div>
 
             <Link
               href={`https://mail.google.com/mail/?view=cm&to=${data.contact.email}`}
               target="_blank"
-              className="sendEmailBtn"
+              onMouseEnter={() => setHoveredSendEmail(true)}
+              onMouseLeave={() => setHoveredSendEmail(false)}
+              className={`send-email-btn ${hoveredSendEmail ? 'active' : ''}`}
             >
               SEND EMAIL
             </Link>
           </div>
 
-          <div className="socialGrid">
-            {socials.map((social) => (
-              <Link
-                key={social.key}
-                href={social.href || '#'}
-                target="_blank"
-                className={`socialItem ${hoveredSocial === social.key ? 'isHovered' : ''}`}
-                onMouseEnter={() => setHoveredSocial(social.key)}
-                onMouseLeave={() => setHoveredSocial(null)}
-              >
-                <span className="socialIcon">{social.icon}</span>
-                <span>{social.label}</span>
-              </Link>
-            ))}
+          <div className="social-box">
+            <Link
+              href={data.socials.facebook || '#'}
+              target="_blank"
+              onMouseEnter={() => setHoveredSocial('facebook')}
+              onMouseLeave={() => setHoveredSocial(null)}
+              className={`social-item ${hoveredSocial === 'facebook' ? 'facebook-hover' : ''}`}
+            >
+              <div className="social-icon-wrap">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill={hoveredSocial === 'facebook' ? '#fff' : '#555'}
+                >
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                </svg>
+              </div>
+              <span>Facebook</span>
+            </Link>
+
+            <Link
+              href={data.socials.instagram || '#'}
+              target="_blank"
+              onMouseEnter={() => setHoveredSocial('instagram')}
+              onMouseLeave={() => setHoveredSocial(null)}
+              className={`social-item ${hoveredSocial === 'instagram' ? 'instagram-hover' : ''}`}
+            >
+              <div className="social-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <rect
+                    x="2"
+                    y="2"
+                    width="20"
+                    height="20"
+                    rx="5"
+                    ry="5"
+                    stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'}
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="4"
+                    stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'}
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                  <circle
+                    cx="17.5"
+                    cy="6.5"
+                    r="1.5"
+                    fill={hoveredSocial === 'instagram' ? '#fff' : '#555'}
+                  />
+                </svg>
+              </div>
+              <span>Instagram</span>
+            </Link>
+
+            <Link
+              href={data.socials.youtube || '#'}
+              target="_blank"
+              onMouseEnter={() => setHoveredSocial('youtube')}
+              onMouseLeave={() => setHoveredSocial(null)}
+              className={`social-item ${hoveredSocial === 'youtube' ? 'youtube-hover' : ''}`}
+            >
+              <div className="social-icon-wrap">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill={hoveredSocial === 'youtube' ? '#fff' : '#555'}
+                >
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+              </div>
+              <span>YouTube</span>
+            </Link>
+
+            <Link
+              href={data.socials.linkedin || '#'}
+              target="_blank"
+              onMouseEnter={() => setHoveredSocial('linkedin')}
+              onMouseLeave={() => setHoveredSocial(null)}
+              className={`social-item ${hoveredSocial === 'linkedin' ? 'linkedin-hover' : ''}`}
+            >
+              <div className="social-icon-wrap">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill={hoveredSocial === 'linkedin' ? '#fff' : '#555'}
+                >
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+              </div>
+              <span>LinkedIn</span>
+            </Link>
           </div>
         </div>
 
-        {/* Opportunities Card */}
-        <div className="opportunityCard">
-          <div className="statusPill">
-            <span className="statusDot" />
+        {/* OPPORTUNITIES CARD */}
+        <div className="opportunities-card">
+          <div className="availability-pill">
+            <div className="availability-dot" />
             <span>Available For Opportunities</span>
           </div>
 
-          <h2>Turning Data into Actionable Insights</h2>
+          <p className="opportunity-title">Turning Data into Actionable Insights</p>
 
-          <p>
+          <p className="opportunity-description">
             Open to internships and work opportunities.
             <br />
             I&apos;m ready to contribute, learn, and deliver real impact.
           </p>
 
-          <Link href={`mailto:${data.contact.email}`} className="workBtn">
+          <Link
+            href={`mailto:${data.contact.email}`}
+            target="_blank"
+            onMouseEnter={() => setHoveredContact(true)}
+            onMouseLeave={() => setHoveredContact(false)}
+            className={`work-button ${hoveredContact ? 'active' : ''}`}
+          >
             WORK WITH ME
           </Link>
         </div>
       </div>
 
       <style jsx>{`
-        .profileHero {
+        .profile-hero {
           width: 100%;
-        }
-
-        .heroShell {
-          width: 100%;
-          max-width: 560px;
-          margin: 0 auto;
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 16px;
         }
 
-        .topCard,
-        .phoneCard,
-        .mainCard,
-        .opportunityCard {
-          background: #fff;
-          border: 2px solid #111;
-          border-radius: 28px;
-        }
-
-        .topCard {
-          padding: 18px;
-        }
-
-        .topRow {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-        }
-
-        .avatarWrap {
-          width: 96px;
-          height: 96px;
-          border-radius: 26px;
-          overflow: hidden;
-          position: relative;
-          flex-shrink: 0;
-          border: 2px solid #111;
-          background: #f3f3f3;
-        }
-
-        .avatarFallback {
+        .top-row {
           width: 100%;
-          height: 100%;
           display: grid;
-          place-items: center;
-          font-size: 12px;
-          color: #777;
+          grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr);
+          gap: 16px;
+          align-items: stretch;
         }
 
-        .topInfo {
-          min-width: 0;
-          flex: 1;
-        }
-
-        .topInfo h1 {
-          margin: 0 0 6px;
-          font-size: 1.9rem;
-          line-height: 1.05;
-          font-weight: 800;
-          letter-spacing: -0.04em;
-          color: #111;
-        }
-
-        .locationRow {
+        .profile-main-card {
+          border: 1.5px solid #000;
+          border-radius: 32px;
+          padding: 20px;
+          background: #fff;
           display: flex;
           align-items: center;
-          gap: 6px;
-          color: #4b4b4b;
-          font-size: 0.92rem;
-          margin-bottom: 8px;
+          gap: 20px;
+          min-width: 0;
         }
 
-        .roleText {
-          margin: 0;
-          font-size: 1.65rem;
-          line-height: 1.1;
-          font-weight: 700;
-          color: #111;
-        }
-
-        .primaryButton {
-          width: 100%;
-          min-height: 58px;
-          border-radius: 20px;
-          background: #3f6df2;
+        .hero-img-container {
+          width: 150px;
+          height: 150px;
+          border-radius: 28px;
+          background: #000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           color: #fff;
-          text-decoration: none;
+          flex-shrink: 0;
+          position: relative;
+          overflow: hidden;
+          border: 1.5px solid #000;
+        }
+
+        .image-placeholder {
+          font-size: 12px;
+          opacity: 0.5;
+        }
+
+        .hero-info {
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .hero-info h1 {
+          margin: 0;
+          font-size: 42px;
+          font-weight: 800;
+          letter-spacing: -1px;
+          line-height: 1;
+          color: #000;
+        }
+
+        .location-row {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          color: #000;
+          font-size: 15px;
+        }
+
+        .role-text {
+          font-size: 24px;
+          font-weight: 500;
+          color: #000;
+          margin-top: 4px;
+        }
+
+        .hero-buttons-block {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          min-width: 0;
+        }
+
+        .cv-button {
+          background: #2b6ef2;
+          color: #fff;
+          padding: 0 24px;
+          border-radius: 18px;
+          font-weight: 700;
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 10px;
-          font-size: 1rem;
-          font-weight: 700;
-          border: 2px solid #2d59d7;
-          transition: transform 0.2s ease, opacity 0.2s ease;
+          text-decoration: none;
+          font-size: 15px;
+          min-height: 62px;
+          box-sizing: border-box;
+          border: 1.5px solid #2b6ef2;
+          transition: all 0.25s ease;
         }
 
-        .primaryButton:hover {
+        .cv-button:hover {
+          background: #1f5fe0;
+          border-color: #1f5fe0;
           transform: translateY(-1px);
-          opacity: 0.96;
         }
 
-        .phoneCard {
-          min-height: 58px;
+        .phone-card {
           padding: 0 20px;
+          border-radius: 18px;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 12px;
-          font-size: 1.1rem;
+          gap: 10px;
           font-weight: 700;
-          color: #111;
+          font-size: 16px;
+          min-height: 62px;
+          box-sizing: border-box;
+          border: 1.5px solid #000;
+          background: #fff;
         }
 
-        .mainCard {
+        .bottom-row {
+          width: 100%;
+          display: grid;
+          grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+          gap: 16px;
+          align-items: stretch;
+        }
+
+        .contact-card {
           padding: 16px;
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 12px;
+          border-radius: 24px;
+          border: 1.5px solid #000;
+          background: #fff;
+          box-sizing: border-box;
         }
 
-        .emailCard {
-          border: 2px solid #111;
-          border-radius: 20px;
-          padding: 14px;
+        .email-box {
+          border: 1.5px solid #000;
+          border-radius: 18px;
+          padding: 14px 16px;
           display: flex;
           align-items: center;
           justify-content: space-between;
+          box-sizing: border-box;
           gap: 12px;
+          background: #fff;
         }
 
-        .emailLeft {
+        .email-left {
           display: flex;
           align-items: center;
           gap: 10px;
@@ -304,180 +390,329 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
           flex: 1;
         }
 
-        .emailLeft span {
-          font-size: 1rem;
-          font-weight: 700;
-          color: #111;
-          word-break: break-word;
-        }
-
-        .sendEmailBtn {
+        .email-icon-wrap {
+          width: 24px;
+          height: 24px;
+          position: relative;
           flex-shrink: 0;
-          text-decoration: none;
-          color: #111;
-          border: 2px solid #111;
-          border-radius: 999px;
-          padding: 10px 16px;
-          font-size: 0.8rem;
-          font-weight: 800;
-          transition: all 0.2s ease;
-          background: #fff;
         }
 
-        .sendEmailBtn:hover {
-          background: #111;
-          color: #fff;
+        .email-text {
+          font-size: 14px;
+          font-weight: 700;
+          word-break: break-word;
+          color: #000;
         }
 
-        .socialGrid {
-          border: 2px solid #111;
+        .send-email-btn {
+          font-size: 11px;
+          font-weight: 700;
+          color: #000;
+          background: transparent;
+          border: 1.5px solid #000;
           border-radius: 20px;
-          padding: 12px;
+          padding: 7px 12px;
+          text-decoration: none;
+          white-space: nowrap;
+          flex-shrink: 0;
+          transition: all 0.25s ease;
+        }
+
+        .send-email-btn.active,
+        .send-email-btn:hover {
+          color: #fff;
+          background: #000;
+        }
+
+        .social-box {
+          border: 1.5px solid #000;
+          border-radius: 18px;
+          padding: 12px 14px;
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 10px;
+          box-sizing: border-box;
+          background: #fff;
         }
 
-        .socialItem {
-          min-height: 72px;
-          border-radius: 16px;
-          border: 1.5px solid #e4e4e4;
-          background: #fafafa;
-          text-decoration: none;
-          color: #222;
+        .social-item {
           display: flex;
           align-items: center;
-          justify-content: center;
           gap: 10px;
-          padding: 12px;
-          font-weight: 700;
-          transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+          padding: 12px 14px;
+          border: 1px solid #e5e5e5;
+          border-radius: 14px;
+          text-decoration: none;
+          background: #fff;
+          transition: all 0.25s ease;
+          min-width: 0;
         }
 
-        .socialItem:hover,
-        .socialItem.isHovered {
-          transform: translateY(-1px);
-          background: #f2f2f2;
-          border-color: #d4d4d4;
+        .social-item span {
+          font-size: 13px;
+          font-weight: 600;
+          color: #333;
+          transition: all 0.25s ease;
+          white-space: nowrap;
         }
 
-        .socialIcon {
+        .social-icon-wrap {
+          width: 28px;
+          height: 28px;
           display: flex;
           align-items: center;
           justify-content: center;
+          flex-shrink: 0;
         }
 
-        .opportunityCard {
-          padding: 18px;
+        .facebook-hover {
+          background: #1877f2;
+          border-color: transparent;
+        }
+
+        .instagram-hover {
+          background: linear-gradient(45deg, #f77737, #fd1d1d, #833ab4);
+          border-color: transparent;
+        }
+
+        .youtube-hover {
+          background: #ff0000;
+          border-color: transparent;
+        }
+
+        .linkedin-hover {
+          background: #0a66c2;
+          border-color: transparent;
+        }
+
+        .facebook-hover span,
+        .instagram-hover span,
+        .youtube-hover span,
+        .linkedin-hover span {
+          color: #fff;
+        }
+
+        .opportunities-card {
+          padding: 24px;
           display: flex;
           flex-direction: column;
           gap: 14px;
+          border-radius: 24px;
+          border: 1.5px solid #000;
+          background: #fff;
+          justify-content: center;
+          box-sizing: border-box;
         }
 
-        .statusPill {
-          width: fit-content;
+        .availability-pill {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          padding: 8px 12px;
-          border-radius: 999px;
-          background: #eef8ee;
-          color: #3b7c41;
-          font-size: 0.88rem;
-          font-weight: 800;
+          gap: 6px;
+          background: #e8f5e9;
+          border-radius: 20px;
+          padding: 4px 12px;
+          width: fit-content;
         }
 
-        .statusDot {
+        .availability-dot {
           width: 8px;
           height: 8px;
           border-radius: 50%;
-          background: #69b96f;
+          background: #4caf50;
+          flex-shrink: 0;
         }
 
-        .opportunityCard h2 {
-          margin: 0;
-          color: #111;
-          font-size: 2rem;
-          line-height: 1.05;
+        .availability-pill span {
+          font-size: 12px;
+          font-weight: 700;
+          color: #2e7d32;
+        }
+
+        .opportunity-title {
+          font-size: 18px;
           font-weight: 800;
-          letter-spacing: -0.04em;
+          color: #000;
+          margin: 0;
+          line-height: 1.3;
         }
 
-        .opportunityCard p {
-          margin: 0;
+        .opportunity-description {
+          font-size: 13px;
           color: #666;
-          font-size: 1rem;
-          line-height: 1.7;
+          margin: 0;
+          line-height: 1.6;
         }
 
-        .workBtn {
-          width: fit-content;
-          min-width: 170px;
-          text-decoration: none;
-          background: #111;
-          color: #fff;
-          border-radius: 16px;
-          padding: 14px 20px;
-          font-size: 0.95rem;
-          font-weight: 800;
+        .work-button {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          transition: transform 0.2s ease, opacity 0.2s ease;
+          background: #1a1a1a;
+          color: #fff;
+          font-weight: 700;
+          font-size: 14px;
+          padding: 12px 28px;
+          border-radius: 12px;
+          text-decoration: none;
+          width: fit-content;
+          transition: all 0.25s ease;
+          transform: translateY(0);
         }
 
-        .workBtn:hover {
-          transform: translateY(-1px);
-          opacity: 0.96;
+        .work-button.active,
+        .work-button:hover {
+          background: #333;
+          transform: translateY(-2px);
         }
 
-        @media (max-width: 640px) {
-          .heroShell {
-            max-width: 100%;
-            gap: 12px;
+        @media (max-width: 1024px) {
+          .top-row {
+            grid-template-columns: 1fr;
           }
 
-          .topCard,
-          .mainCard,
-          .opportunityCard {
-            border-radius: 24px;
+          .bottom-row {
+            grid-template-columns: 1fr;
           }
 
-          .topInfo h1 {
-            font-size: 1.65rem;
+          .hero-buttons-block {
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .profile-hero {
+            gap: 14px;
           }
 
-          .roleText {
-            font-size: 1.3rem;
+          .profile-main-card {
+            padding: 16px;
+            border-radius: 28px;
+            gap: 14px;
+            align-items: flex-start;
           }
 
-          .emailCard {
+          .hero-img-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 22px;
+          }
+
+          .hero-info h1 {
+            font-size: 28px;
+            line-height: 1.05;
+          }
+
+          .location-row {
+            font-size: 14px;
+          }
+
+          .role-text {
+            font-size: 18px;
+            margin-top: 2px;
+          }
+
+          .hero-buttons-block {
+            gap: 10px;
+          }
+
+          .cv-button,
+          .phone-card {
+            width: 100%;
+            min-height: 58px;
+            border-radius: 18px;
+          }
+
+          .contact-card,
+          .opportunities-card {
+            width: 100%;
+            padding: 16px;
+          }
+
+          .email-box {
+            flex-direction: row;
+            align-items: center;
+          }
+
+          .social-box {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+          }
+
+          .social-item {
+            padding: 12px 10px;
+            justify-content: flex-start;
+          }
+
+          .social-item span {
+            font-size: 12px;
+          }
+        }
+
+        @media (max-width: 520px) {
+          .profile-main-card {
+            align-items: center;
+          }
+
+          .hero-img-container {
+            width: 92px;
+            height: 92px;
+            border-radius: 20px;
+          }
+
+          .hero-info h1 {
+            font-size: 24px;
+          }
+
+          .role-text {
+            font-size: 16px;
+          }
+
+          .location-row {
+            font-size: 13px;
+          }
+
+          .cv-button {
+            justify-content: flex-start;
+            padding: 0 18px;
+          }
+
+          .phone-card {
+            justify-content: center;
+            font-size: 15px;
+            padding: 0 16px;
+          }
+
+          .email-box {
             flex-direction: column;
             align-items: stretch;
           }
 
-          .sendEmailBtn {
+          .send-email-btn {
             width: fit-content;
             align-self: flex-end;
           }
 
-          .socialGrid {
-            grid-template-columns: repeat(2, 1fr);
+          .social-box {
+            padding: 10px;
           }
 
-          .socialItem {
-            min-height: 64px;
-            font-size: 0.95rem;
+          .social-item {
+            min-height: 58px;
+            padding: 10px;
+            gap: 8px;
           }
 
-          .opportunityCard h2 {
-            font-size: 1.75rem;
+          .social-icon-wrap {
+            width: 24px;
+            height: 24px;
           }
-        }
 
-        @media (min-width: 768px) {
-          .heroShell {
-            max-width: 100%;
+          .opportunity-title {
+            font-size: 16px;
+          }
+
+          .opportunity-description {
+            font-size: 13px;
           }
         }
       `}</style>
