@@ -24,6 +24,14 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const [atStart, setAtStart] = useState(true);
     const [atEnd, setAtEnd] = useState(false);
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth <= 768);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
 
     const checkScrollPosition = () => {
         if (scrollRef.current) {
@@ -69,8 +77,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     };
 
     return (
-        // FIX 1: "no-lift" class overrides the .card:hover { transform } from globals.css
-        // so the whole section doesn't lift on hover — only individual cert cards do
         <section className="card no-lift" style={{ width: '100%', background: '#fff' }}>
             {/* HEADER */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
@@ -80,97 +86,134 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 <h2 style={{ fontSize: '32px', fontWeight: 800 }}>Certificates</h2>
             </div>
 
-            {/* SCROLL ROW */}
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                {showNav && (
-                    <button onClick={() => scroll('left')} style={{
-                        background: 'none', border: 'none', zIndex: 2,
-                        opacity: atStart ? 0.2 : 1, cursor: 'pointer'
-                    }}>
-                        <FiChevronLeft size={32} />
-                    </button>
-                )}
-
-                <div
-                    ref={scrollRef}
-                    className="no-scrollbar"
-                    style={{
-                        display: 'flex',
-                        gap: '16px',
-                        overflowX: 'auto',
-                        padding: '10px 4px',
-                        flex: 1,
-                        scrollSnapType: 'x mandatory'
-                    }}
-                >
-                    {certificates.map((cert) => (
+            {/* MOBILE LIST VIEW */}
+            {isMobile ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    {certificates.map((cert, index) => (
                         <div
                             key={cert.id}
                             onClick={() => setSelectedCert(cert)}
                             style={{
-                                minWidth: 'clamp(260px, 75vw, 340px)',
-                                borderRadius: '20px',
-                                border: '0.5px solid rgba(0,0,0,0.1)',
-                                background: '#fff',
-                                cursor: 'pointer',
-                                overflow: 'hidden', // FIX 2: clips the image inside rounded corners
-                                flexShrink: 0,
-                                scrollSnapAlign: 'start',
-                                transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                            }}
-                        >
-                            <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
-                                <Image
-                                    src={cert.imageUrl}
-                                    alt={cert.title}
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                    unoptimized
-                                />
-                            </div>
-
-                            <div style={{
-                                padding: '12px 14px',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '8px',
-                                borderTop: '0.5px solid rgba(0,0,0,0.06)'
-                            }}>
-                                <div style={{
-                                    width: '8px', height: '8px', borderRadius: '50%',
-                                    background: getIssuerColor(cert.issuer), flexShrink: 0
-                                }} />
-                                <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
+                                gap: '12px',
+                                padding: '14px 4px',
+                                borderBottom: index < certificates.length - 1 ? '0.5px solid rgba(0,0,0,0.08)' : 'none',
+                                cursor: 'pointer',
+                                background: '#fff',
+                            }}
+                        >
+                            <div style={{
+                                width: '8px', height: '8px', borderRadius: '50%',
+                                background: getIssuerColor(cert.issuer), flexShrink: 0
+                            }} />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontSize: '15px', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>
                                     {cert.title}
-                                </span>
-                                <span style={{
-                                    fontSize: '11px', fontWeight: 600,
-                                    border: '1.5px solid #000',
-                                    padding: '4px 10px', borderRadius: '20px',
-                                    whiteSpace: 'nowrap', flexShrink: 0
-                                }}>
+                                </div>
+                                <div style={{ fontSize: '13px', color: '#888', marginTop: '2px' }}>
                                     {cert.issuer}
-                                </span>
+                                </div>
                             </div>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
                         </div>
                     ))}
                 </div>
+            ) : (
+                /* DESKTOP SCROLL ROW */
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {showNav && (
+                        <button onClick={() => scroll('left')} style={{
+                            background: 'none', border: 'none', zIndex: 2,
+                            opacity: atStart ? 0.2 : 1, cursor: 'pointer'
+                        }}>
+                            <FiChevronLeft size={32} />
+                        </button>
+                    )}
 
-                {showNav && (
-                    <button onClick={() => scroll('right')} style={{
-                        background: 'none', border: 'none', zIndex: 2,
-                        opacity: atEnd ? 0.2 : 1, cursor: 'pointer'
-                    }}>
-                        <FiChevronRight size={32} />
-                    </button>
-                )}
-            </div>
+                    <div
+                        ref={scrollRef}
+                        className="no-scrollbar"
+                        style={{
+                            display: 'flex',
+                            gap: '16px',
+                            overflowX: 'auto',
+                            padding: '10px 4px',
+                            flex: 1,
+                            scrollSnapType: 'x mandatory'
+                        }}
+                    >
+                        {certificates.map((cert) => (
+                            <div
+                                key={cert.id}
+                                onClick={() => setSelectedCert(cert)}
+                                style={{
+                                    minWidth: 'clamp(260px, 75vw, 340px)',
+                                    borderRadius: '20px',
+                                    border: '0.5px solid rgba(0,0,0,0.1)',
+                                    background: '#fff',
+                                    cursor: 'pointer',
+                                    overflow: 'hidden',
+                                    flexShrink: 0,
+                                    scrollSnapAlign: 'start',
+                                    transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                                }}
+                            >
+                                <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
+                                    <Image
+                                        src={cert.imageUrl}
+                                        alt={cert.title}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        unoptimized
+                                    />
+                                </div>
+
+                                <div style={{
+                                    padding: '12px 14px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    borderTop: '0.5px solid rgba(0,0,0,0.06)'
+                                }}>
+                                    <div style={{
+                                        width: '8px', height: '8px', borderRadius: '50%',
+                                        background: getIssuerColor(cert.issuer), flexShrink: 0
+                                    }} />
+                                    <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
+                                        {cert.title}
+                                    </span>
+                                    <span style={{
+                                        fontSize: '11px', fontWeight: 600,
+                                        border: '1.5px solid #000',
+                                        padding: '4px 10px', borderRadius: '20px',
+                                        whiteSpace: 'nowrap', flexShrink: 0
+                                    }}>
+                                        {cert.issuer}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {showNav && (
+                        <button onClick={() => scroll('right')} style={{
+                            background: 'none', border: 'none', zIndex: 2,
+                            opacity: atEnd ? 0.2 : 1, cursor: 'pointer'
+                        }}>
+                            <FiChevronRight size={32} />
+                        </button>
+                    )}
+                </div>
+            )}
 
             {/* PORTAL MODAL */}
             {selectedCert && typeof window !== 'undefined' &&
@@ -207,7 +250,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             <style jsx>{`
                 .no-scrollbar::-webkit-scrollbar { display: none; }
 
-                /* Override globals.css .card:hover so the whole section doesn't lift */
                 .no-lift:hover {
                     transform: none !important;
                     box-shadow: none !important;
