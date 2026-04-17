@@ -267,77 +267,41 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         align-items: stretch !important;
                         gap: 16px !important;
                     }
-
-                    /* Photo + hero-info stay side by side */
-                    .profile-hero > .hero-img-container,
-                    .profile-hero > .hero-info {
-                        flex-direction: row !important;
-                    }
-
                     .hero-img-container {
                         width: 90px !important;
                         height: 90px !important;
                         border-radius: 20px !important;
                         flex-shrink: 0 !important;
                         align-self: flex-start !important;
-                        /* Keep it in flow — do NOT set position absolute */
                     }
-
-                    /* Wrap photo + info together as a row */
-                    .profile-hero {
-                        display: grid !important;
-                        grid-template-areas:
-                            "photo info"
-                            "buttons buttons"
-                            "cards cards" !important;
-                        grid-template-columns: 90px 1fr !important;
-                        gap: 12px 14px !important;
-                        align-items: start !important;
-                    }
-
-                    .hero-img-container {
-                        grid-area: photo !important;
-                        width: 90px !important;
-                        height: 90px !important;
-                        border-radius: 20px !important;
-                        align-self: start !important;
-                    }
-
                     .hero-info {
-                        grid-area: info !important;
+                        width: 100% !important;
                         min-width: 0 !important;
                         flex: none !important;
-                        gap: 4px !important;
                     }
-
                     .hero-info h1 {
-                        font-size: 22px !important;
-                        letter-spacing: -0.5px !important;
-                        line-height: 1.1 !important;
+                        font-size: 32px !important;
                     }
-
-                    /* Hide buttons inside hero-info on mobile, show them in their own row */
                     .hero-buttons {
-                        display: none !important;
-                    }
-
-                    /* Buttons row — full width below photo+info */
-                    .mobile-buttons {
-                        grid-area: buttons !important;
-                        display: flex !important;
                         flex-direction: column !important;
                         gap: 10px !important;
-                        width: 100% !important;
                     }
-
+                    .cv-button {
+                        width: 100% !important;
+                        justify-content: center !important;
+                    }
+                    .phone-card {
+                        width: 100% !important;
+                        justify-content: center !important;
+                        height: auto !important;
+                        padding: 10px !important;
+                    }
                     .hero-cards-wrapper {
-                        grid-area: cards !important;
                         width: 100% !important;
                         flex: none !important;
                         flex-direction: column !important;
                         gap: 12px !important;
                     }
-
                     .contact-card, .opportunities-card {
                         width: 100% !important;
                         flex: none !important;
@@ -346,35 +310,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     }
                 }
             `}</style>
-
-            {/* Mobile-only buttons row (full width, below photo+info) */}
-            <div className="mobile-buttons" style={{ display: 'none' }}>
-                <Link
-                    href="/resume/GonzagaRalphDainiellCVresume_.pdf"
-                    target="_blank"
-                    download
-                    className="cv-button"
-                    style={{
-                        background: '#2b6ef2', color: '#fff', padding: '14px 24px',
-                        borderRadius: '16px', fontWeight: 700, display: 'flex',
-                        alignItems: 'center', justifyContent: 'center', gap: '10px',
-                        textDecoration: 'none', fontSize: '15px', width: '100%',
-                        boxSizing: 'border-box'
-                    }}
-                >
-                    <GoFileZip size={18} color="#fff" />
-                    Download CV
-                </Link>
-                <div className="card phone-card" style={{
-                    padding: '14px 20px', borderRadius: '16px', display: 'flex',
-                    alignItems: 'center', justifyContent: 'center', gap: '10px',
-                    fontWeight: 700, fontSize: '16px', width: '100%',
-                    boxSizing: 'border-box', border: '1.5px solid #000'
-                }}>
-                    <LuPhone size={18} color="#000" />
-                    {data.contact.phone}
-                </div>
-            </div>
         </section>
     );
 };
