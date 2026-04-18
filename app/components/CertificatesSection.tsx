@@ -19,13 +19,10 @@ const getIssuerColor = (issuer: string) => {
 
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
-    const isDragging = useRef(false);
-    const startX = useRef(0);
-    const scrollLeft = useRef(0);
+    const animFrameRef = useRef<number | null>(null);
 
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
-    const [isHovering, setIsHovering] = useState(false);
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
@@ -51,25 +48,25 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
-    const handleMouseDown = (e: React.MouseEvent) => {
-        if (!scrollRef.current) return;
-        isDragging.current = true;
-        startX.current = e.pageX - scrollRef.current.offsetLeft;
-        scrollLeft.current = scrollRef.current.scrollLeft;
-        scrollRef.current.style.cursor = 'grabbing';
+    const startAutoScroll = () => {
+        const scroll = () => {
+            if (!scrollRef.current) return;
+            const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+            if (scrollLeft + clientWidth >= scrollWidth) {
+                scrollRef.current.scrollLeft = 0;
+            } else {
+                scrollRef.current.scrollLeft += 1;
+            }
+            animFrameRef.current = requestAnimationFrame(scroll);
+        };
+        animFrameRef.current = requestAnimationFrame(scroll);
     };
 
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!isDragging.current || !scrollRef.current) return;
-        e.preventDefault();
-        const x = e.pageX - scrollRef.current.offsetLeft;
-        const walk = (x - startX.current) * 1.5;
-        scrollRef.current.scrollLeft = scrollLeft.current - walk;
-    };
-
-    const handleMouseUp = () => {
-        isDragging.current = false;
-        if (scrollRef.current) scrollRef.current.style.cursor = 'grab';
+    const stopAutoScroll = () => {
+        if (animFrameRef.current) {
+            cancelAnimationFrame(animFrameRef.current);
+            animFrameRef.current = null;
+        }
     };
 
     return (
@@ -118,26 +115,21 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     ))}
                 </div>
             ) : (
-                /* DESKTOP — drag to scroll, hidden scrollbar, hover effect with radius */
+                /* DESKTOP — conveyor belt auto scroll on hover */
                 <div
-                    onMouseEnter={() => setIsHovering(true)}
-                    onMouseLeave={() => { setIsHovering(false); handleMouseUp(); }}
-                    style={{ position: 'relative', overflow: 'hidden', borderRadius: '12px' }}
+                    onMouseEnter={startAutoScroll}
+                    onMouseLeave={stopAutoScroll}
+                    style={{ position: 'relative', overflow: 'hidden' }}
                 >
                     <div
                         ref={scrollRef}
                         className="cert-scroll"
-                        onMouseDown={handleMouseDown}
-                        onMouseMove={handleMouseMove}
-                        onMouseUp={handleMouseUp}
-                        onMouseLeave={handleMouseUp}
                         style={{
                             display: 'flex',
                             gap: '16px',
                             overflowX: 'auto',
                             padding: '10px 4px 20px',
                             scrollSnapType: 'x mandatory',
-                            cursor: isHovering ? 'grab' : 'default',
                             userSelect: 'none',
                         }}
                     >
@@ -145,7 +137,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             <div
                                 key={cert.id}
                                 onClick={() => setSelectedCert(cert)}
-                                className="cert-card"
                                 style={{
                                     minWidth: 'clamp(260px, 75vw, 340px)',
                                     borderRadius: '20px',
