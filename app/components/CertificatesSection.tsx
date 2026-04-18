@@ -22,8 +22,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
-    const [isHovering, setIsHovering] = useState(false);
-    const animFrameRef = useRef<number | null>(null);
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
@@ -31,41 +29,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         window.addEventListener('resize', check);
         return () => window.removeEventListener('resize', check);
     }, []);
-
-    // Conveyor belt auto-scroll on hover
-    useEffect(() => {
-        if (isMobile) return;
-
-        const el = scrollRef.current;
-        if (!el) return;
-
-        const speed = 1.2; // px per frame
-
-        const animate = () => {
-            if (!el) return;
-            el.scrollLeft += speed;
-            // Loop back to start when reaching end
-            if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
-                el.scrollLeft = 0;
-            }
-            animFrameRef.current = requestAnimationFrame(animate);
-        };
-
-        if (isHovering) {
-            animFrameRef.current = requestAnimationFrame(animate);
-        } else {
-            if (animFrameRef.current !== null) {
-                cancelAnimationFrame(animFrameRef.current);
-                animFrameRef.current = null;
-            }
-        }
-
-        return () => {
-            if (animFrameRef.current !== null) {
-                cancelAnimationFrame(animFrameRef.current);
-            }
-        };
-    }, [isHovering, isMobile]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -85,7 +48,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     }, [selectedCert]);
 
     return (
-        <section className="card no-lift" style={{ width: '100%', background: '#fff' }}>
+        <section
+            className="card"
+            style={{ width: '100%', background: '#fff' }}
+        >
             {/* HEADER */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
                 <div style={{ width: '32px', height: '32px', position: 'relative' }}>
@@ -130,85 +96,78 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     ))}
                 </div>
             ) : (
-                /* DESKTOP CONVEYOR BELT SCROLL ROW */
+                /* DESKTOP SCROLL ROW */
                 <div
-                    onMouseEnter={() => setIsHovering(true)}
-                    onMouseLeave={() => setIsHovering(false)}
-                    style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+                    ref={scrollRef}
+                    className="no-scrollbar"
+                    style={{
+                        display: 'flex',
+                        gap: '16px',
+                        overflowX: 'auto',
+                        padding: '10px 4px',
+                        scrollSnapType: 'x mandatory',
+                    }}
                 >
-                    <div
-                        ref={scrollRef}
-                        className="no-scrollbar"
-                        style={{
-                            display: 'flex',
-                            gap: '16px',
-                            overflowX: 'auto',
-                            padding: '10px 4px',
-                            flex: 1,
-                            scrollSnapType: 'none',
-                            cursor: 'default',
-                        }}
-                    >
-                        {certificates.map((cert) => (
-                            <div
-                                key={cert.id}
-                                onClick={() => setSelectedCert(cert)}
-                                className="cert-card"
-                                style={{
-                                    minWidth: 'clamp(260px, 75vw, 340px)',
-                                    borderRadius: '20px',
-                                    border: '0.5px solid rgba(0,0,0,0.1)',
-                                    background: '#fff',
-                                    cursor: 'pointer',
-                                    overflow: 'hidden',
-                                    flexShrink: 0,
-                                    transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease',
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
-                                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                                    e.currentTarget.style.boxShadow = 'none';
-                                }}
-                            >
-                                <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
-                                    <Image
-                                        src={cert.imageUrl}
-                                        alt={cert.title}
-                                        fill
-                                        style={{ objectFit: 'cover' }}
-                                        unoptimized
-                                    />
-                                </div>
-
-                                <div style={{
-                                    padding: '12px 14px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    borderTop: '0.5px solid rgba(0,0,0,0.06)'
-                                }}>
-                                    <div style={{
-                                        width: '8px', height: '8px', borderRadius: '50%',
-                                        background: getIssuerColor(cert.issuer), flexShrink: 0
-                                    }} />
-                                    <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
-                                        {cert.title}
-                                    </span>
-                                    <span style={{
-                                        fontSize: '11px', fontWeight: 600,
-                                        border: '1.5px solid #000',
-                                        padding: '4px 10px', borderRadius: '20px',
-                                        whiteSpace: 'nowrap', flexShrink: 0
-                                    }}>
-                                        {cert.issuer}
-                                    </span>
-                                </div>
+                    {certificates.map((cert) => (
+                        <div
+                            key={cert.id}
+                            onClick={() => setSelectedCert(cert)}
+                            className="cert-card"
+                            style={{
+                                minWidth: 'clamp(260px, 75vw, 340px)',
+                                borderRadius: '20px',
+                                border: '0.5px solid rgba(0,0,0,0.1)',
+                                background: '#fff',
+                                cursor: 'pointer',
+                                overflow: 'hidden',
+                                flexShrink: 0,
+                                scrollSnapAlign: 'start',
+                                transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease',
+                            }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
+                                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                                e.currentTarget.style.boxShadow = 'none';
+                            }}
+                        >
+                            <div style={{ position: 'relative', height: '220px', background: '#f2f2f7', borderRadius: '20px 20px 0 0', overflow: 'hidden' }}>
+                                <Image
+                                    src={cert.imageUrl}
+                                    alt={cert.title}
+                                    fill
+                                    style={{ objectFit: 'cover' }}
+                                    unoptimized
+                                />
                             </div>
-                        ))}
-                    </div>
+
+                            <div style={{
+                                padding: '12px 14px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                borderTop: '0.5px solid rgba(0,0,0,0.06)'
+                            }}>
+                                <div style={{
+                                    width: '8px', height: '8px', borderRadius: '50%',
+                                    background: getIssuerColor(cert.issuer), flexShrink: 0
+                                }} />
+                                <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
+                                    {cert.title}
+                                </span>
+                                <span style={{
+                                    fontSize: '11px', fontWeight: 600,
+                                    border: '1.5px solid #000',
+                                    padding: '4px 10px', borderRadius: '20px',
+                                    whiteSpace: 'nowrap', flexShrink: 0
+                                }}>
+                                    {cert.issuer}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             )}
 
@@ -248,9 +207,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-                .no-lift:hover {
-                    transform: none !important;
-                    box-shadow: none !important;
+                /* Section container hover — same lift as other cards */
+                section.card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 12px 40px rgba(0,0,0,0.10);
                 }
 
                 .modal-overlay {
