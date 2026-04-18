@@ -3,7 +3,7 @@
 import { Certificate } from '../types/portfolio';
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
-import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
 import { createPortal } from 'react-dom';
 
 interface CertificatesSectionProps {
@@ -19,12 +19,11 @@ const getIssuerColor = (issuer: string) => {
 
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
-    const showNav = certificates.length > 3;
 
-    const [atStart, setAtStart] = useState(true);
-    const [atEnd, setAtEnd] = useState(false);
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
+    const [isHovering, setIsHovering] = useState(false);
+    const animFrameRef = useRef<number | null>(null);
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
@@ -33,22 +32,40 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => window.removeEventListener('resize', check);
     }, []);
 
-    const checkScrollPosition = () => {
-        if (scrollRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-            setAtStart(scrollLeft <= 10);
-            setAtEnd(scrollLeft + clientWidth >= scrollWidth - 10);
-        }
-    };
-
+    // Conveyor belt auto-scroll on hover
     useEffect(() => {
+        if (isMobile) return;
+
         const el = scrollRef.current;
-        if (el) {
-            el.addEventListener('scroll', checkScrollPosition);
-            checkScrollPosition();
-            return () => el.removeEventListener('scroll', checkScrollPosition);
+        if (!el) return;
+
+        const speed = 1.2; // px per frame
+
+        const animate = () => {
+            if (!el) return;
+            el.scrollLeft += speed;
+            // Loop back to start when reaching end
+            if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
+                el.scrollLeft = 0;
+            }
+            animFrameRef.current = requestAnimationFrame(animate);
+        };
+
+        if (isHovering) {
+            animFrameRef.current = requestAnimationFrame(animate);
+        } else {
+            if (animFrameRef.current !== null) {
+                cancelAnimationFrame(animFrameRef.current);
+                animFrameRef.current = null;
+            }
         }
-    }, []);
+
+        return () => {
+            if (animFrameRef.current !== null) {
+                cancelAnimationFrame(animFrameRef.current);
+            }
+        };
+    }, [isHovering, isMobile]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -66,15 +83,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         }
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
-
-    const scroll = (direction: 'left' | 'right') => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollBy({
-                left: direction === 'left' ? -370 : 370,
-                behavior: 'smooth'
-            });
-        }
-    };
 
     return (
         <section className="card no-lift" style={{ width: '100%', background: '#fff' }}>
@@ -122,17 +130,12 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     ))}
                 </div>
             ) : (
-                /* DESKTOP SCROLL ROW */
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    {showNav && (
-                        <button onClick={() => scroll('left')} style={{
-                            background: 'none', border: 'none', zIndex: 2,
-                            opacity: atStart ? 0.2 : 1, cursor: 'pointer'
-                        }}>
-                            <FiChevronLeft size={32} />
-                        </button>
-                    )}
-
+                /* DESKTOP CONVEYOR BELT SCROLL ROW */
+                <div
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
+                    style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+                >
                     <div
                         ref={scrollRef}
                         className="no-scrollbar"
@@ -142,13 +145,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             overflowX: 'auto',
                             padding: '10px 4px',
                             flex: 1,
-                            scrollSnapType: 'x mandatory'
+                            scrollSnapType: 'none',
+                            cursor: 'default',
                         }}
                     >
                         {certificates.map((cert) => (
                             <div
                                 key={cert.id}
                                 onClick={() => setSelectedCert(cert)}
+                                className="cert-card"
                                 style={{
                                     minWidth: 'clamp(260px, 75vw, 340px)',
                                     borderRadius: '20px',
@@ -157,14 +162,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     cursor: 'pointer',
                                     overflow: 'hidden',
                                     flexShrink: 0,
-                                    scrollSnapAlign: 'start',
-                                    transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                    transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease',
                                 }}
                                 onMouseEnter={e => {
                                     e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
+                                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
                                 }}
                                 onMouseLeave={e => {
                                     e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                                    e.currentTarget.style.boxShadow = 'none';
                                 }}
                             >
                                 <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
@@ -203,15 +209,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             </div>
                         ))}
                     </div>
-
-                    {showNav && (
-                        <button onClick={() => scroll('right')} style={{
-                            background: 'none', border: 'none', zIndex: 2,
-                            opacity: atEnd ? 0.2 : 1, cursor: 'pointer'
-                        }}>
-                            <FiChevronRight size={32} />
-                        </button>
-                    )}
                 </div>
             )}
 
@@ -249,6 +246,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
             <style jsx>{`
                 .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
                 .no-lift:hover {
                     transform: none !important;
