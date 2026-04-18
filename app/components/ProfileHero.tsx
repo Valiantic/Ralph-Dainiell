@@ -25,61 +25,70 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             width: '100%',
             flexWrap: 'wrap'
         }}>
-            {/* 1. Profile Pic */}
-            <div className="hero-img-container" style={{
-                width: '180px',
-                height: '180px',
-                borderRadius: '32px',
-                background: '#000',
+            {/* TOP ROW: pic + bio info side by side on mobile */}
+            <div className="hero-top-row" style={{
                 display: 'flex',
+                gap: '24px',
                 alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                flexShrink: 0,
-                position: 'relative',
-                overflow: 'hidden',
-                border: '1.5px solid #000'
+                width: '100%',
+                flexWrap: 'nowrap'
             }}>
-                {data.profileImage ? (
-                    <Image src={data.profileImage} alt={data.name} fill style={{ objectFit: 'cover', objectPosition: 'center top' }} />
-                ) : (
-                    <span style={{ fontSize: '12px', opacity: 0.5 }}>image here</span>
-                )}
-            </div>
+                {/* 1. Profile Pic */}
+                <div className="hero-img-container" style={{
+                    width: '180px',
+                    height: '180px',
+                    borderRadius: '32px',
+                    background: '#000',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                    flexShrink: 0,
+                    position: 'relative',
+                    overflow: 'hidden',
+                    border: '1.5px solid #000'
+                }}>
+                    {data.profileImage ? (
+                        <Image src={data.profileImage} alt={data.name} fill style={{ objectFit: 'cover', objectPosition: 'center top' }} />
+                    ) : (
+                        <span style={{ fontSize: '12px', opacity: 0.5 }}>image here</span>
+                    )}
+                </div>
 
-            {/* 2. Main Bio Info */}
-            <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
-                <h1 style={{ fontSize: '42px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#000', fontSize: '15px' }}>
-                    <IoLocationOutline size={18} color="#000" />
-                    {data.location}
-                </div>
-                <div style={{ fontSize: '24px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
-                    {data.roles.join(' \\ ')}
-                </div>
-                <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                    <Link
-                        href="/resume/GonzagaRalphDainiellCVresume_.pdf"
-                        target="_blank"
-                        download
-                        className="cv-button"
-                        style={{
-                            background: '#2b6ef2', color: '#fff', padding: '12px 24px',
-                            borderRadius: '16px', fontWeight: 700, display: 'flex',
-                            alignItems: 'center', gap: '10px', textDecoration: 'none',
-                            fontSize: '15px', height: '52px', boxSizing: 'border-box'
-                        }}
-                    >
-                        <GoFileZip size={18} color="#fff" />
-                        Download CV
-                    </Link>
-                    <div className="card phone-card" style={{
-                        padding: '12px 20px', borderRadius: '16px', display: 'flex',
-                        alignItems: 'center', gap: '10px', fontWeight: 700, fontSize: '16px',
-                        height: '52px', boxSizing: 'border-box', border: '1.5px solid #000'
-                    }}>
-                        <LuPhone size={18} color="#000" />
-                        {data.contact.phone}
+                {/* 2. Main Bio Info */}
+                <div className="hero-info" style={{ flex: '1 1 0', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '0' }}>
+                    <h1 style={{ fontSize: '42px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#000', fontSize: '15px' }}>
+                        <IoLocationOutline size={18} color="#000" />
+                        {data.location}
+                    </div>
+                    <div style={{ fontSize: '24px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
+                        {data.roles.join(' \\ ')}
+                    </div>
+                    <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                        <Link
+                            href="/resume/GonzagaRalphDainiellCVresume_.pdf"
+                            target="_blank"
+                            download
+                            className="cv-button"
+                            style={{
+                                background: '#2b6ef2', color: '#fff', padding: '12px 24px',
+                                borderRadius: '16px', fontWeight: 700, display: 'flex',
+                                alignItems: 'center', gap: '10px', textDecoration: 'none',
+                                fontSize: '15px', height: '52px', boxSizing: 'border-box'
+                            }}
+                        >
+                            <GoFileZip size={18} color="#fff" />
+                            Download CV
+                        </Link>
+                        <div className="card phone-card" style={{
+                            padding: '12px 20px', borderRadius: '16px', display: 'flex',
+                            alignItems: 'center', gap: '10px', fontWeight: 700, fontSize: '16px',
+                            height: '52px', boxSizing: 'border-box', border: '1.5px solid #000'
+                        }}>
+                            <LuPhone size={18} color="#000" />
+                            {data.contact.phone}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -267,20 +276,25 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         align-items: stretch !important;
                         gap: 16px !important;
                     }
+                    .hero-top-row {
+                        flex-direction: row !important;
+                        align-items: center !important;
+                        gap: 16px !important;
+                        width: 100% !important;
+                    }
                     .hero-img-container {
                         width: 90px !important;
                         height: 90px !important;
                         border-radius: 20px !important;
                         flex-shrink: 0 !important;
-                        align-self: flex-start !important;
                     }
                     .hero-info {
-                        width: 100% !important;
+                        flex: 1 !important;
                         min-width: 0 !important;
-                        flex: none !important;
                     }
                     .hero-info h1 {
-                        font-size: 32px !important;
+                        font-size: 22px !important;
+                        letter-spacing: -0.5px !important;
                     }
                     .hero-buttons {
                         flex-direction: column !important;
