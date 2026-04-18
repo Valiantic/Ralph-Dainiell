@@ -20,10 +20,10 @@ const getIssuerColor = (issuer: string) => {
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const animFrameRef = useRef<number | null>(null);
+    const isHoveringRef = useRef(false);
 
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
-    const [isHovering, setIsHovering] = useState(false);
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
@@ -32,33 +32,51 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => window.removeEventListener('resize', check);
     }, []);
 
+    // Conveyor belt using ref (not state) to avoid re-render issues
     useEffect(() => {
         if (isMobile) return;
+
+        const section = document.querySelector('.cert-section') as HTMLElement;
+        if (!section) return;
+
         const el = scrollRef.current;
         if (!el) return;
+
         const speed = 1.2;
+
         const animate = () => {
-            if (!el) return;
+            if (!isHoveringRef.current) return;
             el.scrollLeft += speed;
             if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
                 el.scrollLeft = 0;
             }
             animFrameRef.current = requestAnimationFrame(animate);
         };
-        if (isHovering) {
+
+        const handleEnter = () => {
+            isHoveringRef.current = true;
             animFrameRef.current = requestAnimationFrame(animate);
-        } else {
+        };
+
+        const handleLeave = () => {
+            isHoveringRef.current = false;
             if (animFrameRef.current !== null) {
                 cancelAnimationFrame(animFrameRef.current);
                 animFrameRef.current = null;
             }
-        }
+        };
+
+        section.addEventListener('mouseenter', handleEnter);
+        section.addEventListener('mouseleave', handleLeave);
+
         return () => {
+            section.removeEventListener('mouseenter', handleEnter);
+            section.removeEventListener('mouseleave', handleLeave);
             if (animFrameRef.current !== null) {
                 cancelAnimationFrame(animFrameRef.current);
             }
         };
-    }, [isHovering, isMobile]);
+    }, [isMobile]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -81,8 +99,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         <section
             className="card cert-section"
             style={{ width: '100%', background: '#fff' }}
-            onMouseEnter={() => !isMobile && setIsHovering(true)}
-            onMouseLeave={() => !isMobile && setIsHovering(false)}
         >
             {/* HEADER */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
@@ -128,85 +144,89 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     ))}
                 </div>
             ) : (
-                /* DESKTOP CAROUSEL SCROLL ROW */
-                <div
-                    ref={scrollRef}
-                    className="no-scrollbar"
-                    style={{
-                        display: 'flex',
-                        gap: '16px',
-                        overflowX: 'auto',
-                        overflowY: 'visible',
-                        padding: '10px 4px 20px 4px',
-                        flex: 1,
-                        scrollSnapType: 'x mandatory',
-                    }}
-                >
-                    {certificates.map((cert) => (
-                        <div
-                            key={cert.id}
-                            onClick={() => setSelectedCert(cert)}
-                            style={{
-                                minWidth: 'clamp(260px, 75vw, 340px)',
-                                borderRadius: '20px',
-                                outline: '0.5px solid rgba(0,0,0,0.1)',
-                                background: '#fff',
-                                cursor: 'pointer',
-                                overflow: 'hidden',
-                                flexShrink: 0,
-                                scrollSnapAlign: 'start',
-                                transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease',
-                                willChange: 'transform',
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
-                                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                                e.currentTarget.style.boxShadow = 'none';
-                            }}
-                        >
-                            <div style={{
-                                position: 'relative',
-                                height: '220px',
-                                background: '#f2f2f7',
-                            }}>
-                                <Image
-                                    src={cert.imageUrl}
-                                    alt={cert.title}
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                    unoptimized
-                                />
-                            </div>
-
-                            <div style={{
-                                padding: '12px 14px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                borderTop: '0.5px solid rgba(0,0,0,0.06)',
-                                background: '#fff',
-                            }}>
+                /* DESKTOP — wrapper handles Y overflow, inner div handles X scroll */
+                <div style={{
+                    overflowY: 'visible',
+                    overflowX: 'hidden',
+                    margin: '0 -4px',
+                }}>
+                    <div
+                        ref={scrollRef}
+                        className="no-scrollbar"
+                        style={{
+                            display: 'flex',
+                            gap: '16px',
+                            overflowX: 'auto',
+                            padding: '10px 4px 20px 4px',
+                            scrollSnapType: 'x mandatory',
+                        }}
+                    >
+                        {certificates.map((cert) => (
+                            <div
+                                key={cert.id}
+                                onClick={() => setSelectedCert(cert)}
+                                style={{
+                                    minWidth: 'clamp(260px, 75vw, 340px)',
+                                    borderRadius: '20px',
+                                    outline: '0.5px solid rgba(0,0,0,0.1)',
+                                    background: '#fff',
+                                    cursor: 'pointer',
+                                    overflow: 'hidden',
+                                    flexShrink: 0,
+                                    scrollSnapAlign: 'start',
+                                    transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease',
+                                    willChange: 'transform',
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
+                                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                                    e.currentTarget.style.boxShadow = 'none';
+                                }}
+                            >
                                 <div style={{
-                                    width: '8px', height: '8px', borderRadius: '50%',
-                                    background: getIssuerColor(cert.issuer), flexShrink: 0
-                                }} />
-                                <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
-                                    {cert.title}
-                                </span>
-                                <span style={{
-                                    fontSize: '11px', fontWeight: 600,
-                                    border: '1.5px solid #000',
-                                    padding: '4px 10px', borderRadius: '20px',
-                                    whiteSpace: 'nowrap', flexShrink: 0
+                                    position: 'relative',
+                                    height: '220px',
+                                    background: '#f2f2f7',
                                 }}>
-                                    {cert.issuer}
-                                </span>
+                                    <Image
+                                        src={cert.imageUrl}
+                                        alt={cert.title}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        unoptimized
+                                    />
+                                </div>
+
+                                <div style={{
+                                    padding: '12px 14px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    borderTop: '0.5px solid rgba(0,0,0,0.06)',
+                                    background: '#fff',
+                                }}>
+                                    <div style={{
+                                        width: '8px', height: '8px', borderRadius: '50%',
+                                        background: getIssuerColor(cert.issuer), flexShrink: 0
+                                    }} />
+                                    <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
+                                        {cert.title}
+                                    </span>
+                                    <span style={{
+                                        fontSize: '11px', fontWeight: 600,
+                                        border: '1.5px solid #000',
+                                        padding: '4px 10px', borderRadius: '20px',
+                                        whiteSpace: 'nowrap', flexShrink: 0
+                                    }}>
+                                        {cert.issuer}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             )}
 
@@ -246,11 +266,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-                /*
-                 * Override globals.css .card:hover para sa cert-section.
-                 * The global sets translateY(-2px) — we want our own stronger lift.
-                 * Using !important to guarantee override.
-                 */
                 .cert-section.card {
                     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
                 }
