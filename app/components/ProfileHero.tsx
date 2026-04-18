@@ -16,6 +16,13 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredSocial, setHoveredSocial] = useState<string | null>(null);
     const [hoveredSendEmail, setHoveredSendEmail] = useState(false);
     const [hoveredContact, setHoveredContact] = useState(false);
+    const [copied, setCopied] = useState(false);
+
+    const handleCopyPhone = () => {
+        navigator.clipboard.writeText(data.contact.phone);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     return (
         <section className="profile-hero" style={{
@@ -73,13 +80,20 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         <GoFileZip size={18} color="#fff" />
                         Download CV
                     </Link>
-                    <div className="card phone-card" style={{
-                        padding: '12px 20px', borderRadius: '16px', display: 'flex',
-                        alignItems: 'center', gap: '10px', fontWeight: 700, fontSize: '16px',
-                        height: '52px', boxSizing: 'border-box', border: '1.5px solid #000'
-                    }}>
+                    <div
+                        className="card phone-card"
+                        onClick={handleCopyPhone}
+                        title={copied ? 'Copied!' : 'Click to copy'}
+                        style={{
+                            padding: '12px 20px', borderRadius: '16px', display: 'flex',
+                            alignItems: 'center', gap: '10px', fontWeight: 700, fontSize: '16px',
+                            height: '52px', boxSizing: 'border-box', border: '1.5px solid #000',
+                            cursor: 'pointer', userSelect: 'none',
+                            position: 'relative'
+                        }}
+                    >
                         <LuPhone size={18} color="#000" />
-                        {data.contact.phone}
+                        {copied ? 'Copied!' : data.contact.phone}
                     </div>
                 </div>
             </div>
