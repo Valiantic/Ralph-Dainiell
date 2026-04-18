@@ -246,14 +246,17 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-                @media (hover: hover) {
-                    .cert-section {
-                        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
-                    }
-                    .cert-section:hover {
-                        transform: translateY(-6px) !important;
-                        box-shadow: 0 16px 48px rgba(0,0,0,0.12) !important;
-                    }
+                /*
+                 * Override globals.css .card:hover para sa cert-section.
+                 * The global sets translateY(-2px) — we want our own stronger lift.
+                 * Using !important to guarantee override.
+                 */
+                .cert-section.card {
+                    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
+                }
+                .cert-section.card:hover {
+                    transform: translateY(-6px) !important;
+                    box-shadow: 0 16px 48px rgba(0,0,0,0.12) !important;
                 }
 
                 .modal-overlay {
