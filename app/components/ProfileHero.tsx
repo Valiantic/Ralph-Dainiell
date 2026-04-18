@@ -65,7 +65,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     {data.roles.join(' \\ ')}
                 </div>
                 <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                    <Link
+                   <Link
                         href="/resume/GonzagaRalphDainiellCVresume_.pdf"
                         target="_blank"
                         download
@@ -74,7 +74,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             background: '#2b6ef2', color: '#fff', padding: '12px 24px',
                             borderRadius: '16px', fontWeight: 700, display: 'flex',
                             alignItems: 'center', gap: '10px', textDecoration: 'none',
-                            fontSize: '15px', height: '52px', boxSizing: 'border-box'
+                            fontSize: '15px', height: '52px', boxSizing: 'border-box',
+                            justifyContent: 'flex-start'
                         }}
                     >
                         <GoFileZip size={18} color="#fff" />
