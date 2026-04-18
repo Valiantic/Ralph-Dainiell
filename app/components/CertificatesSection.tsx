@@ -19,9 +19,11 @@ const getIssuerColor = (issuer: string) => {
 
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
+    const animFrameRef = useRef<number | null>(null);
 
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
+    const [isHovering, setIsHovering] = useState(false);
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
@@ -29,6 +31,39 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         window.addEventListener('resize', check);
         return () => window.removeEventListener('resize', check);
     }, []);
+
+    // Conveyor belt — only on devices with cursor, only when hovering the section
+    useEffect(() => {
+        if (isMobile) return;
+        const el = scrollRef.current;
+        if (!el) return;
+
+        const speed = 1.2;
+
+        const animate = () => {
+            if (!el) return;
+            el.scrollLeft += speed;
+            if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
+                el.scrollLeft = 0;
+            }
+            animFrameRef.current = requestAnimationFrame(animate);
+        };
+
+        if (isHovering) {
+            animFrameRef.current = requestAnimationFrame(animate);
+        } else {
+            if (animFrameRef.current !== null) {
+                cancelAnimationFrame(animFrameRef.current);
+                animFrameRef.current = null;
+            }
+        }
+
+        return () => {
+            if (animFrameRef.current !== null) {
+                cancelAnimationFrame(animFrameRef.current);
+            }
+        };
+    }, [isHovering, isMobile]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -51,6 +86,8 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         <section
             className="card cert-section"
             style={{ width: '100%', background: '#fff' }}
+            onMouseEnter={() => !isMobile && setIsHovering(true)}
+            onMouseLeave={() => !isMobile && setIsHovering(false)}
         >
             {/* HEADER */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
@@ -96,7 +133,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     ))}
                 </div>
             ) : (
-                /* DESKTOP SCROLL ROW — no arrows, hidden scrollbar, manual scroll */
+                /* DESKTOP CAROUSEL SCROLL ROW */
                 <div
                     ref={scrollRef}
                     className="no-scrollbar"
@@ -113,13 +150,14 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         <div
                             key={cert.id}
                             onClick={() => setSelectedCert(cert)}
+                            className="cert-card"
                             style={{
                                 minWidth: 'clamp(260px, 75vw, 340px)',
                                 borderRadius: '20px',
                                 border: '0.5px solid rgba(0,0,0,0.1)',
                                 background: '#fff',
                                 cursor: 'pointer',
-                                overflow: 'hidden',
+                                // NO overflow:hidden here — so border-radius shows on hover/scale
                                 flexShrink: 0,
                                 scrollSnapAlign: 'start',
                                 transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease',
@@ -133,6 +171,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 e.currentTarget.style.boxShadow = 'none';
                             }}
                         >
+                            {/* Image wrapper clips to top radius only */}
                             <div style={{
                                 position: 'relative',
                                 height: '220px',
@@ -149,12 +188,16 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 />
                             </div>
 
+                            {/* Bottom info — clip to bottom radius */}
                             <div style={{
                                 padding: '12px 14px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '8px',
-                                borderTop: '0.5px solid rgba(0,0,0,0.06)'
+                                borderTop: '0.5px solid rgba(0,0,0,0.06)',
+                                borderRadius: '0 0 20px 20px',
+                                overflow: 'hidden',
+                                background: '#fff',
                             }}>
                                 <div style={{
                                     width: '8px', height: '8px', borderRadius: '50%',
@@ -213,7 +256,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-                /* Section container hover lift — desktop only */
+                /* Section container hover lift — desktop/cursor devices only */
                 @media (hover: hover) {
                     .cert-section {
                         transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
