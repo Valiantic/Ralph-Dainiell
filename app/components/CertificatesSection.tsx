@@ -49,7 +49,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
     return (
         <section
-            className="card"
+            className="card cert-section"
             style={{ width: '100%', background: '#fff' }}
         >
             {/* HEADER */}
@@ -96,7 +96,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     ))}
                 </div>
             ) : (
-                /* DESKTOP SCROLL ROW */
+                /* DESKTOP SCROLL ROW — no arrows, hidden scrollbar, manual scroll */
                 <div
                     ref={scrollRef}
                     className="no-scrollbar"
@@ -105,6 +105,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         gap: '16px',
                         overflowX: 'auto',
                         padding: '10px 4px',
+                        flex: 1,
                         scrollSnapType: 'x mandatory',
                     }}
                 >
@@ -112,7 +113,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         <div
                             key={cert.id}
                             onClick={() => setSelectedCert(cert)}
-                            className="cert-card"
                             style={{
                                 minWidth: 'clamp(260px, 75vw, 340px)',
                                 borderRadius: '20px',
@@ -133,7 +133,13 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 e.currentTarget.style.boxShadow = 'none';
                             }}
                         >
-                            <div style={{ position: 'relative', height: '220px', background: '#f2f2f7', borderRadius: '20px 20px 0 0', overflow: 'hidden' }}>
+                            <div style={{
+                                position: 'relative',
+                                height: '220px',
+                                background: '#f2f2f7',
+                                borderRadius: '20px 20px 0 0',
+                                overflow: 'hidden',
+                            }}>
                                 <Image
                                     src={cert.imageUrl}
                                     alt={cert.title}
@@ -207,10 +213,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-                /* Section container hover — same lift as other cards */
-                section.card:hover {
-                    transform: translateY(-4px);
-                    box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+                /* Section container hover lift — desktop only */
+                @media (hover: hover) {
+                    .cert-section {
+                        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
+                    }
+                    .cert-section:hover {
+                        transform: translateY(-6px) !important;
+                        box-shadow: 0 16px 48px rgba(0,0,0,0.12) !important;
+                    }
                 }
 
                 .modal-overlay {
