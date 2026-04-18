@@ -19,10 +19,13 @@ const getIssuerColor = (issuer: string) => {
 
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
+    const isDragging = useRef(false);
+    const startX = useRef(0);
+    const scrollLeft = useRef(0);
 
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
-    const [isHoveringScroll, setIsHoveringScroll] = useState(false);
+    const [isHovering, setIsHovering] = useState(false);
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
@@ -47,6 +50,27 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         }
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        if (!scrollRef.current) return;
+        isDragging.current = true;
+        startX.current = e.pageX - scrollRef.current.offsetLeft;
+        scrollLeft.current = scrollRef.current.scrollLeft;
+        scrollRef.current.style.cursor = 'grabbing';
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging.current || !scrollRef.current) return;
+        e.preventDefault();
+        const x = e.pageX - scrollRef.current.offsetLeft;
+        const walk = (x - startX.current) * 1.5;
+        scrollRef.current.scrollLeft = scrollLeft.current - walk;
+    };
+
+    const handleMouseUp = () => {
+        isDragging.current = false;
+        if (scrollRef.current) scrollRef.current.style.cursor = 'grab';
+    };
 
     return (
         <section className="card no-lift" style={{ width: '100%', background: '#fff' }}>
@@ -94,28 +118,34 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     ))}
                 </div>
             ) : (
-                /* DESKTOP SCROLL ROW — no arrows, scroll on hover */
+                /* DESKTOP — drag to scroll, hidden scrollbar, hover effect with radius */
                 <div
-                    onMouseEnter={() => setIsHoveringScroll(true)}
-                    onMouseLeave={() => setIsHoveringScroll(false)}
-                    style={{ position: 'relative' }}
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => { setIsHovering(false); handleMouseUp(); }}
+                    style={{ position: 'relative', overflow: 'hidden', borderRadius: '12px' }}
                 >
                     <div
                         ref={scrollRef}
                         className="cert-scroll"
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseUp}
                         style={{
                             display: 'flex',
                             gap: '16px',
-                            overflowX: isHoveringScroll ? 'auto' : 'hidden',
-                            padding: '10px 4px',
+                            overflowX: 'auto',
+                            padding: '10px 4px 20px',
                             scrollSnapType: 'x mandatory',
-                            cursor: isHoveringScroll ? 'grab' : 'default',
+                            cursor: isHovering ? 'grab' : 'default',
+                            userSelect: 'none',
                         }}
                     >
                         {certificates.map((cert) => (
                             <div
                                 key={cert.id}
                                 onClick={() => setSelectedCert(cert)}
+                                className="cert-card"
                                 style={{
                                     minWidth: 'clamp(260px, 75vw, 340px)',
                                     borderRadius: '20px',
@@ -129,11 +159,13 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 }}
                                 onMouseEnter={e => {
                                     e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
-                                    e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.10)';
+                                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
+                                    e.currentTarget.style.borderRadius = '20px';
                                 }}
                                 onMouseLeave={e => {
                                     e.currentTarget.style.transform = 'scale(1) translateY(0)';
                                     e.currentTarget.style.boxShadow = 'none';
+                                    e.currentTarget.style.borderRadius = '20px';
                                 }}
                             >
                                 <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
