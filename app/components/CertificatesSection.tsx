@@ -3,7 +3,7 @@
 import { Certificate } from '../types/portfolio';
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
-import { FiX } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
 import { createPortal } from 'react-dom';
 
 interface CertificatesSectionProps {
@@ -19,8 +19,10 @@ const getIssuerColor = (issuer: string) => {
 
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
-    const animFrameRef = useRef<number | null>(null);
+    const showNav = certificates.length > 3;
 
+    const [atStart, setAtStart] = useState(true);
+    const [atEnd, setAtEnd] = useState(false);
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
 
@@ -29,6 +31,23 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         check();
         window.addEventListener('resize', check);
         return () => window.removeEventListener('resize', check);
+    }, []);
+
+    const checkScrollPosition = () => {
+        if (scrollRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+            setAtStart(scrollLeft <= 10);
+            setAtEnd(scrollLeft + clientWidth >= scrollWidth - 10);
+        }
+    };
+
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (el) {
+            el.addEventListener('scroll', checkScrollPosition);
+            checkScrollPosition();
+            return () => el.removeEventListener('scroll', checkScrollPosition);
+        }
     }, []);
 
     useEffect(() => {
@@ -48,24 +67,12 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
-    const startAutoScroll = () => {
-        const scroll = () => {
-            if (!scrollRef.current) return;
-            const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-            if (scrollLeft + clientWidth >= scrollWidth) {
-                scrollRef.current.scrollLeft = 0;
-            } else {
-                scrollRef.current.scrollLeft += 1;
-            }
-            animFrameRef.current = requestAnimationFrame(scroll);
-        };
-        animFrameRef.current = requestAnimationFrame(scroll);
-    };
-
-    const stopAutoScroll = () => {
-        if (animFrameRef.current) {
-            cancelAnimationFrame(animFrameRef.current);
-            animFrameRef.current = null;
+    const scroll = (direction: 'left' | 'right') => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({
+                left: direction === 'left' ? -370 : 370,
+                behavior: 'smooth'
+            });
         }
     };
 
@@ -115,22 +122,27 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     ))}
                 </div>
             ) : (
-                /* DESKTOP — conveyor belt auto scroll on hover */
-                <div
-                    onMouseEnter={startAutoScroll}
-                    onMouseLeave={stopAutoScroll}
-                    style={{ position: 'relative', overflow: 'hidden' }}
-                >
+                /* DESKTOP SCROLL ROW */
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {showNav && (
+                        <button onClick={() => scroll('left')} style={{
+                            background: 'none', border: 'none', zIndex: 2,
+                            opacity: atStart ? 0.2 : 1, cursor: 'pointer'
+                        }}>
+                            <FiChevronLeft size={32} />
+                        </button>
+                    )}
+
                     <div
                         ref={scrollRef}
-                        className="cert-scroll"
+                        className="no-scrollbar"
                         style={{
                             display: 'flex',
                             gap: '16px',
                             overflowX: 'auto',
-                            padding: '10px 4px 20px',
-                            scrollSnapType: 'x mandatory',
-                            userSelect: 'none',
+                            padding: '10px 4px',
+                            flex: 1,
+                            scrollSnapType: 'x mandatory'
                         }}
                     >
                         {certificates.map((cert) => (
@@ -146,17 +158,13 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     overflow: 'hidden',
                                     flexShrink: 0,
                                     scrollSnapAlign: 'start',
-                                    transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease',
+                                    transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
                                 }}
                                 onMouseEnter={e => {
                                     e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
-                                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
-                                    e.currentTarget.style.borderRadius = '20px';
                                 }}
                                 onMouseLeave={e => {
                                     e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                                    e.currentTarget.style.boxShadow = 'none';
-                                    e.currentTarget.style.borderRadius = '20px';
                                 }}
                             >
                                 <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
@@ -195,6 +203,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             </div>
                         ))}
                     </div>
+
+                    {showNav && (
+                        <button onClick={() => scroll('right')} style={{
+                            background: 'none', border: 'none', zIndex: 2,
+                            opacity: atEnd ? 0.2 : 1, cursor: 'pointer'
+                        }}>
+                            <FiChevronRight size={32} />
+                        </button>
+                    )}
                 </div>
             )}
 
@@ -231,8 +248,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             }
 
             <style jsx>{`
-                .cert-scroll::-webkit-scrollbar { display: none; }
-                .cert-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+                .no-scrollbar::-webkit-scrollbar { display: none; }
 
                 .no-lift:hover {
                     transform: none !important;
