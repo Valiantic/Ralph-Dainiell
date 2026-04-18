@@ -32,14 +32,11 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => window.removeEventListener('resize', check);
     }, []);
 
-    // Conveyor belt — only on devices with cursor, only when hovering the section
     useEffect(() => {
         if (isMobile) return;
         const el = scrollRef.current;
         if (!el) return;
-
         const speed = 1.2;
-
         const animate = () => {
             if (!el) return;
             el.scrollLeft += speed;
@@ -48,7 +45,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             }
             animFrameRef.current = requestAnimationFrame(animate);
         };
-
         if (isHovering) {
             animFrameRef.current = requestAnimationFrame(animate);
         } else {
@@ -57,7 +53,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 animFrameRef.current = null;
             }
         }
-
         return () => {
             if (animFrameRef.current !== null) {
                 cancelAnimationFrame(animFrameRef.current);
@@ -141,7 +136,8 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         display: 'flex',
                         gap: '16px',
                         overflowX: 'auto',
-                        padding: '10px 4px',
+                        overflowY: 'visible',
+                        padding: '10px 4px 20px 4px',
                         flex: 1,
                         scrollSnapType: 'x mandatory',
                     }}
@@ -150,17 +146,17 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         <div
                             key={cert.id}
                             onClick={() => setSelectedCert(cert)}
-                            className="cert-card"
                             style={{
                                 minWidth: 'clamp(260px, 75vw, 340px)',
                                 borderRadius: '20px',
-                                border: '0.5px solid rgba(0,0,0,0.1)',
+                                outline: '0.5px solid rgba(0,0,0,0.1)',
                                 background: '#fff',
                                 cursor: 'pointer',
-                                // NO overflow:hidden here — so border-radius shows on hover/scale
+                                overflow: 'hidden',
                                 flexShrink: 0,
                                 scrollSnapAlign: 'start',
                                 transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease',
+                                willChange: 'transform',
                             }}
                             onMouseEnter={e => {
                                 e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
@@ -171,13 +167,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 e.currentTarget.style.boxShadow = 'none';
                             }}
                         >
-                            {/* Image wrapper clips to top radius only */}
                             <div style={{
                                 position: 'relative',
                                 height: '220px',
                                 background: '#f2f2f7',
-                                borderRadius: '20px 20px 0 0',
-                                overflow: 'hidden',
                             }}>
                                 <Image
                                     src={cert.imageUrl}
@@ -188,15 +181,12 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 />
                             </div>
 
-                            {/* Bottom info — clip to bottom radius */}
                             <div style={{
                                 padding: '12px 14px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '8px',
                                 borderTop: '0.5px solid rgba(0,0,0,0.06)',
-                                borderRadius: '0 0 20px 20px',
-                                overflow: 'hidden',
                                 background: '#fff',
                             }}>
                                 <div style={{
@@ -256,7 +246,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-                /* Section container hover lift — desktop/cursor devices only */
                 @media (hover: hover) {
                     .cert-section {
                         transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
