@@ -4,7 +4,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
     name: "Ralph Dainiell Gonzaga",
     location: "Cavite, Philippines",
     profileImage: "/Images/profile.jpg",
-    roles: ["Data Analyst"],
+    roles: ["iOS App Developer"],
     contact: {
         email: "gonzagaralphdainiell@gmail.com",
         phone: "+63 945 289 3949",
