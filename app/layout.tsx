@@ -9,7 +9,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Ralph Gonzaga - Data Analyst",
+  title: "Ralph Gonzaga - iOS Developer",
   description: "Ralph Dainiell's Portfolio",
   icons: {
     icon: "/Images/FaviconPFP.jpg",

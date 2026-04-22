@@ -4,7 +4,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
     name: "Ralph Dainiell Gonzaga",
     location: "Cavite, Philippines",
     profileImage: "/Images/profile.jpg",
-    roles: ["Data Analyst"],
+    roles: ["iOS Developer"],
     contact: {
         email: "gonzagaralphdainiell@gmail.com",
         phone: "+63 945 289 3949",
@@ -25,7 +25,6 @@ export const PORTFOLIO_DATA: PortfolioData = {
     skills: [
         { name: "MySQL", category: "Programming Language" },
         { name: "Python", category: "Programming Language" },
-        { name: "R", category: "Programming Language" },
         { name: "HTML", category: "Programming Language" },
         { name: "CSS", category: "Programming Language" },
         { name: "Excel", category: "Analytics Software" },
