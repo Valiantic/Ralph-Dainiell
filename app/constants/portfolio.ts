@@ -17,11 +17,14 @@ export const PORTFOLIO_DATA: PortfolioData = {
         linkedin: "https://www.linkedin.com/in/ralph-dainiell",
     },
     bio: [
-        "I am a versatile IT professional with a strong foundation in database management and data analysis. I continuously refine my technical skills to transform complex data into actionable insights and efficient solutions. I approach every project with precision, ensuring accuracy, reliability, and measurable impact.",
-        "I am deeply passionate about pursuing a career as a Data Analyst, and I am actively preparing myself for real-world challenges by continuously learning, exploring, and building practical experience. My curiosity about data and its potential to drive decision-making motivates me to keep improving and expanding my expertise in this field.",
-        "Beyond my technical abilities, I bring creative skills in video editing. By combining analytical thinking with creativity, I create engaging digital content that communicates ideas clearly and effectively.",
-        "I also document my journey as an IT student and aspiring Data Analyst through content creation, where I share insights, experiences, and lessons learned along the way. Committed to continuous growth, I am always looking for opportunities to learn, collaborate, and contribute meaningfully through my skill set."
-    ],
+        "I am an aspiring IT professional currently building my foundation in software development, with a growing focus on iOS application development. I continuously refine my technical skills in Swift and modern iOS technologies to create efficient, user-centered applications. I approach every learning opportunity with discipline, aiming for accuracy, reliability, and continuous improvement.",
+        
+        "I am deeply committed to becoming a professional iOS app developer, and I actively prepare for real-world challenges through consistent practice, exploration, and hands-on experience. My curiosity about how applications impact user experience and solve real problems drives me to keep improving and expanding my expertise in this field.",
+        
+        "Beyond my technical development, I bring creative skills in video editing and content creation. By combining technical understanding with creativity, I produce engaging digital content that communicates ideas clearly, effectively, and with impact.",
+
+        "I also document my journey as an IT student and aspiring iOS developer through content creation, where I share insights, experiences, and lessons learned along the way. Committed to continuous growth, I am always seeking opportunities to learn, collaborate, and contribute meaningfully through both my technical and creative skill set."
+        ],
     skills: [
         { name: "MySQL", category: "Programming Language" },
         { name: "Python", category: "Programming Language" },
