@@ -1,10 +1,18 @@
 'use client';
 
 import { Certificate } from '../types/portfolio';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
 import { createPortal } from 'react-dom';
+import {
+    motion,
+    useMotionValue,
+    useSpring,
+    useTransform,
+    AnimatePresence,
+    useInView,
+} from 'framer-motion';
 
 interface CertificatesSectionProps {
     certificates: Certificate[];
@@ -17,9 +25,131 @@ const getIssuerColor = (issuer: string) => {
     return '#636366';
 };
 
+// ─── Card ────────────────────────────────────────────────────────────────────
+const CertCard = ({
+    cert,
+    index,
+    onClick,
+    hasCursor,
+}: {
+    cert: Certificate;
+    index: number;
+    onClick: () => void;
+    hasCursor: boolean;
+}) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const inView = useInView(ref, { once: true, margin: '0px -60px' });
+
+    // Tilt effect (desktop only)
+    const rotateX = useMotionValue(0);
+    const rotateY = useMotionValue(0);
+    const springX = useSpring(rotateX, { stiffness: 260, damping: 26 });
+    const springY = useSpring(rotateY, { stiffness: 260, damping: 26 });
+
+    const handleMouseMove = useCallback(
+        (e: React.MouseEvent<HTMLDivElement>) => {
+            if (!hasCursor || !ref.current) return;
+            const rect = ref.current.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            rotateY.set(((e.clientX - cx) / rect.width) * 10);
+            rotateX.set(-((e.clientY - cy) / rect.height) * 10);
+        },
+        [hasCursor, rotateX, rotateY]
+    );
+
+    const handleMouseLeave = useCallback(() => {
+        rotateX.set(0);
+        rotateY.set(0);
+    }, [rotateX, rotateY]);
+
+    return (
+        <motion.div
+            ref={ref}
+            onClick={onClick}
+            initial={{ opacity: 0, y: 40, scale: 0.94 }}
+            animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{
+                duration: 0.55,
+                delay: index * 0.07,
+                ease: [0.22, 1, 0.36, 1],
+            }}
+            style={{
+                rotateX: hasCursor ? springX : 0,
+                rotateY: hasCursor ? springY : 0,
+                transformPerspective: 1000,
+                minWidth: 'clamp(260px, 75vw, 340px)',
+                flexShrink: 0,
+                scrollSnapAlign: hasCursor ? 'none' : 'start',
+                borderRadius: '20px',
+                border: '0.5px solid rgba(0,0,0,0.1)',
+                background: '#fff',
+                cursor: 'pointer',
+                overflow: 'hidden',
+            }}
+            whileHover={
+                hasCursor
+                    ? { scale: 1.035, y: -5, boxShadow: '0 18px 40px rgba(0,0,0,0.13)' }
+                    : {}
+            }
+            whileTap={{ scale: 0.975 }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+        >
+            <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
+                <Image
+                    src={cert.imageUrl}
+                    alt={cert.title}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    unoptimized
+                />
+            </div>
+
+            <div
+                style={{
+                    padding: '12px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    borderTop: '0.5px solid rgba(0,0,0,0.06)',
+                }}
+            >
+                <div
+                    style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        background: getIssuerColor(cert.issuer),
+                        flexShrink: 0,
+                    }}
+                />
+                <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
+                    {cert.title}
+                </span>
+                <span
+                    style={{
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        border: '1.5px solid #000',
+                        padding: '4px 10px',
+                        borderRadius: '20px',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                    }}
+                >
+                    {cert.issuer}
+                </span>
+            </div>
+        </motion.div>
+    );
+};
+
+// ─── Main ────────────────────────────────────────────────────────────────────
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const sectionRef = useRef<HTMLElement>(null);
+    const sectionInView = useInView(sectionRef, { once: true, margin: '-60px' });
     const showNav = certificates.length > 3;
 
     const [atStart, setAtStart] = useState(true);
@@ -27,43 +157,51 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
     const [hasCursor, setHasCursor] = useState(false);
-    const [visible, setVisible] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
 
-    // Smooth scroll refs — no GSAP, pure rAF lerp
+    // ── Smooth scroll engine ──────────────────────────────────────────────────
+    // We track the "desired" scroll position and lerp toward it each frame.
+    // The container hover zone covers the ENTIRE section (sectionRef), so the
+    // user doesn't have to be pixel-perfect over a card to scroll.
     const scrollTargetRef = useRef(0);
     const rafRef = useRef<number | null>(null);
-    const isHoveredRef = useRef(false);
+    // Track whether pointer is inside the SECTION (not just the scroll row)
+    const sectionHoveredRef = useRef(false);
 
-    // Keep ref in sync with state (for use inside event listeners)
-    useEffect(() => {
-        isHoveredRef.current = isHovered;
-    }, [isHovered]);
-
-    // Scroll-in animation
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setVisible(true);
-                    observer.disconnect();
-                }
-            },
-            { threshold: 0.1 }
-        );
-        if (sectionRef.current) observer.observe(sectionRef.current);
-        return () => observer.disconnect();
+    const syncTarget = useCallback(() => {
+        if (scrollRef.current) scrollTargetRef.current = scrollRef.current.scrollLeft;
     }, []);
 
-    // Detect mobile
-    useEffect(() => {
-        const check = () => setIsMobile(window.innerWidth <= 768);
-        check();
-        window.addEventListener('resize', check);
-        return () => window.removeEventListener('resize', check);
+    const lerp = useCallback(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+        const current = el.scrollLeft;
+        const target = scrollTargetRef.current;
+        const diff = target - current;
+
+        if (Math.abs(diff) < 0.3) {
+            el.scrollLeft = target;
+            rafRef.current = null;
+            return;
+        }
+
+        // Factor 0.18 → snappier than 0.12 but still buttery
+        el.scrollLeft = current + diff * 0.18;
+        rafRef.current = requestAnimationFrame(lerp);
     }, []);
 
-    // Detect real cursor (mouse/trackpad = pointer: fine)
+    const kickLerp = useCallback(() => {
+        if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(lerp);
+    }, [lerp]);
+
+    // Detect mobile / cursor
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     useEffect(() => {
         const mq = window.matchMedia('(pointer: fine)');
         setHasCursor(mq.matches);
@@ -72,147 +210,189 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => mq.removeEventListener('change', handler);
     }, []);
 
-    const checkScrollPosition = () => {
-        if (scrollRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-            setAtStart(scrollLeft <= 10);
-            setAtEnd(scrollLeft + clientWidth >= scrollWidth - 10);
-        }
-    };
-
+    // Scroll position tracker
     useEffect(() => {
         const el = scrollRef.current;
-        if (el) {
-            el.addEventListener('scroll', checkScrollPosition);
-            checkScrollPosition();
-            return () => el.removeEventListener('scroll', checkScrollPosition);
-        }
-    }, []);
-
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') setSelectedCert(null);
+        if (!el) return;
+        const check = () => {
+            const { scrollLeft, scrollWidth, clientWidth } = el;
+            setAtStart(scrollLeft <= 10);
+            setAtEnd(scrollLeft + clientWidth >= scrollWidth - 10);
         };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        el.addEventListener('scroll', check, { passive: true });
+        check();
+        return () => el.removeEventListener('scroll', check);
+    }, []);
+
+    // Smooth wheel — attached to the SECTION element so hover zone is large
+    useEffect(() => {
+        const section = sectionRef.current;
+        const el = scrollRef.current;
+        if (!section || !el || !hasCursor) return;
+
+        const onEnter = () => { sectionHoveredRef.current = true; };
+        const onLeave = () => { sectionHoveredRef.current = false; };
+        section.addEventListener('mouseenter', onEnter);
+        section.addEventListener('mouseleave', onLeave);
+
+        const onScroll = () => syncTarget();
+        el.addEventListener('scroll', onScroll, { passive: true });
+
+        const onWheel = (e: WheelEvent) => {
+            if (!sectionHoveredRef.current) return;
+
+            // Only intercept horizontal-ish or vertical scroll when there's overflow
+            const maxScroll = el.scrollWidth - el.clientWidth;
+            if (maxScroll <= 0) return;
+
+            e.preventDefault();
+
+            // Support trackpad horizontal swipe natively too
+            const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+
+            scrollTargetRef.current = Math.max(
+                0,
+                Math.min(scrollTargetRef.current + delta * 1.3, maxScroll)
+            );
+
+            kickLerp();
+        };
+
+        // Must be non-passive to call preventDefault
+        section.addEventListener('wheel', onWheel, { passive: false });
+
+        return () => {
+            section.removeEventListener('mouseenter', onEnter);
+            section.removeEventListener('mouseleave', onLeave);
+            section.removeEventListener('wheel', onWheel);
+            el.removeEventListener('scroll', onScroll);
+            if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+        };
+    }, [hasCursor, kickLerp, syncTarget]);
+
+    // Framer Motion drag-to-scroll (desktop) ─────────────────────────────────
+    const dragX = useMotionValue(0);
+    const dragStartScrollLeft = useRef(0);
+
+    const handleDragStart = () => {
+        dragStartScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
+    };
+
+    const handleDrag = (_: unknown, info: { offset: { x: number } }) => {
+        if (!scrollRef.current) return;
+        const newScroll = dragStartScrollLeft.current - info.offset.x;
+        scrollRef.current.scrollLeft = newScroll;
+        scrollTargetRef.current = newScroll;
+    };
+
+    // Modal
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelectedCert(null); };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
     }, []);
 
     useEffect(() => {
-        if (selectedCert) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        document.body.style.overflow = selectedCert ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
-    // Apple-style smooth wheel scroll — pure rAF lerp, zero dependencies
-    useEffect(() => {
-        const el = scrollRef.current;
-        if (!el || !hasCursor) return;
-
-        // Sync target whenever scroll changes externally (e.g. arrow buttons)
-        const syncTarget = () => {
-            scrollTargetRef.current = el.scrollLeft;
-        };
-        el.addEventListener('scroll', syncTarget);
-
-        const handleWheel = (e: WheelEvent) => {
-            if (!isHoveredRef.current) return;
-            e.preventDefault();
-
-            // Accumulate into target
-            scrollTargetRef.current = Math.max(
-                0,
-                Math.min(
-                    scrollTargetRef.current + e.deltaY * 1.2,
-                    el.scrollWidth - el.clientWidth
-                )
-            );
-
-            // Cancel any running frame
-            if (rafRef.current !== null) {
-                cancelAnimationFrame(rafRef.current);
-            }
-
-            // Lerp loop — factor 0.12 gives Apple-like deceleration
-            const lerp = () => {
-                const current = el.scrollLeft;
-                const target = scrollTargetRef.current;
-                const diff = target - current;
-
-                if (Math.abs(diff) < 0.5) {
-                    el.scrollLeft = target;
-                    rafRef.current = null;
-                    return;
-                }
-
-                el.scrollLeft = current + diff * 0.12;
-                rafRef.current = requestAnimationFrame(lerp);
-            };
-
-            rafRef.current = requestAnimationFrame(lerp);
-        };
-
-        el.addEventListener('wheel', handleWheel, { passive: false });
-
-        return () => {
-            el.removeEventListener('wheel', handleWheel);
-            el.removeEventListener('scroll', syncTarget);
-            if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-        };
-    }, [hasCursor]);
-
     const scroll = (direction: 'left' | 'right') => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollBy({
-                left: direction === 'left' ? -370 : 370,
-                behavior: 'smooth'
-            });
-        }
+        const step = 370;
+        const el = scrollRef.current;
+        if (!el) return;
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        scrollTargetRef.current = Math.max(
+            0,
+            Math.min(
+                scrollTargetRef.current + (direction === 'left' ? -step : step),
+                maxScroll
+            )
+        );
+        kickLerp();
     };
 
-    // Arrows only on touch devices (no cursor)
     const showArrows = showNav && !hasCursor;
 
     return (
         <>
-            <section
-                ref={sectionRef}
-                className={`card cert-section${visible ? ' cert-visible' : ''}`}
+            <motion.section
+                ref={sectionRef as React.RefObject<HTMLElement>}
+                className="card cert-section"
+                initial={{ opacity: 0, y: 32 }}
+                animate={sectionInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 style={{ width: '100%', background: '#fff' }}
             >
                 {/* HEADER */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
+                <motion.div
+                    style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={sectionInView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                >
                     <div style={{ width: '32px', height: '32px', position: 'relative' }}>
-                        <Image src="/Images/Icons/certificate icon.png" alt="Certificates" fill style={{ objectFit: 'contain' }} />
+                        <Image
+                            src="/Images/Icons/certificate icon.png"
+                            alt="Certificates"
+                            fill
+                            style={{ objectFit: 'contain' }}
+                        />
                     </div>
                     <h2 style={{ fontSize: '32px', fontWeight: 800 }}>Certificates</h2>
-                </div>
+                </motion.div>
 
                 {/* MOBILE LIST VIEW */}
                 {isMobile ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <motion.div
+                        style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}
+                        initial="hidden"
+                        animate={sectionInView ? 'visible' : 'hidden'}
+                        variants={{
+                            visible: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } },
+                            hidden: {},
+                        }}
+                    >
                         {certificates.map((cert, index) => (
-                            <div
+                            <motion.div
                                 key={cert.id}
+                                variants={{
+                                    hidden: { opacity: 0, x: -20 },
+                                    visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+                                }}
                                 onClick={() => setSelectedCert(cert)}
+                                whileTap={{ scale: 0.98, backgroundColor: 'rgba(0,0,0,0.02)' }}
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '12px',
                                     padding: '14px 4px',
-                                    borderBottom: index < certificates.length - 1 ? '0.5px solid rgba(0,0,0,0.08)' : 'none',
+                                    borderBottom:
+                                        index < certificates.length - 1
+                                            ? '0.5px solid rgba(0,0,0,0.08)'
+                                            : 'none',
                                     cursor: 'pointer',
                                     background: '#fff',
                                 }}
                             >
-                                <div style={{
-                                    width: '8px', height: '8px', borderRadius: '50%',
-                                    background: getIssuerColor(cert.issuer), flexShrink: 0
-                                }} />
+                                <div
+                                    style={{
+                                        width: '8px',
+                                        height: '8px',
+                                        borderRadius: '50%',
+                                        background: getIssuerColor(cert.issuer),
+                                        flexShrink: 0,
+                                    }}
+                                />
                                 <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{ fontSize: '15px', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>
+                                    <div
+                                        style={{
+                                            fontSize: '15px',
+                                            fontWeight: 700,
+                                            color: '#000',
+                                            lineHeight: 1.3,
+                                        }}
+                                    >
                                         {cert.title}
                                     </div>
                                     <div style={{ fontSize: '13px', color: '#888', marginTop: '2px' }}>
@@ -220,154 +400,167 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     </div>
                                 </div>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="2">
-                                    <path d="M9 18l6-6-6-6"/>
+                                    <path d="M9 18l6-6-6-6" />
                                 </svg>
-                            </div>
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 ) : (
-                    /* DESKTOP / TABLET SCROLL ROW */
-                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        {showArrows && (
-                            <button onClick={() => scroll('left')} style={{
-                                background: 'none', border: 'none', zIndex: 2,
-                                opacity: atStart ? 0.2 : 1, cursor: 'pointer'
-                            }}>
-                                <FiChevronLeft size={32} />
-                            </button>
-                        )}
-
-                        <div
-                            ref={scrollRef}
-                            className="no-scrollbar"
-                            onMouseEnter={() => setIsHovered(true)}
-                            onMouseLeave={() => setIsHovered(false)}
-                            style={{
-                                display: 'flex',
-                                gap: '16px',
-                                overflowX: 'auto',
-                                padding: '10px 4px',
-                                flex: 1,
-                                scrollSnapType: hasCursor ? 'none' : 'x mandatory',
-                                cursor: hasCursor && isHovered ? 'grab' : 'default',
-                            }}
-                        >
-                            {certificates.map((cert) => (
-                                <div
-                                    key={cert.id}
-                                    onClick={() => setSelectedCert(cert)}
+                    /* DESKTOP SCROLL ROW */
+                    <div
+                        style={{
+                            position: 'relative',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                        }}
+                    >
+                        <AnimatePresence>
+                            {showArrows && (
+                                <motion.button
+                                    key="left"
+                                    onClick={() => scroll('left')}
+                                    animate={{ opacity: atStart ? 0.2 : 1 }}
+                                    whileTap={{ scale: 0.85 }}
                                     style={{
-                                        minWidth: 'clamp(260px, 75vw, 340px)',
-                                        borderRadius: '20px',
-                                        border: '0.5px solid rgba(0,0,0,0.1)',
-                                        background: '#fff',
+                                        background: 'none',
+                                        border: 'none',
+                                        zIndex: 2,
                                         cursor: 'pointer',
-                                        overflow: 'hidden',
                                         flexShrink: 0,
-                                        scrollSnapAlign: hasCursor ? 'none' : 'start',
-                                        transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease',
-                                    }}
-                                    onMouseEnter={e => {
-                                        e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
-                                        e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
-                                    }}
-                                    onMouseLeave={e => {
-                                        e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                                        e.currentTarget.style.boxShadow = 'none';
                                     }}
                                 >
-                                    <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
-                                        <Image
-                                            src={cert.imageUrl}
-                                            alt={cert.title}
-                                            fill
-                                            style={{ objectFit: 'cover' }}
-                                            unoptimized
-                                        />
-                                    </div>
+                                    <FiChevronLeft size={32} />
+                                </motion.button>
+                            )}
+                        </AnimatePresence>
 
-                                    <div style={{
-                                        padding: '12px 14px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px',
-                                        borderTop: '0.5px solid rgba(0,0,0,0.06)'
-                                    }}>
-                                        <div style={{
-                                            width: '8px', height: '8px', borderRadius: '50%',
-                                            background: getIssuerColor(cert.issuer), flexShrink: 0
-                                        }} />
-                                        <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
-                                            {cert.title}
-                                        </span>
-                                        <span style={{
-                                            fontSize: '11px', fontWeight: 600,
-                                            border: '1.5px solid #000',
-                                            padding: '4px 10px', borderRadius: '20px',
-                                            whiteSpace: 'nowrap', flexShrink: 0
-                                        }}>
-                                            {cert.issuer}
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        {/* Drag wrapper — framer motion drag-to-scroll */}
+                        <motion.div
+                            drag={hasCursor ? 'x' : false}
+                            dragConstraints={{ left: 0, right: 0 }}
+                            dragElastic={0}
+                            onDragStart={handleDragStart}
+                            onDrag={handleDrag}
+                            style={{
+                                x: dragX,
+                                flex: 1,
+                                overflow: 'hidden',
+                                cursor: hasCursor ? 'grab' : 'default',
+                            }}
+                            whileDrag={{ cursor: 'grabbing' }}
+                        >
+                            <div
+                                ref={scrollRef}
+                                className="no-scrollbar"
+                                style={{
+                                    display: 'flex',
+                                    gap: '16px',
+                                    overflowX: 'auto',
+                                    padding: '10px 4px 14px',
+                                    scrollSnapType: hasCursor ? 'none' : 'x mandatory',
+                                    // Disable native scroll momentum — we control it
+                                    WebkitOverflowScrolling: 'auto',
+                                    pointerEvents: hasCursor ? 'none' : 'auto',
+                                }}
+                            >
+                                {certificates.map((cert, index) => (
+                                    <CertCard
+                                        key={cert.id}
+                                        cert={cert}
+                                        index={index}
+                                        onClick={() => setSelectedCert(cert)}
+                                        hasCursor={hasCursor}
+                                    />
+                                ))}
+                            </div>
+                        </motion.div>
 
-                        {showArrows && (
-                            <button onClick={() => scroll('right')} style={{
-                                background: 'none', border: 'none', zIndex: 2,
-                                opacity: atEnd ? 0.2 : 1, cursor: 'pointer'
-                            }}>
-                                <FiChevronRight size={32} />
-                            </button>
-                        )}
+                        <AnimatePresence>
+                            {showArrows && (
+                                <motion.button
+                                    key="right"
+                                    onClick={() => scroll('right')}
+                                    animate={{ opacity: atEnd ? 0.2 : 1 }}
+                                    whileTap={{ scale: 0.85 }}
+                                    style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        zIndex: 2,
+                                        cursor: 'pointer',
+                                        flexShrink: 0,
+                                    }}
+                                >
+                                    <FiChevronRight size={32} />
+                                </motion.button>
+                            )}
+                        </AnimatePresence>
                     </div>
                 )}
 
                 {/* PORTAL MODAL */}
-                {selectedCert && typeof window !== 'undefined' &&
+                {selectedCert &&
+                    typeof window !== 'undefined' &&
                     createPortal(
-                        <div onClick={() => setSelectedCert(null)} className="modal-overlay">
-                            <div onClick={e => e.stopPropagation()} className="modal-content">
-                                <button onClick={() => setSelectedCert(null)} className="close-btn">
-                                    <FiX size={16} />
-                                </button>
+                        <AnimatePresence>
+                            <motion.div
+                                key="overlay"
+                                onClick={() => setSelectedCert(null)}
+                                className="modal-overlay"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.22 }}
+                            >
+                                <motion.div
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="modal-content"
+                                    initial={{ opacity: 0, scale: 0.88, y: 24 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.92, y: 16 }}
+                                    transition={{
+                                        type: 'spring',
+                                        stiffness: 360,
+                                        damping: 28,
+                                        mass: 0.8,
+                                    }}
+                                >
+                                    <motion.button
+                                        onClick={() => setSelectedCert(null)}
+                                        className="close-btn"
+                                        whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,0,0,0.15)' }}
+                                        whileTap={{ scale: 0.9 }}
+                                    >
+                                        <FiX size={16} />
+                                    </motion.button>
 
-                                <div className="modal-header">
-                                    <div className="dot" style={{ background: getIssuerColor(selectedCert.issuer) }} />
-                                    <div>
-                                        <h3>{selectedCert.title}</h3>
-                                        <p>{selectedCert.issuer}</p>
+                                    <div className="modal-header">
+                                        <div
+                                            className="dot"
+                                            style={{ background: getIssuerColor(selectedCert.issuer) }}
+                                        />
+                                        <div>
+                                            <h3>{selectedCert.title}</h3>
+                                            <p>{selectedCert.issuer}</p>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="modal-image">
-                                    <Image
-                                        src={selectedCert.imageUrl}
-                                        alt={selectedCert.title}
-                                        fill
-                                        style={{ objectFit: 'contain', padding: '24px' }}
-                                        unoptimized
-                                    />
-                                </div>
-                            </div>
-                        </div>,
+                                    <div className="modal-image">
+                                        <Image
+                                            src={selectedCert.imageUrl}
+                                            alt={selectedCert.title}
+                                            fill
+                                            style={{ objectFit: 'contain', padding: '24px' }}
+                                            unoptimized
+                                        />
+                                    </div>
+                                </motion.div>
+                            </motion.div>
+                        </AnimatePresence>,
                         document.getElementById('modal-root')!
-                    )
-                }
+                    )}
 
                 <style jsx>{`
-                    .cert-section {
-                        opacity: 0;
-                        transform: translateY(32px);
-                        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-                                    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-                    }
-                    .cert-section.cert-visible {
-                        opacity: 1;
-                        transform: translateY(0px);
-                    }
-
                     .no-scrollbar::-webkit-scrollbar { display: none; }
                     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -377,13 +570,13 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         width: 100vw; height: 100vh;
                         background: rgba(0,0,0,0.55);
                         backdrop-filter: blur(12px);
+                        -webkit-backdrop-filter: blur(12px);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         z-index: 9999;
                         padding: 16px;
                         box-sizing: border-box;
-                        animation: fadeIn 0.25s ease;
                     }
                     .modal-content {
                         background: #fff;
@@ -395,7 +588,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         flex-direction: column;
                         overflow: hidden;
                         position: relative;
-                        animation: zoomIn 0.25s ease forwards;
                         box-shadow: 0 30px 80px rgba(0,0,0,0.25);
                     }
                     .close-btn {
@@ -411,9 +603,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         cursor: pointer;
                         z-index: 10;
                         flex-shrink: 0;
-                        transition: background 0.2s ease;
                     }
-                    .close-btn:hover { background: rgba(0,0,0,0.15); }
                     .modal-header {
                         padding: 20px 24px 16px;
                         display: flex;
@@ -432,16 +622,8 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         max-height: 70vh;
                         background: #f2f2f7;
                     }
-                    @keyframes zoomIn {
-                        from { opacity: 0; transform: scale(0.92); }
-                        to { opacity: 1; transform: scale(1); }
-                    }
-                    @keyframes fadeIn {
-                        from { opacity: 0; }
-                        to { opacity: 1; }
-                    }
                 `}</style>
-            </section>
+            </motion.section>
         </>
     );
 };
