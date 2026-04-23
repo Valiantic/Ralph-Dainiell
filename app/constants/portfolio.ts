@@ -26,6 +26,8 @@ export const PORTFOLIO_DATA: PortfolioData = {
         "I also document my journey as an IT student and aspiring iOS developer through content creation, where I share insights, experiences, and lessons learned along the way. Committed to continuous growth, I am always seeking opportunities to learn, collaborate, and contribute meaningfully through both my technical and creative skill set."
         ],
     skills: [
+        { name: "Swift", category: "Programming Language" },
+        { name: "SwiftUI", category: "Programming Language" },
         { name: "MySQL", category: "Programming Language" },
         { name: "Python", category: "Programming Language" },
         { name: "HTML5", category: "Programming Language" },
