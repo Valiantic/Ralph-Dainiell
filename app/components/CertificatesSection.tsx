@@ -94,268 +94,285 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     };
 
     return (
-        <section
-            ref={sectionRef}
-            className="card"
-            style={{
-                width: '100%',
-                background: '#fff',
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0px)' : 'translateY(32px)',
-                transition: 'opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
-            }}
-        >
-            {/* HEADER */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-                <div style={{ width: '32px', height: '32px', position: 'relative' }}>
-                    <Image src="/Images/Icons/certificate icon.png" alt="Certificates" fill style={{ objectFit: 'contain' }} />
+        <>
+            {/* 
+                We use a className-based approach for the scroll-in animation
+                so it does NOT conflict with .card:hover transform in globals.css.
+                The inline style only sets background and width — no transform/opacity here.
+            */}
+            <section
+                ref={sectionRef}
+                className={`card cert-section${visible ? ' cert-visible' : ''}`}
+                style={{ width: '100%', background: '#fff' }}
+            >
+                {/* HEADER */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
+                    <div style={{ width: '32px', height: '32px', position: 'relative' }}>
+                        <Image src="/Images/Icons/certificate icon.png" alt="Certificates" fill style={{ objectFit: 'contain' }} />
+                    </div>
+                    <h2 style={{ fontSize: '32px', fontWeight: 800 }}>Certificates</h2>
                 </div>
-                <h2 style={{ fontSize: '32px', fontWeight: 800 }}>Certificates</h2>
-            </div>
 
-            {/* MOBILE LIST VIEW */}
-            {isMobile ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                    {certificates.map((cert, index) => (
-                        <div
-                            key={cert.id}
-                            onClick={() => setSelectedCert(cert)}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '12px',
-                                padding: '14px 4px',
-                                borderBottom: index < certificates.length - 1 ? '0.5px solid rgba(0,0,0,0.08)' : 'none',
-                                cursor: 'pointer',
-                                background: '#fff',
-                            }}
-                        >
-                            <div style={{
-                                width: '8px', height: '8px', borderRadius: '50%',
-                                background: getIssuerColor(cert.issuer), flexShrink: 0
-                            }} />
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ fontSize: '15px', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>
-                                    {cert.title}
-                                </div>
-                                <div style={{ fontSize: '13px', color: '#888', marginTop: '2px' }}>
-                                    {cert.issuer}
-                                </div>
-                            </div>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="2">
-                                <path d="M9 18l6-6-6-6"/>
-                            </svg>
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                /* DESKTOP SCROLL ROW */
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    {showNav && (
-                        <button onClick={() => scroll('left')} style={{
-                            background: 'none', border: 'none', zIndex: 2,
-                            opacity: atStart ? 0.2 : 1, cursor: 'pointer'
-                        }}>
-                            <FiChevronLeft size={32} />
-                        </button>
-                    )}
-
-                    <div
-                        ref={scrollRef}
-                        className="no-scrollbar"
-                        style={{
-                            display: 'flex',
-                            gap: '16px',
-                            overflowX: 'auto',
-                            padding: '10px 4px',
-                            flex: 1,
-                            scrollSnapType: 'x mandatory'
-                        }}
-                    >
-                        {certificates.map((cert) => (
+                {/* MOBILE LIST VIEW */}
+                {isMobile ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        {certificates.map((cert, index) => (
                             <div
                                 key={cert.id}
                                 onClick={() => setSelectedCert(cert)}
                                 style={{
-                                    minWidth: 'clamp(260px, 75vw, 340px)',
-                                    borderRadius: '20px',
-                                    border: '0.5px solid rgba(0,0,0,0.1)',
-                                    background: '#fff',
-                                    cursor: 'pointer',
-                                    overflow: 'hidden',
-                                    flexShrink: 0,
-                                    scrollSnapAlign: 'start',
-                                    transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                                }}
-                            >
-                                <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
-                                    <Image
-                                        src={cert.imageUrl}
-                                        alt={cert.title}
-                                        fill
-                                        style={{ objectFit: 'cover' }}
-                                        unoptimized
-                                    />
-                                </div>
-
-                                <div style={{
-                                    padding: '12px 14px',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '8px',
-                                    borderTop: '0.5px solid rgba(0,0,0,0.06)'
-                                }}>
-                                    <div style={{
-                                        width: '8px', height: '8px', borderRadius: '50%',
-                                        background: getIssuerColor(cert.issuer), flexShrink: 0
-                                    }} />
-                                    <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
+                                    gap: '12px',
+                                    padding: '14px 4px',
+                                    borderBottom: index < certificates.length - 1 ? '0.5px solid rgba(0,0,0,0.08)' : 'none',
+                                    cursor: 'pointer',
+                                    background: '#fff',
+                                }}
+                            >
+                                <div style={{
+                                    width: '8px', height: '8px', borderRadius: '50%',
+                                    background: getIssuerColor(cert.issuer), flexShrink: 0
+                                }} />
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ fontSize: '15px', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>
                                         {cert.title}
-                                    </span>
-                                    <span style={{
-                                        fontSize: '11px', fontWeight: 600,
-                                        border: '1.5px solid #000',
-                                        padding: '4px 10px', borderRadius: '20px',
-                                        whiteSpace: 'nowrap', flexShrink: 0
-                                    }}>
+                                    </div>
+                                    <div style={{ fontSize: '13px', color: '#888', marginTop: '2px' }}>
                                         {cert.issuer}
-                                    </span>
+                                    </div>
                                 </div>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="2">
+                                    <path d="M9 18l6-6-6-6"/>
+                                </svg>
                             </div>
                         ))}
                     </div>
-
-                    {showNav && (
-                        <button onClick={() => scroll('right')} style={{
-                            background: 'none', border: 'none', zIndex: 2,
-                            opacity: atEnd ? 0.2 : 1, cursor: 'pointer'
-                        }}>
-                            <FiChevronRight size={32} />
-                        </button>
-                    )}
-                </div>
-            )}
-
-            {/* PORTAL MODAL */}
-            {selectedCert && typeof window !== 'undefined' &&
-                createPortal(
-                    <div onClick={() => setSelectedCert(null)} className="modal-overlay">
-                        <div onClick={e => e.stopPropagation()} className="modal-content">
-                            <button onClick={() => setSelectedCert(null)} className="close-btn">
-                                <FiX size={16} />
+                ) : (
+                    /* DESKTOP SCROLL ROW */
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        {showNav && (
+                            <button onClick={() => scroll('left')} style={{
+                                background: 'none', border: 'none', zIndex: 2,
+                                opacity: atStart ? 0.2 : 1, cursor: 'pointer'
+                            }}>
+                                <FiChevronLeft size={32} />
                             </button>
+                        )}
 
-                            <div className="modal-header">
-                                <div className="dot" style={{ background: getIssuerColor(selectedCert.issuer) }} />
-                                <div>
-                                    <h3>{selectedCert.title}</h3>
-                                    <p>{selectedCert.issuer}</p>
+                        <div
+                            ref={scrollRef}
+                            className="no-scrollbar"
+                            style={{
+                                display: 'flex',
+                                gap: '16px',
+                                overflowX: 'auto',
+                                padding: '10px 4px',
+                                flex: 1,
+                                scrollSnapType: 'x mandatory'
+                            }}
+                        >
+                            {certificates.map((cert) => (
+                                <div
+                                    key={cert.id}
+                                    onClick={() => setSelectedCert(cert)}
+                                    style={{
+                                        minWidth: 'clamp(260px, 75vw, 340px)',
+                                        borderRadius: '20px',
+                                        border: '0.5px solid rgba(0,0,0,0.1)',
+                                        background: '#fff',
+                                        cursor: 'pointer',
+                                        overflow: 'hidden',
+                                        flexShrink: 0,
+                                        scrollSnapAlign: 'start',
+                                        transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                    }}
+                                    onMouseEnter={e => {
+                                        e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
+                                    }}
+                                    onMouseLeave={e => {
+                                        e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                                    }}
+                                >
+                                    <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
+                                        <Image
+                                            src={cert.imageUrl}
+                                            alt={cert.title}
+                                            fill
+                                            style={{ objectFit: 'cover' }}
+                                            unoptimized
+                                        />
+                                    </div>
+
+                                    <div style={{
+                                        padding: '12px 14px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        borderTop: '0.5px solid rgba(0,0,0,0.06)'
+                                    }}>
+                                        <div style={{
+                                            width: '8px', height: '8px', borderRadius: '50%',
+                                            background: getIssuerColor(cert.issuer), flexShrink: 0
+                                        }} />
+                                        <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
+                                            {cert.title}
+                                        </span>
+                                        <span style={{
+                                            fontSize: '11px', fontWeight: 600,
+                                            border: '1.5px solid #000',
+                                            padding: '4px 10px', borderRadius: '20px',
+                                            whiteSpace: 'nowrap', flexShrink: 0
+                                        }}>
+                                            {cert.issuer}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {showNav && (
+                            <button onClick={() => scroll('right')} style={{
+                                background: 'none', border: 'none', zIndex: 2,
+                                opacity: atEnd ? 0.2 : 1, cursor: 'pointer'
+                            }}>
+                                <FiChevronRight size={32} />
+                            </button>
+                        )}
+                    </div>
+                )}
+
+                {/* PORTAL MODAL */}
+                {selectedCert && typeof window !== 'undefined' &&
+                    createPortal(
+                        <div onClick={() => setSelectedCert(null)} className="modal-overlay">
+                            <div onClick={e => e.stopPropagation()} className="modal-content">
+                                <button onClick={() => setSelectedCert(null)} className="close-btn">
+                                    <FiX size={16} />
+                                </button>
+
+                                <div className="modal-header">
+                                    <div className="dot" style={{ background: getIssuerColor(selectedCert.issuer) }} />
+                                    <div>
+                                        <h3>{selectedCert.title}</h3>
+                                        <p>{selectedCert.issuer}</p>
+                                    </div>
+                                </div>
+
+                                <div className="modal-image">
+                                    <Image
+                                        src={selectedCert.imageUrl}
+                                        alt={selectedCert.title}
+                                        fill
+                                        style={{ objectFit: 'contain', padding: '24px' }}
+                                        unoptimized
+                                    />
                                 </div>
                             </div>
-
-                            <div className="modal-image">
-                                <Image
-                                    src={selectedCert.imageUrl}
-                                    alt={selectedCert.title}
-                                    fill
-                                    style={{ objectFit: 'contain', padding: '24px' }}
-                                    unoptimized
-                                />
-                            </div>
-                        </div>
-                    </div>,
-                    document.getElementById('modal-root')!
-                )
-            }
-
-            <style jsx>{`
-                .no-scrollbar::-webkit-scrollbar { display: none; }
-
-                .modal-overlay {
-                    position: fixed;
-                    top: 0; left: 0;
-                    width: 100vw; height: 100vh;
-                    background: rgba(0,0,0,0.55);
-                    backdrop-filter: blur(12px);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 9999;
-                    padding: 16px;
-                    box-sizing: border-box;
-                    animation: fadeIn 0.25s ease;
+                        </div>,
+                        document.getElementById('modal-root')!
+                    )
                 }
 
-                .modal-content {
-                    background: #fff;
-                    border-radius: 28px;
-                    max-width: 780px;
-                    width: 100%;
-                    max-height: calc(100vh - 32px);
-                    display: flex;
-                    flex-direction: column;
-                    overflow: hidden;
-                    position: relative;
-                    animation: zoomIn 0.25s ease forwards;
-                    box-shadow: 0 30px 80px rgba(0,0,0,0.25);
-                }
+                <style jsx>{`
+                    /* --- Scroll-in animation via className (no inline transform conflict) --- */
+                    .cert-section {
+                        opacity: 0;
+                        transform: translateY(32px);
+                        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                                    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+                    }
 
-                .close-btn {
-                    position: absolute;
-                    top: 16px; right: 16px;
-                    width: 32px; height: 32px;
-                    border-radius: 50%;
-                    border: none;
-                    background: rgba(0,0,0,0.06);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    z-index: 10;
-                    flex-shrink: 0;
-                    transition: background 0.2s ease;
-                }
+                    /* Once visible, reset to neutral so .card:hover can take over freely */
+                    .cert-section.cert-visible {
+                        opacity: 1;
+                        transform: translateY(0px);
+                    }
 
-                .close-btn:hover { background: rgba(0,0,0,0.15); }
+                    /* .card:hover from globals.css will apply translateY(-2px) on top — no conflict */
 
-                .modal-header {
-                    padding: 20px 24px 16px;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    flex-shrink: 0;
-                }
+                    .no-scrollbar::-webkit-scrollbar { display: none; }
 
-                .modal-header h3 { font-size: 16px; font-weight: 700; margin: 0; }
-                .modal-header p { font-size: 12px; color: #8e8e93; margin: 2px 0 0; }
+                    .modal-overlay {
+                        position: fixed;
+                        top: 0; left: 0;
+                        width: 100vw; height: 100vh;
+                        background: rgba(0,0,0,0.55);
+                        backdrop-filter: blur(12px);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 9999;
+                        padding: 16px;
+                        box-sizing: border-box;
+                        animation: fadeIn 0.25s ease;
+                    }
 
-                .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+                    .modal-content {
+                        background: #fff;
+                        border-radius: 28px;
+                        max-width: 780px;
+                        width: 100%;
+                        max-height: calc(100vh - 32px);
+                        display: flex;
+                        flex-direction: column;
+                        overflow: hidden;
+                        position: relative;
+                        animation: zoomIn 0.25s ease forwards;
+                        box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+                    }
 
-                .modal-image {
-                    position: relative;
-                    width: 100%;
-                    flex: 1 1 auto;
-                    min-height: 480px;
-                    max-height: 70vh;
-                    background: #f2f2f7;
-                }
+                    .close-btn {
+                        position: absolute;
+                        top: 16px; right: 16px;
+                        width: 32px; height: 32px;
+                        border-radius: 50%;
+                        border: none;
+                        background: rgba(0,0,0,0.06);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        z-index: 10;
+                        flex-shrink: 0;
+                        transition: background 0.2s ease;
+                    }
 
-                @keyframes zoomIn {
-                    from { opacity: 0; transform: scale(0.92); }
-                    to { opacity: 1; transform: scale(1); }
-                }
+                    .close-btn:hover { background: rgba(0,0,0,0.15); }
 
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-            `}</style>
-        </section>
+                    .modal-header {
+                        padding: 20px 24px 16px;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        flex-shrink: 0;
+                    }
+
+                    .modal-header h3 { font-size: 16px; font-weight: 700; margin: 0; }
+                    .modal-header p { font-size: 12px; color: #8e8e93; margin: 2px 0 0; }
+
+                    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+                    .modal-image {
+                        position: relative;
+                        width: 100%;
+                        flex: 1 1 auto;
+                        min-height: 480px;
+                        max-height: 70vh;
+                        background: #f2f2f7;
+                    }
+
+                    @keyframes zoomIn {
+                        from { opacity: 0; transform: scale(0.92); }
+                        to { opacity: 1; transform: scale(1); }
+                    }
+
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                `}</style>
+            </section>
+        </>
     );
 };
