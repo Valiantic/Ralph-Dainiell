@@ -26,9 +26,21 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const [atEnd, setAtEnd] = useState(false);
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
+    const [hasCursor, setHasCursor] = useState(false);
     const [visible, setVisible] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
-    // Scroll-in animation — fires once when section enters viewport
+    // Smooth scroll refs — no GSAP, pure rAF lerp
+    const scrollTargetRef = useRef(0);
+    const rafRef = useRef<number | null>(null);
+    const isHoveredRef = useRef(false);
+
+    // Keep ref in sync with state (for use inside event listeners)
+    useEffect(() => {
+        isHoveredRef.current = isHovered;
+    }, [isHovered]);
+
+    // Scroll-in animation
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -43,11 +55,21 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => observer.disconnect();
     }, []);
 
+    // Detect mobile
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
         check();
         window.addEventListener('resize', check);
         return () => window.removeEventListener('resize', check);
+    }, []);
+
+    // Detect real cursor (mouse/trackpad = pointer: fine)
+    useEffect(() => {
+        const mq = window.matchMedia('(pointer: fine)');
+        setHasCursor(mq.matches);
+        const handler = (e: MediaQueryListEvent) => setHasCursor(e.matches);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
     }, []);
 
     const checkScrollPosition = () => {
@@ -84,6 +106,63 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
+    // Apple-style smooth wheel scroll — pure rAF lerp, zero dependencies
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el || !hasCursor) return;
+
+        // Sync target whenever scroll changes externally (e.g. arrow buttons)
+        const syncTarget = () => {
+            scrollTargetRef.current = el.scrollLeft;
+        };
+        el.addEventListener('scroll', syncTarget);
+
+        const handleWheel = (e: WheelEvent) => {
+            if (!isHoveredRef.current) return;
+            e.preventDefault();
+
+            // Accumulate into target
+            scrollTargetRef.current = Math.max(
+                0,
+                Math.min(
+                    scrollTargetRef.current + e.deltaY * 1.2,
+                    el.scrollWidth - el.clientWidth
+                )
+            );
+
+            // Cancel any running frame
+            if (rafRef.current !== null) {
+                cancelAnimationFrame(rafRef.current);
+            }
+
+            // Lerp loop — factor 0.12 gives Apple-like deceleration
+            const lerp = () => {
+                const current = el.scrollLeft;
+                const target = scrollTargetRef.current;
+                const diff = target - current;
+
+                if (Math.abs(diff) < 0.5) {
+                    el.scrollLeft = target;
+                    rafRef.current = null;
+                    return;
+                }
+
+                el.scrollLeft = current + diff * 0.12;
+                rafRef.current = requestAnimationFrame(lerp);
+            };
+
+            rafRef.current = requestAnimationFrame(lerp);
+        };
+
+        el.addEventListener('wheel', handleWheel, { passive: false });
+
+        return () => {
+            el.removeEventListener('wheel', handleWheel);
+            el.removeEventListener('scroll', syncTarget);
+            if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+        };
+    }, [hasCursor]);
+
     const scroll = (direction: 'left' | 'right') => {
         if (scrollRef.current) {
             scrollRef.current.scrollBy({
@@ -93,13 +172,11 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         }
     };
 
+    // Arrows only on touch devices (no cursor)
+    const showArrows = showNav && !hasCursor;
+
     return (
         <>
-            {/* 
-                We use a className-based approach for the scroll-in animation
-                so it does NOT conflict with .card:hover transform in globals.css.
-                The inline style only sets background and width — no transform/opacity here.
-            */}
             <section
                 ref={sectionRef}
                 className={`card cert-section${visible ? ' cert-visible' : ''}`}
@@ -149,9 +226,9 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         ))}
                     </div>
                 ) : (
-                    /* DESKTOP SCROLL ROW */
+                    /* DESKTOP / TABLET SCROLL ROW */
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        {showNav && (
+                        {showArrows && (
                             <button onClick={() => scroll('left')} style={{
                                 background: 'none', border: 'none', zIndex: 2,
                                 opacity: atStart ? 0.2 : 1, cursor: 'pointer'
@@ -163,13 +240,16 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         <div
                             ref={scrollRef}
                             className="no-scrollbar"
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
                             style={{
                                 display: 'flex',
                                 gap: '16px',
                                 overflowX: 'auto',
                                 padding: '10px 4px',
                                 flex: 1,
-                                scrollSnapType: 'x mandatory'
+                                scrollSnapType: hasCursor ? 'none' : 'x mandatory',
+                                cursor: hasCursor && isHovered ? 'grab' : 'default',
                             }}
                         >
                             {certificates.map((cert) => (
@@ -184,14 +264,16 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                         cursor: 'pointer',
                                         overflow: 'hidden',
                                         flexShrink: 0,
-                                        scrollSnapAlign: 'start',
-                                        transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                        scrollSnapAlign: hasCursor ? 'none' : 'start',
+                                        transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease',
                                     }}
                                     onMouseEnter={e => {
                                         e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
+                                        e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
                                     }}
                                     onMouseLeave={e => {
                                         e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                                        e.currentTarget.style.boxShadow = 'none';
                                     }}
                                 >
                                     <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
@@ -231,7 +313,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             ))}
                         </div>
 
-                        {showNav && (
+                        {showArrows && (
                             <button onClick={() => scroll('right')} style={{
                                 background: 'none', border: 'none', zIndex: 2,
                                 opacity: atEnd ? 0.2 : 1, cursor: 'pointer'
@@ -275,23 +357,19 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 }
 
                 <style jsx>{`
-                    /* --- Scroll-in animation via className (no inline transform conflict) --- */
                     .cert-section {
                         opacity: 0;
                         transform: translateY(32px);
                         transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
                                     transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
                     }
-
-                    /* Once visible, reset to neutral so .card:hover can take over freely */
                     .cert-section.cert-visible {
                         opacity: 1;
                         transform: translateY(0px);
                     }
 
-                    /* .card:hover from globals.css will apply translateY(-2px) on top — no conflict */
-
                     .no-scrollbar::-webkit-scrollbar { display: none; }
+                    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
                     .modal-overlay {
                         position: fixed;
@@ -307,7 +385,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         box-sizing: border-box;
                         animation: fadeIn 0.25s ease;
                     }
-
                     .modal-content {
                         background: #fff;
                         border-radius: 28px;
@@ -321,7 +398,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         animation: zoomIn 0.25s ease forwards;
                         box-shadow: 0 30px 80px rgba(0,0,0,0.25);
                     }
-
                     .close-btn {
                         position: absolute;
                         top: 16px; right: 16px;
@@ -337,9 +413,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         flex-shrink: 0;
                         transition: background 0.2s ease;
                     }
-
                     .close-btn:hover { background: rgba(0,0,0,0.15); }
-
                     .modal-header {
                         padding: 20px 24px 16px;
                         display: flex;
@@ -347,12 +421,9 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         gap: 10px;
                         flex-shrink: 0;
                     }
-
                     .modal-header h3 { font-size: 16px; font-weight: 700; margin: 0; }
                     .modal-header p { font-size: 12px; color: #8e8e93; margin: 2px 0 0; }
-
                     .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-
                     .modal-image {
                         position: relative;
                         width: 100%;
@@ -361,12 +432,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         max-height: 70vh;
                         background: #f2f2f7;
                     }
-
                     @keyframes zoomIn {
                         from { opacity: 0; transform: scale(0.92); }
                         to { opacity: 1; transform: scale(1); }
                     }
-
                     @keyframes fadeIn {
                         from { opacity: 0; }
                         to { opacity: 1; }
