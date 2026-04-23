@@ -35,6 +35,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
         { name: "Xcode", category: "Mobile Development" },
         { name: "UIKit", category: "Mobile Development" },
         { name: "Excel", category: "Analytics Software" },
+        { name: "PowerBi", category: "Analytics Software" },
         { name: "Adobe Premiere Pro", category: "Editing Software" },
         { name: "Final Cut Pro", category: "Editing Software" },
         { name: "Figma", category: "Editing Software" },
