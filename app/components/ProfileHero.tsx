@@ -247,7 +247,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </div>
 
                     <p style={{ fontSize: '18px', fontWeight: 800, color: '#000', margin: 0, lineHeight: 1.3 }}>
-                        Passionate About Intuitive iOS Design & Development
+                        Crafting Seamless iOS Experiences
                     </p>
 
                     <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
