@@ -20,13 +20,22 @@ const getIssuerColor = (issuer: string) => {
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const sectionRef = useRef<HTMLElement>(null);
-    const showNav = certificates.length > 3;
 
     const [atStart, setAtStart] = useState(true);
     const [atEnd, setAtEnd] = useState(false);
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
+    const [hasFineCursor, setHasFineCursor] = useState(false);
     const [visible, setVisible] = useState(false);
+
+    // Detect fine pointer (mouse/trackpad) vs coarse (touch)
+    useEffect(() => {
+        const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+        setHasFineCursor(mq.matches);
+        const handler = (e: MediaQueryListEvent) => setHasFineCursor(e.matches);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
 
     // Scroll-in animation — fires once when section enters viewport
     useEffect(() => {
@@ -84,6 +93,43 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
+    // Apple-style carousel: scroll based on mouse X position within container
+    const animFrameRef = useRef<number | null>(null);
+    const isHoveringRef = useRef(false);
+    const mouseXRef = useRef(0);
+
+    const handleCarouselMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        // Normalize -1 (far left) to +1 (far right)
+        mouseXRef.current = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    };
+
+    const handleCarouselMouseEnter = () => {
+        if (!hasFineCursor) return;
+        isHoveringRef.current = true;
+
+        const tick = () => {
+            if (!isHoveringRef.current || !scrollRef.current) return;
+            const x = mouseXRef.current;
+            // Dead zone in center so certificates don't auto-scroll when hovering middle
+            const deadZone = 0.25;
+            let speed = 0;
+            if (x > deadZone) {
+                speed = ((x - deadZone) / (1 - deadZone)) * 8;
+            } else if (x < -deadZone) {
+                speed = ((x + deadZone) / (1 - deadZone)) * 8;
+            }
+            if (speed !== 0) scrollRef.current.scrollLeft += speed;
+            animFrameRef.current = requestAnimationFrame(tick);
+        };
+        animFrameRef.current = requestAnimationFrame(tick);
+    };
+
+    const handleCarouselMouseLeave = () => {
+        isHoveringRef.current = false;
+        if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
+
     const scroll = (direction: 'left' | 'right') => {
         if (scrollRef.current) {
             scrollRef.current.scrollBy({
@@ -93,13 +139,11 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         }
     };
 
+    // Arrows only for touch/coarse devices with enough certificates
+    const showNav = !hasFineCursor && certificates.length > 3;
+
     return (
         <>
-            {/* 
-                We use a className-based approach for the scroll-in animation
-                so it does NOT conflict with .card:hover transform in globals.css.
-                The inline style only sets background and width — no transform/opacity here.
-            */}
             <section
                 ref={sectionRef}
                 className={`card cert-section${visible ? ' cert-visible' : ''}`}
@@ -149,8 +193,14 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         ))}
                     </div>
                 ) : (
-                    /* DESKTOP SCROLL ROW */
-                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    /* DESKTOP / TABLET SCROLL ROW */
+                    <div
+                        style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}
+                        onMouseMove={hasFineCursor ? handleCarouselMouseMove : undefined}
+                        onMouseEnter={hasFineCursor ? handleCarouselMouseEnter : undefined}
+                        onMouseLeave={hasFineCursor ? handleCarouselMouseLeave : undefined}
+                    >
+                        {/* LEFT ARROW — touch/coarse pointer only */}
                         {showNav && (
                             <button onClick={() => scroll('left')} style={{
                                 background: 'none', border: 'none', zIndex: 2,
@@ -169,7 +219,8 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 overflowX: 'auto',
                                 padding: '10px 4px',
                                 flex: 1,
-                                scrollSnapType: 'x mandatory'
+                                scrollSnapType: 'x mandatory',
+                                cursor: hasFineCursor ? 'default' : 'grab',
                             }}
                         >
                             {certificates.map((cert) => (
@@ -231,6 +282,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             ))}
                         </div>
 
+                        {/* RIGHT ARROW — touch/coarse pointer only */}
                         {showNav && (
                             <button onClick={() => scroll('right')} style={{
                                 background: 'none', border: 'none', zIndex: 2,
@@ -275,7 +327,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 }
 
                 <style jsx>{`
-                    /* --- Scroll-in animation via className (no inline transform conflict) --- */
                     .cert-section {
                         opacity: 0;
                         transform: translateY(32px);
@@ -283,13 +334,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
                     }
 
-                    /* Once visible, reset to neutral so .card:hover can take over freely */
                     .cert-section.cert-visible {
                         opacity: 1;
                         transform: translateY(0px);
                     }
-
-                    /* .card:hover from globals.css will apply translateY(-2px) on top — no conflict */
 
                     .no-scrollbar::-webkit-scrollbar { display: none; }
 
