@@ -77,7 +77,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     };
 
     return (
-        <section className="card no-lift" style={{ width: '100%', background: '#fff' }}>
+        <section className="card" style={{ width: '100%', background: '#fff' }}>
             {/* HEADER */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
                 <div style={{ width: '32px', height: '32px', position: 'relative' }}>
