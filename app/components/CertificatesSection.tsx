@@ -19,12 +19,29 @@ const getIssuerColor = (issuer: string) => {
 
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
+    const sectionRef = useRef<HTMLElement>(null);
     const showNav = certificates.length > 3;
 
     const [atStart, setAtStart] = useState(true);
     const [atEnd, setAtEnd] = useState(false);
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isMobile, setIsMobile] = useState(false);
+    const [visible, setVisible] = useState(false);
+
+    // Scroll-in animation — fires once when section enters viewport
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.1 }
+        );
+        if (sectionRef.current) observer.observe(sectionRef.current);
+        return () => observer.disconnect();
+    }, []);
 
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
@@ -77,7 +94,17 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     };
 
     return (
-        <section className="card" style={{ width: '100%', background: '#fff' }}>
+        <section
+            ref={sectionRef}
+            className="card"
+            style={{
+                width: '100%',
+                background: '#fff',
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0px)' : 'translateY(32px)',
+                transition: 'opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
+            }}
+        >
             {/* HEADER */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
                 <div style={{ width: '32px', height: '32px', position: 'relative' }}>
@@ -249,11 +276,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
             <style jsx>{`
                 .no-scrollbar::-webkit-scrollbar { display: none; }
-
-                .no-lift:hover {
-                    transform: none !important;
-                    box-shadow: none !important;
-                }
 
                 .modal-overlay {
                     position: fixed;
