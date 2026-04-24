@@ -9,7 +9,6 @@ import {
     motion,
     useMotionValue,
     useSpring,
-    useTransform,
     AnimatePresence,
     useInView,
 } from 'framer-motion';
@@ -80,7 +79,7 @@ const CertCard = ({
                 transformPerspective: 1000,
                 minWidth: 'clamp(260px, 75vw, 340px)',
                 flexShrink: 0,
-                scrollSnapAlign: hasCursor ? 'none' : 'start',
+                scrollSnapAlign: 'start',
                 borderRadius: '20px',
                 border: '0.5px solid rgba(0,0,0,0.1)',
                 background: '#fff',
@@ -159,12 +158,8 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const [hasCursor, setHasCursor] = useState(false);
 
     // ── Smooth scroll engine ──────────────────────────────────────────────────
-    // We track the "desired" scroll position and lerp toward it each frame.
-    // The container hover zone covers the ENTIRE section (sectionRef), so the
-    // user doesn't have to be pixel-perfect over a card to scroll.
     const scrollTargetRef = useRef(0);
     const rafRef = useRef<number | null>(null);
-    // Track whether pointer is inside the SECTION (not just the scroll row)
     const sectionHoveredRef = useRef(false);
 
     const syncTarget = useCallback(() => {
@@ -184,7 +179,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             return;
         }
 
-        // Factor 0.18 → snappier than 0.12 but still buttery
         el.scrollLeft = current + diff * 0.18;
         rafRef.current = requestAnimationFrame(lerp);
     }, []);
@@ -224,7 +218,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => el.removeEventListener('scroll', check);
     }, []);
 
-    // Smooth wheel — attached to the SECTION element so hover zone is large
+    // Smooth wheel scroll — attached to SECTION so hover zone is large
     useEffect(() => {
         const section = sectionRef.current;
         const el = scrollRef.current;
@@ -241,13 +235,11 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         const onWheel = (e: WheelEvent) => {
             if (!sectionHoveredRef.current) return;
 
-            // Only intercept horizontal-ish or vertical scroll when there's overflow
             const maxScroll = el.scrollWidth - el.clientWidth;
             if (maxScroll <= 0) return;
 
             e.preventDefault();
 
-            // Support trackpad horizontal swipe natively too
             const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
 
             scrollTargetRef.current = Math.max(
@@ -258,7 +250,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             kickLerp();
         };
 
-        // Must be non-passive to call preventDefault
         section.addEventListener('wheel', onWheel, { passive: false });
 
         return () => {
@@ -270,22 +261,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         };
     }, [hasCursor, kickLerp, syncTarget]);
 
-    // Framer Motion drag-to-scroll (desktop) ─────────────────────────────────
-    const dragX = useMotionValue(0);
-    const dragStartScrollLeft = useRef(0);
-
-    const handleDragStart = () => {
-        dragStartScrollLeft.current = scrollRef.current?.scrollLeft ?? 0;
-    };
-
-    const handleDrag = (_: unknown, info: { offset: { x: number } }) => {
-        if (!scrollRef.current) return;
-        const newScroll = dragStartScrollLeft.current - info.offset.x;
-        scrollRef.current.scrollLeft = newScroll;
-        scrollTargetRef.current = newScroll;
-    };
-
-    // Modal
+    // Modal keyboard / scroll lock
     useEffect(() => {
         const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelectedCert(null); };
         window.addEventListener('keydown', handler);
@@ -435,46 +411,30 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             )}
                         </AnimatePresence>
 
-                        {/* Drag wrapper — framer motion drag-to-scroll */}
-                        <motion.div
-                            drag={hasCursor ? 'x' : false}
-                            dragConstraints={{ left: 0, right: 0 }}
-                            dragElastic={0}
-                            onDragStart={handleDragStart}
-                            onDrag={handleDrag}
+                        {/* Scroll container — no drag, just wheel + touch */}
+                        <div
+                            ref={scrollRef}
+                            className="no-scrollbar"
                             style={{
-                                x: dragX,
                                 flex: 1,
-                                overflow: 'hidden',
-                                cursor: hasCursor ? 'grab' : 'default',
+                                display: 'flex',
+                                gap: '16px',
+                                overflowX: 'auto',
+                                padding: '10px 4px 14px',
+                                scrollSnapType: 'x mandatory',
+                                WebkitOverflowScrolling: 'touch',
                             }}
-                            whileDrag={{ cursor: 'grabbing' }}
                         >
-                            <div
-                                ref={scrollRef}
-                                className="no-scrollbar"
-                                style={{
-                                    display: 'flex',
-                                    gap: '16px',
-                                    overflowX: 'auto',
-                                    padding: '10px 4px 14px',
-                                    scrollSnapType: hasCursor ? 'none' : 'x mandatory',
-                                    // Disable native scroll momentum — we control it
-                                    WebkitOverflowScrolling: 'auto',
-                                    pointerEvents: hasCursor ? 'none' : 'auto',
-                                }}
-                            >
-                                {certificates.map((cert, index) => (
-                                    <CertCard
-                                        key={cert.id}
-                                        cert={cert}
-                                        index={index}
-                                        onClick={() => setSelectedCert(cert)}
-                                        hasCursor={hasCursor}
-                                    />
-                                ))}
-                            </div>
-                        </motion.div>
+                            {certificates.map((cert, index) => (
+                                <CertCard
+                                    key={cert.id}
+                                    cert={cert}
+                                    index={index}
+                                    onClick={() => setSelectedCert(cert)}
+                                    hasCursor={hasCursor}
+                                />
+                            ))}
+                        </div>
 
                         <AnimatePresence>
                             {showArrows && (
