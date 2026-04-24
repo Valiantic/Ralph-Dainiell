@@ -20,7 +20,6 @@ const getIssuerColor = (issuer: string) => {
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const sectionRef = useRef<HTMLElement>(null);
-    const showNav = certificates.length > 3;
 
     const [atStart, setAtStart] = useState(true);
     const [atEnd, setAtEnd] = useState(false);
@@ -28,7 +27,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const [isMobile, setIsMobile] = useState(false);
     const [visible, setVisible] = useState(false);
 
-    // Scroll-in animation — fires once when section enters viewport
+    // Scroll-in animation
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -51,21 +50,30 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     }, []);
 
     const checkScrollPosition = () => {
-        if (scrollRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-            setAtStart(scrollLeft <= 10);
-            setAtEnd(scrollLeft + clientWidth >= scrollWidth - 10);
-        }
+        const el = scrollRef.current;
+        if (!el) return;
+        const { scrollLeft, scrollWidth, clientWidth } = el;
+        setAtStart(scrollLeft <= 10);
+        setAtEnd(scrollLeft + clientWidth >= scrollWidth - 10);
     };
 
     useEffect(() => {
         const el = scrollRef.current;
-        if (el) {
-            el.addEventListener('scroll', checkScrollPosition);
-            checkScrollPosition();
-            return () => el.removeEventListener('scroll', checkScrollPosition);
-        }
-    }, []);
+        if (!el) return;
+
+        // Check immediately + after a tick (cards need to render first)
+        checkScrollPosition();
+        const t = setTimeout(checkScrollPosition, 100);
+
+        el.addEventListener('scroll', checkScrollPosition, { passive: true });
+        window.addEventListener('resize', checkScrollPosition);
+
+        return () => {
+            clearTimeout(t);
+            el.removeEventListener('scroll', checkScrollPosition);
+            window.removeEventListener('resize', checkScrollPosition);
+        };
+    }, [isMobile]); // re-run when switching between mobile/desktop
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -76,11 +84,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     }, []);
 
     useEffect(() => {
-        if (selectedCert) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        document.body.style.overflow = selectedCert ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
@@ -88,18 +92,13 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         if (scrollRef.current) {
             scrollRef.current.scrollBy({
                 left: direction === 'left' ? -370 : 370,
-                behavior: 'smooth'
+                behavior: 'smooth',
             });
         }
     };
 
     return (
         <>
-            {/*
-                .card class from globals.css handles the hover lift on the whole container —
-                same behaviour as Skills and Experience sections.
-                cert-section only adds the scroll-in animation via className toggle.
-            */}
             <section
                 ref={sectionRef}
                 className={`card cert-section${visible ? ' cert-visible' : ''}`}
@@ -132,7 +131,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             >
                                 <div style={{
                                     width: '8px', height: '8px', borderRadius: '50%',
-                                    background: getIssuerColor(cert.issuer), flexShrink: 0
+                                    background: getIssuerColor(cert.issuer), flexShrink: 0,
                                 }} />
                                 <div style={{ flex: 1, minWidth: 0 }}>
                                     <div style={{ fontSize: '15px', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>
@@ -143,7 +142,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     </div>
                                 </div>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="2">
-                                    <path d="M9 18l6-6-6-6"/>
+                                    <path d="M9 18l6-6-6-6" />
                                 </svg>
                             </div>
                         ))}
@@ -152,22 +151,20 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     /* DESKTOP SCROLL ROW */
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
 
-                        {/* LEFT ARROW — dim when at start */}
-                        {showNav && (
-                            <button
-                                onClick={() => scroll('left')}
-                                disabled={atStart}
-                                style={{
-                                    background: 'none', border: 'none', zIndex: 2,
-                                    opacity: atStart ? 0.2 : 1,
-                                    cursor: atStart ? 'default' : 'pointer',
-                                    transition: 'opacity 0.2s ease',
-                                    flexShrink: 0,
-                                }}
-                            >
-                                <FiChevronLeft size={32} />
-                            </button>
-                        )}
+                        {/* LEFT ARROW — bright when NOT at start, dim when at start */}
+                        <button
+                            onClick={() => scroll('left')}
+                            disabled={atStart}
+                            style={{
+                                background: 'none', border: 'none', zIndex: 2,
+                                opacity: atStart ? 0.2 : 1,
+                                cursor: atStart ? 'default' : 'pointer',
+                                transition: 'opacity 0.2s ease',
+                                flexShrink: 0,
+                            }}
+                        >
+                            <FiChevronLeft size={32} />
+                        </button>
 
                         <div
                             ref={scrollRef}
@@ -211,11 +208,11 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '8px',
-                                        borderTop: '0.5px solid rgba(0,0,0,0.06)'
+                                        borderTop: '0.5px solid rgba(0,0,0,0.06)',
                                     }}>
                                         <div style={{
                                             width: '8px', height: '8px', borderRadius: '50%',
-                                            background: getIssuerColor(cert.issuer), flexShrink: 0
+                                            background: getIssuerColor(cert.issuer), flexShrink: 0,
                                         }} />
                                         <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
                                             {cert.title}
@@ -224,7 +221,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                             fontSize: '11px', fontWeight: 600,
                                             border: '1.5px solid #000',
                                             padding: '4px 10px', borderRadius: '20px',
-                                            whiteSpace: 'nowrap', flexShrink: 0
+                                            whiteSpace: 'nowrap', flexShrink: 0,
                                         }}>
                                             {cert.issuer}
                                         </span>
@@ -233,22 +230,20 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             ))}
                         </div>
 
-                        {/* RIGHT ARROW — dim when at end */}
-                        {showNav && (
-                            <button
-                                onClick={() => scroll('right')}
-                                disabled={atEnd}
-                                style={{
-                                    background: 'none', border: 'none', zIndex: 2,
-                                    opacity: atEnd ? 0.2 : 1,
-                                    cursor: atEnd ? 'default' : 'pointer',
-                                    transition: 'opacity 0.2s ease',
-                                    flexShrink: 0,
-                                }}
-                            >
-                                <FiChevronRight size={32} />
-                            </button>
-                        )}
+                        {/* RIGHT ARROW — bright when NOT at end, dim when at end */}
+                        <button
+                            onClick={() => scroll('right')}
+                            disabled={atEnd}
+                            style={{
+                                background: 'none', border: 'none', zIndex: 2,
+                                opacity: atEnd ? 0.2 : 1,
+                                cursor: atEnd ? 'default' : 'pointer',
+                                transition: 'opacity 0.2s ease',
+                                flexShrink: 0,
+                            }}
+                        >
+                            <FiChevronRight size={32} />
+                        </button>
                     </div>
                 )}
 
@@ -285,14 +280,12 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 }
 
                 <style jsx>{`
-                    /* --- Scroll-in animation via className (no inline transform conflict) --- */
                     .cert-section {
                         opacity: 0;
                         transform: translateY(32px);
                         transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
                                     transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
                     }
-                    /* Once visible, reset so .card:hover from globals.css can take over freely */
                     .cert-section.cert-visible {
                         opacity: 1;
                         transform: translateY(0px);
