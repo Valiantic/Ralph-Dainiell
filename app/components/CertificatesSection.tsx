@@ -95,6 +95,11 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
     return (
         <>
+            {/*
+                .card class from globals.css handles the hover lift on the whole container —
+                same behaviour as Skills and Experience sections.
+                cert-section only adds the scroll-in animation via className toggle.
+            */}
             <section
                 ref={sectionRef}
                 className={`card cert-section${visible ? ' cert-visible' : ''}`}
@@ -147,7 +152,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     /* DESKTOP SCROLL ROW */
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
 
-                        {/* LEFT ARROW — dim when at start (nothing to scroll left) */}
+                        {/* LEFT ARROW — dim when at start */}
                         {showNav && (
                             <button
                                 onClick={() => scroll('left')}
@@ -179,7 +184,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             {certificates.map((cert) => (
                                 <div
                                     key={cert.id}
-                                    className="cert-card"
                                     onClick={() => setSelectedCert(cert)}
                                     style={{
                                         minWidth: 'clamp(260px, 75vw, 340px)',
@@ -229,7 +233,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             ))}
                         </div>
 
-                        {/* RIGHT ARROW — dim when at end (nothing to scroll right) */}
+                        {/* RIGHT ARROW — dim when at end */}
                         {showNav && (
                             <button
                                 onClick={() => scroll('right')}
@@ -281,26 +285,17 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 }
 
                 <style jsx>{`
-                    /* --- Scroll-in animation --- */
+                    /* --- Scroll-in animation via className (no inline transform conflict) --- */
                     .cert-section {
                         opacity: 0;
                         transform: translateY(32px);
                         transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
                                     transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
                     }
+                    /* Once visible, reset so .card:hover from globals.css can take over freely */
                     .cert-section.cert-visible {
                         opacity: 1;
                         transform: translateY(0px);
-                    }
-
-                    /* --- Card hover lift --- */
-                    .cert-card {
-                        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                                    box-shadow 0.25s ease;
-                    }
-                    .cert-card:hover {
-                        transform: scale(1.035) translateY(-6px);
-                        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.13);
                     }
 
                     .no-scrollbar::-webkit-scrollbar { display: none; }
