@@ -95,11 +95,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
     return (
         <>
-            {/* 
-                We use a className-based approach for the scroll-in animation
-                so it does NOT conflict with .card:hover transform in globals.css.
-                The inline style only sets background and width — no transform/opacity here.
-            */}
             <section
                 ref={sectionRef}
                 className={`card cert-section${visible ? ' cert-visible' : ''}`}
@@ -151,11 +146,20 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 ) : (
                     /* DESKTOP SCROLL ROW */
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
+
+                        {/* LEFT ARROW — dim when at start (nothing to scroll left) */}
                         {showNav && (
-                            <button onClick={() => scroll('left')} style={{
-                                background: 'none', border: 'none', zIndex: 2,
-                                opacity: atStart ? 0.2 : 1, cursor: 'pointer'
-                            }}>
+                            <button
+                                onClick={() => scroll('left')}
+                                disabled={atStart}
+                                style={{
+                                    background: 'none', border: 'none', zIndex: 2,
+                                    opacity: atStart ? 0.2 : 1,
+                                    cursor: atStart ? 'default' : 'pointer',
+                                    transition: 'opacity 0.2s ease',
+                                    flexShrink: 0,
+                                }}
+                            >
                                 <FiChevronLeft size={32} />
                             </button>
                         )}
@@ -167,14 +171,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 display: 'flex',
                                 gap: '16px',
                                 overflowX: 'auto',
-                                padding: '10px 4px',
+                                padding: '10px 4px 14px',
                                 flex: 1,
-                                scrollSnapType: 'x mandatory'
+                                scrollSnapType: 'x mandatory',
                             }}
                         >
                             {certificates.map((cert) => (
                                 <div
                                     key={cert.id}
+                                    className="cert-card"
                                     onClick={() => setSelectedCert(cert)}
                                     style={{
                                         minWidth: 'clamp(260px, 75vw, 340px)',
@@ -185,13 +190,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                         overflow: 'hidden',
                                         flexShrink: 0,
                                         scrollSnapAlign: 'start',
-                                        transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                                    }}
-                                    onMouseEnter={e => {
-                                        e.currentTarget.style.transform = 'scale(1.03) translateY(-4px)';
-                                    }}
-                                    onMouseLeave={e => {
-                                        e.currentTarget.style.transform = 'scale(1) translateY(0)';
                                     }}
                                 >
                                     <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
@@ -231,11 +229,19 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             ))}
                         </div>
 
+                        {/* RIGHT ARROW — dim when at end (nothing to scroll right) */}
                         {showNav && (
-                            <button onClick={() => scroll('right')} style={{
-                                background: 'none', border: 'none', zIndex: 2,
-                                opacity: atEnd ? 0.2 : 1, cursor: 'pointer'
-                            }}>
+                            <button
+                                onClick={() => scroll('right')}
+                                disabled={atEnd}
+                                style={{
+                                    background: 'none', border: 'none', zIndex: 2,
+                                    opacity: atEnd ? 0.2 : 1,
+                                    cursor: atEnd ? 'default' : 'pointer',
+                                    transition: 'opacity 0.2s ease',
+                                    flexShrink: 0,
+                                }}
+                            >
                                 <FiChevronRight size={32} />
                             </button>
                         )}
@@ -275,23 +281,30 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 }
 
                 <style jsx>{`
-                    /* --- Scroll-in animation via className (no inline transform conflict) --- */
+                    /* --- Scroll-in animation --- */
                     .cert-section {
                         opacity: 0;
                         transform: translateY(32px);
                         transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
                                     transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
                     }
-
-                    /* Once visible, reset to neutral so .card:hover can take over freely */
                     .cert-section.cert-visible {
                         opacity: 1;
                         transform: translateY(0px);
                     }
 
-                    /* .card:hover from globals.css will apply translateY(-2px) on top — no conflict */
+                    /* --- Card hover lift --- */
+                    .cert-card {
+                        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                                    box-shadow 0.25s ease;
+                    }
+                    .cert-card:hover {
+                        transform: scale(1.035) translateY(-6px);
+                        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.13);
+                    }
 
                     .no-scrollbar::-webkit-scrollbar { display: none; }
+                    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
                     .modal-overlay {
                         position: fixed;
@@ -337,7 +350,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         flex-shrink: 0;
                         transition: background 0.2s ease;
                     }
-
                     .close-btn:hover { background: rgba(0,0,0,0.15); }
 
                     .modal-header {
@@ -347,7 +359,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         gap: 10px;
                         flex-shrink: 0;
                     }
-
                     .modal-header h3 { font-size: 16px; font-weight: 700; margin: 0; }
                     .modal-header p { font-size: 12px; color: #8e8e93; margin: 2px 0 0; }
 
