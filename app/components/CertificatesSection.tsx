@@ -61,7 +61,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         const el = scrollRef.current;
         if (!el) return;
 
-        // Check immediately + after a tick (cards need to render first)
         checkScrollPosition();
         const t = setTimeout(checkScrollPosition, 100);
 
@@ -73,7 +72,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             el.removeEventListener('scroll', checkScrollPosition);
             window.removeEventListener('resize', checkScrollPosition);
         };
-    }, [isMobile]); // re-run when switching between mobile/desktop
+    }, [isMobile]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -151,19 +150,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     /* DESKTOP SCROLL ROW */
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
 
-                        {/* LEFT ARROW — bright when NOT at start, dim when at start */}
+                        {/* LEFT ARROW */}
                         <button
                             onClick={() => scroll('left')}
                             disabled={atStart}
-                            style={{
-                                background: 'none', border: 'none', zIndex: 2,
-                                opacity: atStart ? 0.2 : 1,
-                                cursor: atStart ? 'default' : 'pointer',
-                                transition: 'opacity 0.2s ease',
-                                flexShrink: 0,
-                            }}
+                            className="arrow-btn"
+                            style={{ opacity: atStart ? 0.35 : 1 }}
+                            aria-label="Scroll left"
                         >
-                            <FiChevronLeft size={32} />
+                            <FiChevronLeft size={20} strokeWidth={2.5} />
                         </button>
 
                         <div
@@ -230,19 +225,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             ))}
                         </div>
 
-                        {/* RIGHT ARROW — bright when NOT at end, dim when at end */}
+                        {/* RIGHT ARROW */}
                         <button
                             onClick={() => scroll('right')}
                             disabled={atEnd}
-                            style={{
-                                background: 'none', border: 'none', zIndex: 2,
-                                opacity: atEnd ? 0.2 : 1,
-                                cursor: atEnd ? 'default' : 'pointer',
-                                transition: 'opacity 0.2s ease',
-                                flexShrink: 0,
-                            }}
+                            className="arrow-btn"
+                            style={{ opacity: atEnd ? 0.35 : 1 }}
+                            aria-label="Scroll right"
                         >
-                            <FiChevronRight size={32} />
+                            <FiChevronRight size={20} strokeWidth={2.5} />
                         </button>
                     </div>
                 )}
@@ -289,6 +280,38 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     .cert-section.cert-visible {
                         opacity: 1;
                         transform: translateY(0px);
+                    }
+
+                    /* ── Pill arrow button ── */
+                    .arrow-btn {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 44px;
+                        height: 44px;
+                        border-radius: 50%;
+                        border: none;
+                        background: #fff;
+                        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12), 0 0 0 0.5px rgba(0, 0, 0, 0.06);
+                        cursor: pointer;
+                        flex-shrink: 0;
+                        color: #1c1c1e;
+                        transition: opacity 0.2s ease,
+                                    background 0.18s ease,
+                                    box-shadow 0.18s ease,
+                                    transform 0.15s ease;
+                    }
+                    .arrow-btn:hover:not(:disabled) {
+                        background: #f5f5f7;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.16), 0 0 0 0.5px rgba(0, 0, 0, 0.08);
+                        transform: scale(1.08);
+                    }
+                    .arrow-btn:active:not(:disabled) {
+                        transform: scale(0.93);
+                        background: #ebebed;
+                    }
+                    .arrow-btn:disabled {
+                        cursor: default;
                     }
 
                     .no-scrollbar::-webkit-scrollbar { display: none; }
