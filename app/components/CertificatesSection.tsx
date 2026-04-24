@@ -282,17 +282,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         transform: translateY(0px);
                     }
 
-                    /* ── Per-card hover lift ── */
+                    /* ── Per-card hover lift (no shadow) ── */
                     .cert-card {
-                        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                                    box-shadow 0.25s ease;
+                        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
                     }
                     .cert-card:hover {
                         transform: scale(1.035) translateY(-6px);
-                        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.13);
                     }
 
-                    /* ── Pill arrow button ── */
+                    /* ── Arrow buttons ── */
                     .arrow-btn {
                         display: flex;
                         align-items: center;
