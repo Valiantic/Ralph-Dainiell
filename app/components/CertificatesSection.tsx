@@ -27,7 +27,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const [isMobile, setIsMobile] = useState(false);
     const [visible, setVisible] = useState(false);
 
-    // Scroll-in animation
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -176,6 +175,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             {certificates.map((cert) => (
                                 <div
                                     key={cert.id}
+                                    className="cert-card"
                                     onClick={() => setSelectedCert(cert)}
                                     style={{
                                         minWidth: 'clamp(260px, 75vw, 340px)',
@@ -280,6 +280,16 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     .cert-section.cert-visible {
                         opacity: 1;
                         transform: translateY(0px);
+                    }
+
+                    /* ── Per-card hover lift ── */
+                    .cert-card {
+                        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                                    box-shadow 0.25s ease;
+                    }
+                    .cert-card:hover {
+                        transform: scale(1.035) translateY(-6px);
+                        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.13);
                     }
 
                     /* ── Pill arrow button ── */
