@@ -98,6 +98,10 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                     .skills-card-outer {
                         height: auto !important;
                     }
+                    .skills-card {
+                        overflow-y: visible !important;
+                        height: auto !important;
+                    }
                 }
             `}</style>
         </div>
