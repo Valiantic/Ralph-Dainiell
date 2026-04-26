@@ -111,13 +111,16 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                 .skills-card::-webkit-scrollbar {
                     display: none;
                 }
-                @media (max-width: 1024px) {
+               @media (max-width: 1024px) {
                     .skills-card-outer {
                         height: auto !important;
+                        width: 100% !important;
+                        align-self: flex-start !important;
                     }
                     .skills-card {
                         overflow-y: visible !important;
                         height: auto !important;
+                        align-items: flex-start !important;
                     }
                 }
             `}</style>
