@@ -41,7 +41,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
             padding: 0,
             width: '100%',
         }}>
-            <div
+           <div
                 ref={scrollRef}
                 onScroll={handleScroll}
                 className="skills-card"
@@ -50,6 +50,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                     overflowY: 'auto',
                     padding: '24px',
                     boxSizing: 'border-box',
+                    WebkitOverflowScrolling: 'touch',
                 }}
             >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
@@ -102,7 +103,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                 height: `${THUMB_HEIGHT}px`,
                 background: showThumb ? 'rgba(0,0,0,0.25)' : 'transparent',
                 borderRadius: '999px',
-                transition: 'background 0.3s ease, top 0.05s linear',
+                transition: 'background 0.3s ease, top 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                 pointerEvents: 'none',
             }} />
 
