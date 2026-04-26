@@ -339,11 +339,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         gap: 12px !important;
                     }
 
-                    /* buttons stack full width under the name block */
                     .hero-buttons {
                         flex-direction: column !important;
                         gap: 10px !important;
-                        margin-top: 8px !important;
                     }
 
                     .cv-button {
@@ -352,13 +350,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         display: flex !important;
                         align-items: center !important;
                         text-align: center !important;
-                        border-radius: 999px !important;
                     }
 
                     .github-btn {
                         width: 100% !important;
                         justify-content: center !important;
-                        border-radius: 999px !important;
                     }
 
                     .contact-card, .opportunities-card {
