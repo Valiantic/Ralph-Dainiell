@@ -81,9 +81,9 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                 .skills-card::-webkit-scrollbar-thumb {
                     background: transparent;
                     border-radius: 999px;
-                    min-height: 20px;
-                    max-height: 30px;
-                    margin: 600px 0;
+                    min-height: 10px;
+                    max-height: 10px;
+                    margin: 100px 0;
                 }
 
                 .skills-card:hover::-webkit-scrollbar-thumb {
