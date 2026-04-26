@@ -164,3 +164,20 @@ button {
     display: block;
   }
 }
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  html, body {
+    overflow: hidden;
+    height: 100%;
+  }
+  
+  main {
+    overflow-y: auto;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+}
