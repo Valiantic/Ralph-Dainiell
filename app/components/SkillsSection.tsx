@@ -62,25 +62,27 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                     -ms-overflow-style: none;
                 }
 
+                /* Hide scrollbar by default */
                 .skills-card::-webkit-scrollbar {
                     width: 4px;
                 }
                 .skills-card::-webkit-scrollbar-track {
                     background: transparent;
+                    margin: 12px 0;
                 }
                 .skills-card::-webkit-scrollbar-thumb {
                     background: transparent;
                     border-radius: 999px;
                     min-height: 40px;
-                    max-height: 60px;
                 }
 
+                /* Show on hover — Apple-style: thin, rounded, subtle gray */
                 .skills-card:hover::-webkit-scrollbar-thumb {
-                    background: rgba(0, 0, 0, 0.25);
+                    background: rgba(0, 0, 0, 0.18);
                 }
                 .skills-card:hover {
                     scrollbar-width: thin;
-                    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+                    scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
                 }
 
                 @media (max-width: 1024px) {
