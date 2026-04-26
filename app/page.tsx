@@ -17,7 +17,7 @@ export default function Home() {
       display: 'flex',
       flexDirection: 'column',
       gap: 'clamp(20px, 5vw, 32px)',
-      overflowX: 'hidden'
+      overflowX: 'hidden',
       alignItems: 'flex-start',
     }}>
       <ProfileHero data={PORTFOLIO_DATA} />
