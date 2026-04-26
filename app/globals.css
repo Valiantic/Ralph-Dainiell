@@ -162,26 +162,3 @@ button {
     display: block;
   }
 }
-/* iOS-style scrollbar for skills card */
-.skills-card::-webkit-scrollbar {
-    width: 4px;
-}
-.skills-card::-webkit-scrollbar-track {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-.skills-card::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: 999px;
-    min-height: 40px;
-    border: none !important;
-}
-.skills-card::-webkit-scrollbar-button {
-    display: none;
-    height: 0;
-    width: 0;
-}
-.skills-card:hover::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.22);
-}

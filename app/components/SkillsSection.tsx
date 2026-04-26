@@ -6,21 +6,16 @@ interface SkillsSectionProps {
 }
 
 export const SkillsSection = ({ skills }: SkillsSectionProps) => {
-        const categories: Skill['category'][] = ['Programming Language', 'UI Development','Architecture', 'Networking','Tools & DevOps','Database','Design'];
+    const categories: Skill['category'][] = ['Programming Language', 'UI Development','Architecture', 'Networking','Tools & DevOps','Database','Design'];
 
     return (
-        <div
-            className="skills-card card"
-            style={{
-                height: 'var(--bento-height, 650px)',
-                background: '#fff',
-                overflowY: 'auto',
-                position: 'relative',
-                borderRadius: '20px',
-                scrollbarWidth: 'thin',
-                scrollbarColor: 'transparent transparent',
-            }}
-        >
+        <div className="skills-card card" style={{
+            height: 'var(--bento-height, 650px)',
+            background: '#fff',
+            overflowY: 'auto',
+            position: 'relative',
+            borderRadius: '20px',
+        }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <div style={{ width: '24px', height: '24px', position: 'relative' }}>
                     <Image src="/Images/Icons/skills icon.png" alt="Skills" fill style={{ objectFit: 'contain' }} />
@@ -45,18 +40,14 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                             {skills
                                 .filter((s) => s.category === category)
                                 .map((skill) => (
-                                    <span
-                                        key={skill.name}
-                                        className="pill"
-                                        style={{
-                                            borderRadius: '12px',
-                                            fontSize: '12px',
-                                            fontWeight: 600,
-                                            border: '1.5px solid #000',
-                                            padding: '6px 14px',
-                                            background: '#fff'
-                                        }}
-                                    >
+                                    <span key={skill.name} className="pill" style={{
+                                        borderRadius: '12px',
+                                        fontSize: '12px',
+                                        fontWeight: 600,
+                                        border: '1.5px solid #000',
+                                        padding: '6px 14px',
+                                        background: '#fff'
+                                    }}>
                                         {skill.name}
                                     </span>
                                 ))}
@@ -64,6 +55,41 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                     </div>
                 ))}
             </div>
+
+            <style jsx>{`
+                .skills-card {
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                }
+
+                .skills-card::-webkit-scrollbar {
+                    width: 4px;
+                }
+                .skills-card::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .skills-card::-webkit-scrollbar-thumb {
+                    background: transparent;
+                    border-radius: 999px;
+                    min-height: 40px;
+                    max-height: 60px;
+                }
+
+                .skills-card:hover::-webkit-scrollbar-thumb {
+                    background: rgba(0, 0, 0, 0.25);
+                }
+                .skills-card:hover {
+                    scrollbar-width: thin;
+                    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+                }
+
+                @media (max-width: 1024px) {
+                    .skills-card {
+                        height: auto !important;
+                        padding: 20px !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 };
