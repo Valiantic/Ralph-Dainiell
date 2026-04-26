@@ -340,21 +340,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     }
 
                     .hero-buttons {
-                        flex-direction: column !important;
-                        gap: 10px !important;
-                    }
-
-                    .cv-button {
-                        width: 100% !important;
-                        justify-content: center !important;
-                        display: flex !important;
-                        align-items: center !important;
-                        text-align: center !important;
-                    }
-
-                    .github-btn {
-                        width: 100% !important;
-                        justify-content: center !important;
+                        flex-direction: row !important;
+                        flex-wrap: wrap !important;
+                        gap: 12px !important;
                     }
 
                     .contact-card, .opportunities-card {
