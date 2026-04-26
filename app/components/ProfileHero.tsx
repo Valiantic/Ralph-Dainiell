@@ -272,47 +272,30 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
             <style jsx>{`
                 @media (max-width: 1024px) {
-                    /* Grid: pic + name in row 1, buttons in row 2, cards in row 3 */
                     .profile-hero {
-                        display: grid !important;
-                        grid-template-columns: 90px 1fr !important;
-                        column-gap: 14px !important;
-                        row-gap: 16px !important;
-                        align-items: start !important;
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        gap: 16px !important;
                     }
-
                     .hero-img-container {
-                        grid-column: 1 !important;
-                        grid-row: 1 !important;
                         width: 90px !important;
                         height: 90px !important;
                         border-radius: 20px !important;
                         flex-shrink: 0 !important;
+                        align-self: flex-start !important;
                     }
-
                     .hero-info {
-                        grid-column: 2 !important;
-                        grid-row: 1 !important;
+                        width: 100% !important;
                         min-width: 0 !important;
                         flex: none !important;
-                        width: 100% !important;
                     }
-
                     .hero-info h1 {
-                        font-size: 26px !important;
-                        letter-spacing: -0.5px !important;
-                        line-height: 1.1 !important;
+                        font-size: 32px !important;
                     }
-
-                    /* Buttons span full width below pic+name */
                     .hero-buttons {
-                        grid-column: 1 / -1 !important;
-                        grid-row: 2 !important;
                         flex-direction: column !important;
                         gap: 10px !important;
-                        display: flex !important;
                     }
-
                     .cv-button {
                         width: 100% !important;
                         justify-content: center !important;
@@ -320,22 +303,16 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         align-items: center !important;
                         text-align: center !important;
                     }
-
                     .github-btn {
                         width: 100% !important;
                         justify-content: center !important;
                     }
-
-                    /* Cards below buttons */
                     .hero-cards-wrapper {
-                        grid-column: 1 / -1 !important;
-                        grid-row: 3 !important;
                         width: 100% !important;
                         flex: none !important;
                         flex-direction: column !important;
                         gap: 12px !important;
                     }
-
                     .contact-card, .opportunities-card {
                         width: 100% !important;
                         flex: none !important;
