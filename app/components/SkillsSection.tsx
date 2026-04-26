@@ -16,6 +16,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
             borderRadius: '30px',
             overflow: 'hidden',
             padding: 0,
+            width: '100%',
         }}>
             <div className="skills-card" style={{
                 height: '100%',
