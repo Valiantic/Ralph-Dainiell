@@ -13,6 +13,8 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
             height: 'var(--bento-height, 650px)',
             background: '#fff',
             overflowY: 'auto',
+            position: 'relative',
+            borderRadius: '20px',
         }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <div style={{ width: '24px', height: '24px', position: 'relative' }}>
@@ -59,24 +61,30 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                     scrollbar-width: none;
                     -ms-overflow-style: none;
                 }
+
+                /* Hide scrollbar by default */
                 .skills-card::-webkit-scrollbar {
-                    width: 6px;
+                    width: 4px;
                 }
                 .skills-card::-webkit-scrollbar-track {
                     background: transparent;
+                    margin: 12px 0;
                 }
                 .skills-card::-webkit-scrollbar-thumb {
                     background: transparent;
                     border-radius: 999px;
-                    transition: background 0.2s ease;
+                    min-height: 40px;
                 }
+
+                /* Show on hover — Apple-style: thin, rounded, subtle gray */
                 .skills-card:hover::-webkit-scrollbar-thumb {
-                    background: rgba(0, 0, 0, 0.2);
+                    background: rgba(0, 0, 0, 0.18);
                 }
                 .skills-card:hover {
                     scrollbar-width: thin;
-                    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+                    scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
                 }
+
                 @media (max-width: 1024px) {
                     .skills-card {
                         height: auto !important;
