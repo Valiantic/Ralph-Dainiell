@@ -94,7 +94,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
             </div>
 
             {/* Custom iOS-style scrollbar thumb */}
-            <div style={{
+            <div className="scroll-thumb" style={{
                 position: 'absolute',
                 right: '4px',
                 top: `${thumbTop}px`,
@@ -114,7 +114,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                 .skills-card::-webkit-scrollbar {
                     display: none;
                 }
-               @media (max-width: 1024px) {
+                @media (max-width: 1024px) {
                     .skills-card-outer {
                         height: auto !important;
                         width: 100% !important;
@@ -124,6 +124,9 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                         overflow-y: visible !important;
                         height: auto !important;
                         align-items: flex-start !important;
+                    }
+                    .scroll-thumb {
+                        display: none !important;
                     }
                 }
             `}</style>
