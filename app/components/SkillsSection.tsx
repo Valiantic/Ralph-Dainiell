@@ -16,6 +16,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
             borderRadius: '30px',
             overflow: 'hidden',
             padding: 0,
+            width: '100%',
         }}>
             <div className="skills-card" style={{
                 height: '100%',
@@ -71,18 +72,17 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                 }
 
                 .skills-card::-webkit-scrollbar {
-                    width: 6px;
+                    width: 3px;
                 }
 
                 .skills-card::-webkit-scrollbar-track {
                     background: transparent;
-                    margin: 20px 0;
+                    margin: 56px 0 24px 0;
                 }
 
                 .skills-card::-webkit-scrollbar-thumb {
                     background: transparent;
                     border-radius: 999px;
-                    min-height: 60px;
                 }
 
                 .skills-card:hover::-webkit-scrollbar-thumb {
@@ -95,6 +95,10 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
 
                 @media (max-width: 1024px) {
                     .skills-card-outer {
+                        height: auto !important;
+                    }
+                    .skills-card {
+                        overflow-y: visible !important;
                         height: auto !important;
                     }
                 }
