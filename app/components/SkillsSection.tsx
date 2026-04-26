@@ -1,4 +1,3 @@
-
 import { Skill } from '../types/portfolio';
 import Image from 'next/image';
 
@@ -10,10 +9,10 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
     const categories: Skill['category'][] = ['Programming Language', 'UI Development','Architecture', 'Networking','Tools & DevOps','Database','Design'];
 
     return (
-        <div className="card no-scrollbar" style={{
+        <div className="skills-card card" style={{
             height: 'var(--bento-height, 650px)',
             background: '#fff',
-            overflowY: 'auto'
+            overflowY: 'auto',
         }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <div style={{ width: '24px', height: '24px', position: 'relative' }}>
@@ -25,7 +24,14 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 {categories.map((category) => (
                     <div key={category}>
-                        <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#666', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        <h3 style={{
+                            fontSize: '14px',
+                            fontWeight: 700,
+                            color: '#666',
+                            marginBottom: '12px',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em'
+                        }}>
                             {category}
                         </h3>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -47,12 +53,32 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                     </div>
                 ))}
             </div>
+
             <style jsx>{`
-                .no-scrollbar::-webkit-scrollbar {
-                    display: none;
+                .skills-card {
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                }
+                .skills-card::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .skills-card::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .skills-card::-webkit-scrollbar-thumb {
+                    background: transparent;
+                    border-radius: 999px;
+                    transition: background 0.2s ease;
+                }
+                .skills-card:hover::-webkit-scrollbar-thumb {
+                    background: rgba(0, 0, 0, 0.2);
+                }
+                .skills-card:hover {
+                    scrollbar-width: thin;
+                    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
                 }
                 @media (max-width: 1024px) {
-                    div.card {
+                    .skills-card {
                         height: auto !important;
                         padding: 20px !important;
                     }
