@@ -1,5 +1,6 @@
 import { Skill } from '../types/portfolio';
 import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 interface SkillsSectionProps {
     skills: Skill[];
@@ -7,6 +8,25 @@ interface SkillsSectionProps {
 
 export const SkillsSection = ({ skills }: SkillsSectionProps) => {
     const categories: Skill['category'][] = ['Programming Language', 'UI Development','Architecture', 'Networking','Tools & DevOps','Database','Design'];
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [thumbTop, setThumbTop] = useState(0);
+    const [showThumb, setShowThumb] = useState(false);
+    const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const THUMB_HEIGHT = 40;
+    const TRACK_TOP = 56;
+    const TRACK_BOTTOM = 24;
+
+    const handleScroll = () => {
+        const el = scrollRef.current;
+        if (!el) return;
+        const scrollable = el.scrollHeight - el.clientHeight;
+        const trackHeight = el.clientHeight - TRACK_TOP - TRACK_BOTTOM - THUMB_HEIGHT;
+        const ratio = el.scrollTop / scrollable;
+        setThumbTop(TRACK_TOP + ratio * trackHeight);
+        setShowThumb(true);
+        clearTimeout(hideTimer.current);
+        hideTimer.current = setTimeout(() => setShowThumb(false), 1200);
+    };
 
     return (
         <div className="skills-card-outer card" style={{
@@ -18,12 +38,17 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
             padding: 0,
             width: '100%',
         }}>
-            <div className="skills-card" style={{
-                height: '100%',
-                overflowY: 'auto',
-                padding: '24px',
-                boxSizing: 'border-box',
-            }}>
+            <div
+                ref={scrollRef}
+                onScroll={handleScroll}
+                className="skills-card"
+                style={{
+                    height: '100%',
+                    overflowY: 'auto',
+                    padding: '24px',
+                    boxSizing: 'border-box',
+                }}
+            >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                     <div style={{ width: '24px', height: '24px', position: 'relative' }}>
                         <Image src="/Images/Icons/skills icon.png" alt="Skills" fill style={{ objectFit: 'contain' }} />
@@ -65,34 +90,27 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                 </div>
             </div>
 
+            {/* Custom iOS-style scrollbar thumb */}
+            <div style={{
+                position: 'absolute',
+                right: '4px',
+                top: `${thumbTop}px`,
+                width: '4px',
+                height: `${THUMB_HEIGHT}px`,
+                background: showThumb ? 'rgba(0,0,0,0.25)' : 'transparent',
+                borderRadius: '999px',
+                transition: 'background 0.3s ease, top 0.05s linear',
+                pointerEvents: 'none',
+            }} />
+
             <style jsx>{`
                 .skills-card {
-                    scrollbar-width: thin;
-                    scrollbar-color: transparent transparent;
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
                 }
-
                 .skills-card::-webkit-scrollbar {
-                    width: 3px;
+                    display: none;
                 }
-
-                .skills-card::-webkit-scrollbar-track {
-                    background: transparent;
-                    margin: 56px 0 24px 0;
-                }
-
-                .skills-card::-webkit-scrollbar-thumb {
-                    background: transparent;
-                    border-radius: 999px;
-                }
-
-                .skills-card:hover::-webkit-scrollbar-thumb {
-                    background: rgba(0, 0, 0, 0.25);
-                }
-
-                .skills-card:hover {
-                    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
-                }
-
                 @media (max-width: 1024px) {
                     .skills-card-outer {
                         height: auto !important;
