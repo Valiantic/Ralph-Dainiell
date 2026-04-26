@@ -17,8 +17,7 @@ export default function Home() {
       display: 'flex',
       flexDirection: 'column',
       gap: 'clamp(20px, 5vw, 32px)',
-      overflowX: 'hidden',
-      alignItems: 'flex-start',
+      overflowX: 'hidden'
     }}>
       <ProfileHero data={PORTFOLIO_DATA} />
 
@@ -51,6 +50,10 @@ export default function Home() {
           .mobile-span-12 {
             grid-column: span 12 !important;
             width: 100% !important;
+          }
+          .mobile-span-12 > * {
+            width: 100% !important;
+            max-width: 100% !important;
           }
         }
       `}</style>
