@@ -14,7 +14,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
             background: '#fff',
             overflowY: 'auto',
             position: 'relative',
-            borderRadius: '20px',
+            borderRadius: '30px',
         }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <div style={{ width: '24px', height: '24px', position: 'relative' }}>
