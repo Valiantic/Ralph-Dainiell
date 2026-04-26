@@ -58,31 +58,33 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
 
             <style jsx>{`
                 .skills-card {
-                    scrollbar-width: none;
-                    -ms-overflow-style: none;
+                    scrollbar-width: thin;
+                    scrollbar-color: transparent transparent;
+                    scrollbar-gutter: stable;
                 }
 
-                /* Hide scrollbar by default */
                 .skills-card::-webkit-scrollbar {
-                    width: 4px;
+                    width: 6px;
                 }
+
                 .skills-card::-webkit-scrollbar-track {
                     background: transparent;
-                    margin: 12px 0;
+                    margin: 20px 0;
                 }
+
                 .skills-card::-webkit-scrollbar-thumb {
                     background: transparent;
                     border-radius: 999px;
-                    min-height: 40px;
+                    min-height: 60px;
                 }
 
-                /* Show on hover — Apple-style: thin, rounded, subtle gray */
+                /* Show on hover — Apple iOS style */
                 .skills-card:hover::-webkit-scrollbar-thumb {
-                    background: rgba(0, 0, 0, 0.18);
+                    background: rgba(0, 0, 0, 0.25);
                 }
+
                 .skills-card:hover {
-                    scrollbar-width: thin;
-                    scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
+                    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
                 }
 
                 @media (max-width: 1024px) {
