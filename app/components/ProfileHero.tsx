@@ -304,13 +304,13 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         letter-spacing: -0.5px !important;
                         line-height: 1.1 !important;
                     }
-                    /* Row 2, full width: Buttons — original styles, just stacked & full width */
+                    /* Row 2, full width: extend buttons to match card width */
                     .hero-buttons {
-                        grid-column: 1 / -1 !important;
-                        grid-row: 2 !important;
                         display: flex !important;
                         flex-direction: column !important;
                         gap: 10px !important;
+                        width: calc(100% + 104px) !important;
+                        margin-left: -104px !important;
                     }
                     .cv-button {
                         width: 100% !important;
