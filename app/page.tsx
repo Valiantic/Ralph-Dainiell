@@ -46,6 +46,7 @@ export default function Home() {
             grid-template-columns: 1fr !important;
             display: flex !important;
             flex-direction: column !important;
+            align-items: flex-start !important;
           }
           .mobile-span-12 {
             grid-column: span 12 !important;
