@@ -29,7 +29,10 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
     };
 
     return (
-        <div className="skills-card-outer card" style={{
+        <div className="skills-card-outer card" 
+        onMouseEnter={() => setShowThumb(true)}
+        onMouseLeave={() => setShowThumb(false)}
+        style={{
             height: 'var(--bento-height, 650px)',
             background: '#fff',
             position: 'relative',
