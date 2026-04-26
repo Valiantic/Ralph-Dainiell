@@ -26,21 +26,42 @@ export const PORTFOLIO_DATA: PortfolioData = {
         "I also document my journey as an IT student and aspiring iOS developer through content creation, where I share insights, experiences, and lessons learned along the way. Committed to continuous growth, I am always seeking opportunities to learn, collaborate, and contribute meaningfully through both my technical and creative skill set."
         ],
     skills: [
-        { name: "Swift", category: "Programming Language" },
-        { name: "SwiftUI", category: "Programming Language" },
-        { name: "MySQL", category: "Programming Language" },
-        { name: "Python", category: "Programming Language" },
-        { name: "HTML5", category: "Programming Language" },
-        { name: "CSS", category: "Programming Language" },
-        { name: "Xcode", category: "Mobile Development" },
-        { name: "UIKit", category: "Mobile Development" },
-        { name: "Excel", category: "Analytics Software" },
-        { name: "Adobe Premiere Pro", category: "Editing Software" },
-        { name: "Final Cut Pro", category: "Editing Software" },
-        { name: "Figma", category: "Editing Software" },
-        
-        
-    ],
+    { name: "Swift", category: "Programming Language" },
+    { name: "SwiftUI", category: "Programming Language" },
+    { name: "Python", category: "Programming Language" },
+    { name: "HTML5", category: "Programming Language" },
+    { name: "CSS", category: "Programming Language" },
+
+  
+    { name: "UIKit", category: "UI Development" },
+    { name: "Auto Layout", category: "UI Development" },
+    { name: "View Controllers", category: "UI Development" },
+    { name: "Navigation & Flow", category: "UI Development" },
+
+    { name: "MVVM", category: "Architecture" },
+    { name: "MVC", category: "Architecture" },
+    { name: "State Management", category: "Architecture" },
+    { name: "Memory Management (ARC)", category: "Architecture" },
+
+
+    { name: "REST API", category: "Networking" },
+    { name: "JSON Parsing", category: "Networking" },
+    { name: "App Lifecycle", category: "Networking" },
+    { name: "Error Handling", category: "Networking" },
+
+
+    { name: "Xcode", category: "Tools & DevOps" },
+    { name: "Git & GitHub", category: "Tools & DevOps" },
+    { name: "Debugging", category: "Tools & DevOps" },
+    { name: "Data Handling", category: "Tools & DevOps" },
+
+    { name: "MySQL", category: "Database" },
+    { name: "SQLlite", category: "Database" },
+
+
+    { name: "Figma", category: "Design" },
+    { name: "DetailsPro", category: "Design" },
+],
     experiences: [
         {
             id: "1",

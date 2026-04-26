@@ -7,7 +7,7 @@ interface SkillsSectionProps {
 }
 
 export const SkillsSection = ({ skills }: SkillsSectionProps) => {
-    const categories: Skill['category'][] = ['Programming Language', 'Mobile Development','Analytics Software', 'Editing Software'];
+    const categories: Skill['category'][] = ['Programming Language', 'UI Development','Architecture', 'Networking','Tools & DevOps','Database','Design'];
 
     return (
         <div className="card no-scrollbar" style={{
