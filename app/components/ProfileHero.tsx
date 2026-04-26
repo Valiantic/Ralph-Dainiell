@@ -272,27 +272,43 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
             <style jsx>{`
                 @media (max-width: 1024px) {
+                    /* ONLY CHANGE: pic + name side by side via grid.
+                       Buttons and cards below — exactly as original. */
                     .profile-hero {
-                        flex-direction: column !important;
-                        align-items: stretch !important;
-                        gap: 16px !important;
+                        display: grid !important;
+                        grid-template-columns: 90px 1fr !important;
+                        column-gap: 14px !important;
+                        row-gap: 16px !important;
+                        align-items: start !important;
                     }
+                    /* Row 1, Col 1: Profile pic */
                     .hero-img-container {
+                        grid-column: 1 !important;
+                        grid-row: 1 !important;
                         width: 90px !important;
                         height: 90px !important;
                         border-radius: 20px !important;
                         flex-shrink: 0 !important;
                         align-self: flex-start !important;
                     }
+                    /* Row 1, Col 2: Name + location + role (NO buttons here) */
                     .hero-info {
+                        grid-column: 2 !important;
+                        grid-row: 1 !important;
                         width: 100% !important;
                         min-width: 0 !important;
                         flex: none !important;
                     }
                     .hero-info h1 {
-                        font-size: 32px !important;
+                        font-size: 26px !important;
+                        letter-spacing: -0.5px !important;
+                        line-height: 1.1 !important;
                     }
+                    /* Row 2, full width: Buttons — original styles, just stacked & full width */
                     .hero-buttons {
+                        grid-column: 1 / -1 !important;
+                        grid-row: 2 !important;
+                        display: flex !important;
                         flex-direction: column !important;
                         gap: 10px !important;
                     }
@@ -307,7 +323,10 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         width: 100% !important;
                         justify-content: center !important;
                     }
+                    /* Row 3, full width: Cards */
                     .hero-cards-wrapper {
+                        grid-column: 1 / -1 !important;
+                        grid-row: 3 !important;
                         width: 100% !important;
                         flex: none !important;
                         flex-direction: column !important;
