@@ -331,6 +331,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         flex: none !important;
                         flex-direction: column !important;
                         gap: 12px !important;
+                        margin-top: -8px !important;
                     }
                     .contact-card, .opportunities-card {
                         width: 100% !important;
