@@ -277,42 +277,90 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         align-items: stretch !important;
                         gap: 16px !important;
                     }
+
+                    /* ── TOP ROW: pic + name/location side by side ── */
                     .hero-img-container {
+                        /* pulled out of flow — sits beside .hero-info via the row wrapper below */
                         width: 90px !important;
                         height: 90px !important;
                         border-radius: 20px !important;
                         flex-shrink: 0 !important;
-                        align-self: flex-start !important;
                     }
+
+                    /*
+                     * On mobile we wrap the pic + info together in a flex row.
+                     * We achieve this without changing JSX by making .profile-hero
+                     * display as a grid where the first two children (img + info)
+                     * share the first row, and everything else stacks below.
+                     */
+                    .profile-hero {
+                        display: grid !important;
+                        grid-template-columns: 90px 1fr !important;
+                        grid-template-rows: auto auto !important;
+                        column-gap: 14px !important;
+                        row-gap: 16px !important;
+                        align-items: start !important;
+                    }
+
+                    /* hero-img-container → grid cell [1,1] */
+                    .hero-img-container {
+                        grid-column: 1 !important;
+                        grid-row: 1 !important;
+                    }
+
+                    /* hero-info → grid cell [1,2] */
                     .hero-info {
-                        width: 100% !important;
+                        grid-column: 2 !important;
+                        grid-row: 1 !important;
                         min-width: 0 !important;
                         flex: none !important;
+                        width: 100% !important;
                     }
+
                     .hero-info h1 {
-                        font-size: 32px !important;
+                        font-size: 26px !important;
+                        letter-spacing: -0.5px !important;
+                        line-height: 1.1 !important;
                     }
+
+                    /* roles text */
+                    .hero-info > div:nth-child(3) {
+                        font-size: 16px !important;
+                        margin-bottom: 0 !important;
+                    }
+
+                    /* hero-cards-wrapper → spans both columns, sits in row 2 */
+                    .hero-cards-wrapper {
+                        grid-column: 1 / -1 !important;
+                        grid-row: 2 !important;
+                        width: 100% !important;
+                        flex: none !important;
+                        flex-direction: column !important;
+                        gap: 12px !important;
+                    }
+
+                    /* buttons stack full width under the name block */
                     .hero-buttons {
                         flex-direction: column !important;
                         gap: 10px !important;
+                        margin-top: 8px !important;
                     }
+
                     .cv-button {
                         width: 100% !important;
                         justify-content: center !important;
                         display: flex !important;
                         align-items: center !important;
                         text-align: center !important;
+                        border-radius: 999px !important;
                     }
+
                     .github-btn {
                         width: 100% !important;
                         justify-content: center !important;
+                        border-radius: 999px !important;
                     }
-                    .hero-cards-wrapper {
-                        width: 100% !important;
-                        flex: none !important;
-                        flex-direction: column !important;
-                        gap: 12px !important;
-                    }
+
                     .contact-card, .opportunities-card {
                         width: 100% !important;
                         flex: none !important;
