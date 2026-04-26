@@ -272,43 +272,24 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
             <style jsx>{`
                 @media (max-width: 1024px) {
+                    /* Grid: pic + name in row 1, buttons in row 2, cards in row 3 */
                     .profile-hero {
-                        flex-direction: column !important;
-                        align-items: stretch !important;
-                        gap: 16px !important;
+                        display: grid !important;
+                        grid-template-columns: 90px 1fr !important;
+                        column-gap: 14px !important;
+                        row-gap: 16px !important;
+                        align-items: start !important;
                     }
 
-                    /* ── TOP ROW: pic + name/location side by side ── */
                     .hero-img-container {
-                        /* pulled out of flow — sits beside .hero-info via the row wrapper below */
+                        grid-column: 1 !important;
+                        grid-row: 1 !important;
                         width: 90px !important;
                         height: 90px !important;
                         border-radius: 20px !important;
                         flex-shrink: 0 !important;
                     }
 
-                    /*
-                     * On mobile we wrap the pic + info together in a flex row.
-                     * We achieve this without changing JSX by making .profile-hero
-                     * display as a grid where the first two children (img + info)
-                     * share the first row, and everything else stacks below.
-                     */
-                    .profile-hero {
-                        display: grid !important;
-                        grid-template-columns: 90px 1fr !important;
-                        grid-template-rows: auto auto !important;
-                        column-gap: 14px !important;
-                        row-gap: 16px !important;
-                        align-items: start !important;
-                    }
-
-                    /* hero-img-container → grid cell [1,1] */
-                    .hero-img-container {
-                        grid-column: 1 !important;
-                        grid-row: 1 !important;
-                    }
-
-                    /* hero-info → grid cell [1,2] */
                     .hero-info {
                         grid-column: 2 !important;
                         grid-row: 1 !important;
@@ -323,27 +304,13 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         line-height: 1.1 !important;
                     }
 
-                    /* roles text */
-                    .hero-info > div:nth-child(3) {
-                        font-size: 16px !important;
-                        margin-bottom: 0 !important;
-                    }
-
-                    /* hero-cards-wrapper → spans both columns, sits in row 2 */
-                    .hero-cards-wrapper {
+                    /* Buttons span full width below pic+name */
+                    .hero-buttons {
                         grid-column: 1 / -1 !important;
                         grid-row: 2 !important;
-                        width: 100% !important;
-                        flex: none !important;
-                        flex-direction: column !important;
-                        gap: 12px !important;
-                    }
-
-
-
-                    .hero-buttons {
                         flex-direction: column !important;
                         gap: 10px !important;
+                        display: flex !important;
                     }
 
                     .cv-button {
@@ -352,13 +319,21 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         display: flex !important;
                         align-items: center !important;
                         text-align: center !important;
-                        border-radius: 999px !important;
                     }
 
                     .github-btn {
                         width: 100% !important;
                         justify-content: center !important;
-                        border-radius: 999px !important;
+                    }
+
+                    /* Cards below buttons */
+                    .hero-cards-wrapper {
+                        grid-column: 1 / -1 !important;
+                        grid-row: 3 !important;
+                        width: 100% !important;
+                        flex: none !important;
+                        flex-direction: column !important;
+                        gap: 12px !important;
                     }
 
                     .contact-card, .opportunities-card {
