@@ -55,12 +55,12 @@ export const PORTFOLIO_DATA: PortfolioData = {
     { name: "Debugging", category: "Tools & DevOps" },
     { name: "Data Handling", category: "Tools & DevOps" },
 
-    { name: "MySQL", category: "Database" },
-    { name: "SQLlite", category: "Database" },
+    { name: "MySQL", category: "Database Tools" },
+    { name: "SQLlite", category: "Database Tools" },
 
 
-    { name: "Figma", category: "Design" },
-    { name: "DetailsPro", category: "Design" },
+    { name: "Figma", category: "Design Tools" },
+    { name: "DetailsPro", category: "Design Tools" },
 ],
     experiences: [
         {
