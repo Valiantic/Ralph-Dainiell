@@ -50,9 +50,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
     { name: "Error Handling", category: "Networking" },
 
 
-    { name: "Xcode", category: "Tools & DevOps" },
-    { name: "Git", category: "Tools & DevOps" },
-    { name: "Github", category: "Tools & DevOps" },
+    { name: "Git & Github", category: "Tools & DevOps" },
     { name: "Data Handling", category: "Tools & DevOps" },
 
     { name: "MySQL", category: "Database Tools" },
