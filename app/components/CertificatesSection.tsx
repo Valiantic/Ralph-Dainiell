@@ -104,7 +104,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             >
                 {/* HEADER */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-                    <div style={{ width: '32px', height: '32px', position: 'relative' }}>
+                    <div style={{ width: '36px', height: '35px', position: 'relative' }}>
                         <Image src="/Images/Icons/certificate icon.png" alt="Certificates" fill style={{ objectFit: 'contain' }} />
                     </div>
                     <h2 style={{ fontSize: '32px', fontWeight: 800 }}>Certificates</h2>
