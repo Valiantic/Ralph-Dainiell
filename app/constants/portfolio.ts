@@ -17,14 +17,14 @@ export const PORTFOLIO_DATA: PortfolioData = {
         linkedin: "https://www.linkedin.com/in/ralph-dainiell",
     },
     bio: [
-        "I am an aspiring IT professional currently building my foundation in software development, with a growing focus on iOS application development. I continuously refine my technical skills in Swift and modern iOS technologies to create efficient, user-centered applications. I approach every learning opportunity with discipline, aiming for accuracy, reliability, and continuous improvement.",
-        
-        "I am deeply committed to becoming a professional iOS app developer, and I actively prepare for real-world challenges through consistent practice, exploration, and hands-on experience. My curiosity about how applications impact user experience and solve real problems drives me to keep improving and expanding my expertise in this field.",
-        
-        "Beyond my technical development, I bring creative skills in video editing and content creation. By combining technical understanding with creativity, I produce engaging digital content that communicates ideas clearly, effectively, and with impact.",
+    "I am an aspiring iOS App Developer with a strong interest in building clean, reliable, and user-focused mobile applications. My current career direction is focused on Swift, SwiftUI, and modern iOS development practices.",
 
-        "I also document my journey as an IT student and aspiring iOS developer through content creation, where I share insights, experiences, and lessons learned along the way. Committed to continuous growth, I am always seeking opportunities to learn, collaborate, and contribute meaningfully through both my technical and creative skill set."
-        ],
+    "Alongside my transition into iOS development, I have junior-level experience performing data analyst-related tasks, including organizing data, identifying patterns, interpreting information, and supporting data-driven work.",
+
+    "This background has strengthened my attention to detail, analytical thinking, and accuracy qualities that I apply to writing structured code, solving development challenges, and improving user-centered solutions.",
+
+    "My goal is to contribute to a professional team where I can apply my technical foundation, analytical background, and creative mindset while continuously growing into an industry-ready mobile app developer."
+],
     skills: [
     { name: "Swift", category: "Programming Language" },
     { name: "SwiftUI", category: "Programming Language" },
