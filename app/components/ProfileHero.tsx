@@ -246,8 +246,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </p>
 
                     <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
-                        Seeking internship opportunities to build real-world iOS apps.<br />
-                        
+                        Actively pursuing opportunities in iOS development full-time, internship, or volunteer.<br />
                     </p>
 
                     <Link
