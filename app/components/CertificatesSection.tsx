@@ -281,6 +281,11 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         opacity: 1;
                         transform: translateY(0px);
                     }
+                    .cert-section.cert-visible:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+                        transition: transform 0.25s ease, box-shadow 0.25s ease;
+                    }
 
                     /* ── Per-card hover lift (no shadow) ── */
                     .cert-card {
