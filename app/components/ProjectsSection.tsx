@@ -40,9 +40,9 @@ export default function ProjectsSection() {
         </h2>
       </div>
 
-      <div style={{ textAlign: "center", padding: "2rem 0", color: "#6b7280" }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "2rem 0", color: "#6b7280" }}>
         Coming Soon
-      </div>
+    </div>
 
       <style jsx>{`
         .proj-section {
