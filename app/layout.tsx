@@ -12,10 +12,10 @@ export const metadata: Metadata = {
   title: "Ralph Gonzaga - iOS Developer",
   description: "Ralph Dainiell's Portfolio",
   icons: {
-    icon: "/Images/FaviconPFP.jpg",
-    shortcut: "/Images/FaviconPFP.jpg",
-    apple: "/Images/FaviconPFP.jpg",
-  },
+  icon: "/favicon.ico",
+  shortcut: "/favicon.ico",
+  apple: "/Images/FaviconPFP.jpg",
+},
 };
 
 export default function RootLayout({
@@ -28,7 +28,6 @@ export default function RootLayout({
       <body className={`${roboto.variable} antialiased`}>
         {children}
 
-        {/* 🔥 THIS IS THE FIX */}
         <div id="modal-root"></div>
       </body>
     </html>
