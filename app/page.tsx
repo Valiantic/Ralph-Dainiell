@@ -7,6 +7,7 @@ import { BioSection } from './components/BioSection';
 import { SkillsSection } from './components/SkillsSection';
 import { ExperienceSection } from './components/ExperienceSection';
 import { CertificatesSection } from './components/CertificatesSection';
+import ProjectsSection from './components/ProjectsSection';
 
 export default function Home() {
   return (
@@ -38,6 +39,7 @@ export default function Home() {
         </div>
       </div>
 
+      <ProjectsSection />
       <CertificatesSection certificates={PORTFOLIO_DATA.certificates} />
 
       <style jsx global>{`
