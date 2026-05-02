@@ -8,7 +8,7 @@ export default function ProjectsSection() {
       className="card"
       style={{ width: "100%", background: "#fff" }}
     >
-      {/* Section Header */}
+     
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.5rem" }}>
         <Image
           src="/Images/Icons/ProjectsIcon.png"
@@ -22,7 +22,7 @@ export default function ProjectsSection() {
         </h2>
       </div>
 
-      {/* Coming Soon */}
+    
       <div style={{ textAlign: "center", padding: "2rem 0", color: "#6b7280" }}>
         Coming Soon
       </div>

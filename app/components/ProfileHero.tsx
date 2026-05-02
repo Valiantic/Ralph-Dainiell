@@ -242,12 +242,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </div>
 
                     <p style={{ fontSize: '18px', fontWeight: 800, color: '#000', margin: 0, lineHeight: 1.3 }}>
-                        Crafting Seamless iOS Experiences
+                        Turning Ideas Into iOS Applications
                     </p>
 
                     <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
-                        Open to internships and work opportunities.<br />
-                        I&apos;m ready to contribute, learn, and deliver real impact.
+                        Seeking internship opportunities to build real-world iOS apps.<br />
+                        
                     </p>
 
                     <Link
