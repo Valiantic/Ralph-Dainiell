@@ -231,8 +231,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 <div className="card opportunities-card" style={{
                     padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px',
                     flex: '1 1 240px', borderRadius: '24px', border: '1.5px solid #000',
-                    background: '#fff', justifyContent: 'center', boxSizing: 'border-box',
-                    alignItems: 'center', textAlign: 'center'
+                    background: '#fff', justifyContent: 'center', boxSizing: 'border-box'
                 }}>
                     <div style={{
                         display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -247,8 +246,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </p>
 
                     <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
-                        Actively pursuing opportunities in iOS development full-time, internship, or volunteer.
+                        Actively pursuing opportunities in iOS development full-time, internship, or volunteer.<br />
                     </p>
+
 
                     <Link
                         href={`mailto:${data.contact.email}`}
