@@ -26,8 +26,8 @@ export const PORTFOLIO_DATA: PortfolioData = {
     "I am currently building my path toward becoming an industry ready iOS developer who can contribute to real projects with discipline, adaptability, and creativity. I aim to combine my technical foundation, analytical background, and passion for learning to create mobile applications that deliver real value."
 ],
     skills: [
-    { name: "Swift", category: "Programming Language" },
-    { name: "Python", category: "Programming Language" },
+    { name: "Swift", category: "Programming Languages" },
+    { name: "Python", category: "Programming Languages" },
 
     { name: "SwiftUI", category: "UI Development" },
     { name: "UIKit", category: "UI Development" },
@@ -46,7 +46,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
     { name: "JSON Parsing", category: "Networking" },
 
 
-    { name: "Git & Github", category: "Dev Tools" },
+    { name: "Git & GitHub", category: "Dev Tools" },
     { name: "Xcode", category: "Dev Tools" },
     { name: "VS Code", category: "Dev Tools" },
 
