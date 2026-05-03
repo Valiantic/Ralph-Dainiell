@@ -31,11 +31,11 @@ export default function ProjectsSection() {
         <Image
           src="/Images/Icons/ProjectsIcon.png"
           alt="Projects"
-          width={28}
-          height={28}
+          width={25}
+          height={25}
           style={{ objectFit: "contain" }}
         />
-        <h2 style={{ fontSize: "1.75rem", fontWeight: "700", margin: 0 }}>
+        <h2 style={{ fontSize: "27px", fontWeight: "800", margin: 0 }}>
           Projects
         </h2>
       </div>
