@@ -107,7 +107,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     <div style={{ width: '37px', height: '39px', position: 'relative' }}>
                         <Image src="/Images/Icons/certificate icon.png" alt="Certificates" fill style={{ objectFit: 'contain' }} />
                     </div>
-                    <h2 style={{ fontSize: '32px', fontWeight: 800 }}>Certificates</h2>
+                    <h2 style={{ fontSize: '30px', fontWeight: 800 }}>Certificates</h2>
                 </div>
 
                 {/* MOBILE LIST VIEW */}
