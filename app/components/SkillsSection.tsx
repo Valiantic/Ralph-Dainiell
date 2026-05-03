@@ -7,7 +7,7 @@ interface SkillsSectionProps {
 }
 
 export const SkillsSection = ({ skills }: SkillsSectionProps) => {
-    const categories: Skill['category'][] = ['Programming Language', 'UI Development','Architecture', 'Networking','Tools & DevOps','Database Tools','Design Tools'];
+    const categories: Skill['category'][] = ['Programming Language', 'UI Development','Architecture', 'Networking','Dev Tools','Database Tools','Design Tools'];
     const scrollRef = useRef<HTMLDivElement>(null);
     const [thumbTop, setThumbTop] = useState(56);
     const [showThumb, setShowThumb] = useState(false);
