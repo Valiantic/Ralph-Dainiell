@@ -7,7 +7,7 @@ interface SkillsSectionProps {
 }
 
 export const SkillsSection = ({ skills }: SkillsSectionProps) => {
-    const categories: Skill['category'][] = ['Programming Language', 'UI Development','Architecture', 'Networking','Dev Tools','Database Tools','Design Tools'];
+    const categories: Skill['category'][] = ['Programming Language', 'UI Development','App Architecture', 'Networking','Dev Tools','Database','Design Tools'];
     const scrollRef = useRef<HTMLDivElement>(null);
     const [thumbTop, setThumbTop] = useState(56);
     const [showThumb, setShowThumb] = useState(false);
@@ -57,7 +57,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                     <div style={{ width: '24px', height: '24px', position: 'relative' }}>
                         <Image src="/Images/Icons/skills icon.png" alt="Skills" fill style={{ objectFit: 'contain' }} />
                     </div>
-                    <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800 }}>Skills</h2>
+                    <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800 }}>Tech Skills</h2>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>

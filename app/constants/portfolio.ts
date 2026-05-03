@@ -27,36 +27,32 @@ export const PORTFOLIO_DATA: PortfolioData = {
 ],
     skills: [
     { name: "Swift", category: "Programming Language" },
-    { name: "SwiftUI", category: "Programming Language" },
     { name: "Python", category: "Programming Language" },
-    { name: "HTML5", category: "Programming Language" },
-    { name: "CSS", category: "Programming Language" },
 
-  
+    { name: "SwiftUI", category: "UI Development" },
     { name: "UIKit", category: "UI Development" },
     { name: "Auto Layout", category: "UI Development" },
     { name: "View Controllers", category: "UI Development" },
     { name: "Navigation & Flow", category: "UI Development" },
 
-    { name: "MVVM", category: "Architecture" },
-    { name: "MVC", category: "Architecture" },
-    { name: "State Management", category: "Architecture" },
-    { name: "Memory Management (ARC)", category: "Architecture" },
+    { name: "MVVM", category: "App Architecture" },
+    { name: "MVC", category: "App Architecture" },
+    { name: "State Management", category: "App Architecture" },
+    { name: "Memory Management (ARC)", category: "App Architecture" },
+    { name: "App Lifecycle", category: "App Architecture" },
 
 
     { name: "REST API", category: "Networking" },
     { name: "JSON Parsing", category: "Networking" },
-    { name: "App Lifecycle", category: "Networking" },
-    { name: "Error Handling", category: "Networking" },
 
 
     { name: "Git & Github", category: "Dev Tools" },
-    { name: "Data Handling", category: "Dev Tools" },
+    { name: "Xcode", category: "Dev Tools" },
+    { name: "VS Code", category: "Dev Tools" },
 
-    { name: "MySQL", category: "Database Tools" },
-    { name: "SQLlite", category: "Database Tools" },
-
-
+    { name: "MySQL", category: "Database" },
+    { name: "Supabase", category: "Database" },
+   
     { name: "Figma", category: "Design Tools" },
     { name: "DetailsPro", category: "Design Tools" },
 ],
