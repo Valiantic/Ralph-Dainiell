@@ -19,13 +19,13 @@ export const PORTFOLIO_DATA: PortfolioData = {
     bio: [
     "I am a 20 years old IT student majoring in Web and Mobile Development, with a growing passion for building applications that are clean, practical, and useful to real users. My current focus is iOS app development, where I am continuously improving my skills in Swift, SwiftUI, and modern mobile development practices.",
 
-    "Before focusing on iOS development, I also developed junior to intermediate experience in data analyst-related work, such as organizing information, checking data accuracy, identifying patterns, and understanding results. This experience helped me build stronger attention to detail, logical thinking, and a more structured way of solving problems.",
+    "Before focusing on iOS development, I also developed junior level experience in data analyst-related work, such as organizing information, checking data accuracy, identifying patterns, and understanding results. This experience helped me build stronger attention to detail, logical thinking, and a more structured way of solving problems.",
 
     "What started as simple curiosity about how apps and digital products work has slowly become a career path I genuinely want to pursue. I enjoy learning through hands-on projects, exploring better ways to improve my work, and documenting my growth through YouTube videos as part of my journey in tech.",
 
     "As a student, I understand that I am still growing, but I am committed to improving every day and building a strong foundation as a future developer. I value discipline, consistency, and the ability to learn from every project, challenge, and experience.",
 
-    "My goal is to become an industry-ready iOS developer who can contribute to real projects with discipline, creativity, and a strong willingness to learn. I aim to combine my technical foundation, analytical background, and passion for building meaningful mobile applications that can provide real value to users."
+    "My goal is to become an iOS developer who can contribute to real projects with creativity, and a strong willingness to learn. I aim to combine my technical foundation, analytical background, and passion for building meaningful mobile applications that can provide real value to users."
 ],
     skills: [
     { name: "Swift", category: "Programming Languages" },
