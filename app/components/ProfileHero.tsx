@@ -122,7 +122,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </div>
                         <span style={{ fontSize: '14px', fontWeight: 700, wordBreak: 'break-all', flex: 1 }}>{data.contact.email}</span>
                         <Link
-                            href={`https://mail.google.com/mail/?view=cm&to=${data.contact.email}`}
+                            href={`mailto:${data.contact.email}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSendEmail(true)}
@@ -251,7 +251,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
 
                     <Link
-                        href={`mailto:${data.contact.email}`}
+                        href={`https://mail.google.com/mail/?view=cm&to=${data.contact.email}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         onMouseEnter={() => setHoveredContact(true)}

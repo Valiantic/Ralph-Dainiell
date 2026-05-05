@@ -66,15 +66,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => observer.disconnect();
     }, []);
 
-    // ── Wheel-hijack carousel — listener moved to SECTION so the entire card captures scroll ──
+    
     useEffect(() => {
         if (!hasMouse) return;
-        const el = sectionRef.current;   // <-- changed from outerRef to sectionRef
+        const el = sectionRef.current;   
         if (!el) return;
 
         const onWheel = (e: WheelEvent) => {
-            if (!isHoveredRef.current) return;          // only active on hover
-            e.preventDefault();                          // stop page scroll
+            if (!isHoveredRef.current) return;         
+            e.preventDefault();                          
 
             const track = trackRef.current;
             const outer = outerRef.current;
