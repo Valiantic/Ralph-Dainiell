@@ -17,13 +17,13 @@ export const PORTFOLIO_DATA: PortfolioData = {
         linkedin: "https://www.linkedin.com/in/ralph-dainiell",
     },
     bio: [
-    "I am 20 years old, an IT student, and an aspiring iOS App Developer focused on building clean, practical, and user centered mobile applications. My current career direction is centered on Swift, SwiftUI, and modern iOS development, with the goal of creating apps that are reliable, functional, and meaningful to users.",
+    "I am a 20-year-old IT student majoring in Web and Mobile Development, with a growing passion for building applications that are clean, practical, and useful to real users. My current focus is iOS app development, where I am continuously improving my skills in Swift, SwiftUI, and modern mobile development practices.",
 
-    "Before focusing on iOS development, I gained junior level experience in data analyst related work, including organizing information, checking data accuracy, identifying patterns, and interpreting results. This experience helped me develop strong attention to detail, logical thinking, and a more structured approach to solving problems.",
+    "Before focusing on iOS development, I also developed junior to intermediate experience in data analyst-related work, such as organizing information, checking data accuracy, identifying patterns, and understanding results. This helped me build stronger attention to detail, logical thinking, and a more structured way of solving problems.",
 
-    "My journey in technology started with curiosity about how applications, systems, and digital products work. Through hands on projects, continuous practice, and self improvement, I continue to strengthen my ability to write organized code, understand user needs, and build solutions with purpose.",
+    "What started as simple curiosity about how apps and digital products work has slowly become a career path I genuinely want to pursue. I enjoy learning through hands-on projects, documenting my growth through YouTube videos, and continuously improving myself as a developer.",
 
-    "I am currently building my path toward becoming an industry ready iOS developer who can contribute to real projects with discipline, adaptability, and creativity. I aim to combine my technical foundation, analytical background, and passion for learning to create mobile applications that deliver real value."
+    "My goal is to become an industry-ready iOS developer who can contribute to real projects with discipline, creativity, and a strong willingness to learn. I aim to combine my technical foundation, analytical background, and passion for building meaningful mobile applications."
 ],
     skills: [
     { name: "Swift", category: "Programming Languages" },
