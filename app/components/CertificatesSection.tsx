@@ -118,7 +118,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
-    // ── Hover handlers ────────────────────────────────────────────────────────
+    // ── Hover handlers — now applied at the SECTION level ────────────────────
     const handleMouseEnter = () => { isHoveredRef.current = true;  setIsHovered(true);  };
     const handleMouseLeave = () => { isHoveredRef.current = false; setIsHovered(false); };
 
@@ -180,6 +180,8 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 ref={sectionRef}
                 className={`card cert-section${visible ? ' cert-visible' : ''}`}
                 style={{ width: '100%', background: '#fff' }}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
             >
                 {/* ── HEADER ── */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
@@ -236,8 +238,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             userSelect: 'none',
                             WebkitUserSelect: 'none',
                         }}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
                     >
                         <motion.div
                             ref={trackRef}
