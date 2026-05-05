@@ -66,22 +66,21 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => observer.disconnect();
     }, []);
 
-    
+    // ── Wheel-hijack carousel — listener on SECTION so entire container captures scroll ──
     useEffect(() => {
         if (!hasMouse) return;
-        const el = sectionRef.current;   
+        const el = sectionRef.current;
         if (!el) return;
 
         const onWheel = (e: WheelEvent) => {
-            if (!isHoveredRef.current) return;         
-            e.preventDefault();                          
+            if (!isHoveredRef.current) return;
+            e.preventDefault();
 
             const track = trackRef.current;
             const outer = outerRef.current;
             if (!track || !outer) return;
 
             const maxX  = -(track.scrollWidth - outer.clientWidth);
-            // prefer vertical delta (trackpad / scroll wheel); fall back to horizontal
             const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
             const next  = Math.max(maxX, Math.min(0, xVal.get() - delta));
             xVal.set(next);
@@ -230,14 +229,14 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 ) : hasMouse ? (
                     /* ── DESKTOP / MOUSE-DEVICE — framer-motion carousel ── */
                     <div
-                        ref={outerRef}
-                        style={{
-                            overflow: 'hidden',
-                            padding: '10px 4px 14px',
-                            cursor: isHovered ? 'grab' : 'default',
-                            userSelect: 'none',
-                            WebkitUserSelect: 'none',
-                        }}
+                     style={{
+                        overflow: 'hidden',
+                        padding: '10px 4px 14px',
+                        paddingRight: 'clamp(130px, 37.5vw, 170px)',
+                        cursor: isHovered ? 'grab' : 'default',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none',
+                    }}
                     >
                         <motion.div
                             ref={trackRef}
@@ -245,6 +244,20 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         >
                             {certificates.map(renderCard)}
                         </motion.div>
+
+                        {/* ── Fade-right overlay — hints user that more cards exist ── */}
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                right: 0,
+                                bottom: 0,
+                                width: '180px',
+                                background: 'linear-gradient(to left, #ffffff 20%, transparent)',
+                                pointerEvents: 'none',
+                                zIndex: 2,
+                            }}
+                        />
                     </div>
 
                 ) : (
