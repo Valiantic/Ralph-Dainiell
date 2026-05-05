@@ -66,10 +66,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => observer.disconnect();
     }, []);
 
-    // ── Wheel-hijack carousel (mouse devices only) ────────────────────────────
+    // ── Wheel-hijack carousel — listener moved to SECTION so the entire card captures scroll ──
     useEffect(() => {
         if (!hasMouse) return;
-        const el = outerRef.current;
+        const el = sectionRef.current;   // <-- changed from outerRef to sectionRef
         if (!el) return;
 
         const onWheel = (e: WheelEvent) => {
@@ -118,7 +118,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
-    // ── Hover handlers — now applied at the SECTION level ────────────────────
+    // ── Hover handlers — applied at SECTION level ─────────────────────────────
     const handleMouseEnter = () => { isHoveredRef.current = true;  setIsHovered(true);  };
     const handleMouseLeave = () => { isHoveredRef.current = false; setIsHovered(false); };
 
