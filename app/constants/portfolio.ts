@@ -25,7 +25,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
 
     "As a student, I understand that I am still growing, but I am committed to improving every day and building a strong foundation as a future developer. I value discipline, consistency, and the ability to learn from every project, challenge, and experience.",
 
-    "My goal is to become an iOS developer who can contribute to real projects with creativity, and a strong willingness to learn and passion for building meaningful mobile applications that can provide real value to users."
+    "My goal is to provide a real projects with creativity, and a strong willingness to learn and passion for building meaningful mobile applications that can provide real value to users."
 ],
     skills: [
     { name: "Swift", category: "Programming Languages" },
