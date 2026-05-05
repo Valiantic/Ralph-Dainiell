@@ -54,7 +54,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                 }}
             >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                    <div style={{ width: '24px', height: '24px', position: 'relative' }}>
+                    <div style={{ width: '27px', height: '27px', position: 'relative' }}>
                         <Image src="/Images/Icons/skills icon.png" alt="Skills" fill style={{ objectFit: 'contain' }} />
                     </div>
                     <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800 }}>Tech Stack</h2>
