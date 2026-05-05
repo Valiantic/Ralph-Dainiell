@@ -229,16 +229,14 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 ) : hasMouse ? (
                     /* ── DESKTOP / MOUSE-DEVICE — framer-motion carousel ── */
                     <div
-                        ref={outerRef}
-                        style={{
-                            overflow: 'hidden',
-                            padding: '10px 4px 14px',
-                            cursor: isHovered ? 'grab' : 'default',
-                            userSelect: 'none',
-                            WebkitUserSelect: 'none',
-                            WebkitMaskImage: 'linear-gradient(to right, black 70%, transparent 100%)',
-                            maskImage: 'linear-gradient(to right, black 70%, transparent 100%)',
-                        }}
+                     style={{
+                        overflow: 'hidden',
+                        padding: '10px 4px 14px',
+                        paddingRight: 'clamp(130px, 37.5vw, 170px)',
+                        cursor: isHovered ? 'grab' : 'default',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none',
+                    }}
                     >
                         <motion.div
                             ref={trackRef}
