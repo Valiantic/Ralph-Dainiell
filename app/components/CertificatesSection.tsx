@@ -236,7 +236,8 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             cursor: isHovered ? 'grab' : 'default',
                             userSelect: 'none',
                             WebkitUserSelect: 'none',
-                            position: 'relative',  // needed for the gradient overlay
+                            WebkitMaskImage: 'linear-gradient(to right, black 70%, transparent 100%)',
+                            maskImage: 'linear-gradient(to right, black 70%, transparent 100%)',
                         }}
                     >
                         <motion.div
