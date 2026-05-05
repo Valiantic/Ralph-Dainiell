@@ -17,7 +17,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
         linkedin: "https://www.linkedin.com/in/ralph-dainiell",
     },
     bio: [
-    "I am a 20-year-old IT student majoring in Web and Mobile Development, with a growing passion for building applications that are clean, practical, and useful to real users. My current focus is iOS app development, where I am continuously improving my skills in Swift, SwiftUI, and modern mobile development practices.",
+    "I am a 20 years old IT student majoring in Web and Mobile Development, with a growing passion for building applications that are clean, practical, and useful to real users. My current focus is iOS app development, where I am continuously improving my skills in Swift, SwiftUI, and modern mobile development practices.",
 
     "Before focusing on iOS development, I also developed junior to intermediate experience in data analyst-related work, such as organizing information, checking data accuracy, identifying patterns, and understanding results. This experience helped me build stronger attention to detail, logical thinking, and a more structured way of solving problems.",
 
