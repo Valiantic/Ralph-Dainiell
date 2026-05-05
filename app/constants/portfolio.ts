@@ -79,41 +79,48 @@ export const PORTFOLIO_DATA: PortfolioData = {
     certificates: [
         {
             id: "cert0",
+            title: "Introduction to Git",
+            issuer: "DataCamp",
+            issueDate: "May 5 2026",
+            imageUrl: "/Images/certificates/Git.jpg"
+        },
+        {
+            id: "cert1",
             title: "Associate Data Analyst",
             issuer: "DataCamp",
             issueDate: "April 11 2026",
             imageUrl: "/Images/certificates/associate-data-analyst-datacamp.jpg"
         },
         {
-            id: "cert1",
+            id: "cert2",
             title: "SQL (Intermediate)",
             issuer: "HackerRank",
             issueDate: "March 29 2026",
             imageUrl: "/Images/certificates/sql-intermediate.jpg"
         },
         {
-            id: "cert2",
+            id: "cert3",
             title: "Introduction to SQL",
             issuer: "DataCamp",
             issueDate: "March 25 2026",
             imageUrl: "/Images/certificates/sql-intro-datacamp.png"
         },
         {
-            id: "cert3",
+            id: "cert4",
             title: "Data Science Essentials with Python",
             issuer: "Cisco Networking Academy",
             issueDate: "January 15 2026",
             imageUrl: "/Images/certificates/Data Science.jpg"
         },
         {
-            id: "cert4",
+            id: "cert5",
             title: "Python Essentials 2",
             issuer: "Cisco Networking Academy",
             issueDate: "February 22 2025",
             imageUrl: "/Images/certificates/python 2.jpg"
         },
         {
-            id: "cert5",
+            id: "cert6",
             title: "Python Essentials 1",
             issuer: "Cisco Networking Academy",
             issueDate: "December 16 2024",
