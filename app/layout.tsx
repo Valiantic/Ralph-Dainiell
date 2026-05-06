@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const roboto = Roboto({
-  variable: "--font-roboto",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
   weight: ["400", "500", "700"],
 });
@@ -25,12 +25,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} antialiased`}>
+      <body className={`${plusJakartaSans.variable} antialiased`}>
         {children}
 
         <div id="modal-root"></div>
 
-        <footer className="w-full text-center py-6 text-sm text-gray-500 border-t border-gray-200">
+        <footer className="w-full flex items-center justify-center py-6 px-4 text-sm text-gray-500 border-t border-gray-200">
           © {new Date().getFullYear()} Ralph Dainiell. All rights reserved.
         </footer>
       </body>
