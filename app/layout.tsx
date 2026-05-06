@@ -39,8 +39,7 @@ export default function RootLayout({
             textAlign: "center",
             padding: "1.5rem 1rem",
             fontSize: "0.875rem",
-            color: "#6b7280",
-            borderTop: "1px solid #e5e7eb",
+            color: "#6b7280"
           }}
         >
           © {new Date().getFullYear()} Ralph Dainiell. All rights reserved.
