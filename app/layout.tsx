@@ -30,7 +30,19 @@ export default function RootLayout({
 
         <div id="modal-root"></div>
 
-        <footer className="w-full flex items-center justify-center py-6 px-4 text-sm text-gray-500 border-t border-gray-200">
+        <footer
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            padding: "1.5rem 1rem",
+            fontSize: "0.875rem",
+            color: "#6b7280",
+            borderTop: "1px solid #e5e7eb",
+          }}
+        >
           © {new Date().getFullYear()} Ralph Dainiell. All rights reserved.
         </footer>
       </body>
