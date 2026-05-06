@@ -12,10 +12,10 @@ export const metadata: Metadata = {
   title: "Ralph Gonzaga - iOS Developer",
   description: "Ralph Dainiell's Portfolio",
   icons: {
-  icon: "/favicon.ico",
-  shortcut: "/favicon.ico",
-  apple: "/Images/FaviconPFP.jpg",
-},
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/Images/FaviconPFP.jpg",
+  },
 };
 
 export default function RootLayout({
@@ -29,6 +29,10 @@ export default function RootLayout({
         {children}
 
         <div id="modal-root"></div>
+
+        <footer className="w-full text-center py-6 text-sm text-gray-500 border-t border-gray-200">
+          © {new Date().getFullYear()} Ralph Dainiell. All rights reserved.
+        </footer>
       </body>
     </html>
   );
