@@ -445,5 +445,5 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 `}</style>
             </section>
         </>
-    );
+    );  
 };
