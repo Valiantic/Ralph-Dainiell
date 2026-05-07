@@ -30,11 +30,11 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const [isHovered,  setIsHovered]  = useState(false);
     const [visible,    setVisible]    = useState(false);
 
-    // ── Framer Motion values ──────────────────────────────────────────────────
+   
     const xVal = useMotionValue(0);
     const x    = useSpring(xVal, { stiffness: 80, damping: 20, mass: 0.5 });
 
-    // ── Mobile breakpoint ─────────────────────────────────────────────────────
+  
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth <= 768);
         check();
@@ -42,7 +42,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => window.removeEventListener('resize', check);
     }, []);
 
-    // ── Mouse / fine-pointer detection ────────────────────────────────────────
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
         setHasMouse(mq.matches);
@@ -51,7 +50,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => mq.removeEventListener('change', handler);
     }, []);
 
-    // ── Intersection observer (section entrance animation) ────────────────────
+
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -105,24 +104,23 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => window.removeEventListener('resize', onResize);
     }, [hasMouse, xVal]);
 
-    // ── Modal: ESC key ────────────────────────────────────────────────────────
+   
     useEffect(() => {
         const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelectedCert(null); };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
     }, []);
 
-    // ── Modal: body scroll lock ───────────────────────────────────────────────
     useEffect(() => {
         document.body.style.overflow = selectedCert ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
-    // ── Hover handlers — applied at SECTION level ─────────────────────────────
+   
     const handleMouseEnter = () => { isHoveredRef.current = true;  setIsHovered(true);  };
     const handleMouseLeave = () => { isHoveredRef.current = false; setIsHovered(false); };
 
-    // ── Shared card renderer ──────────────────────────────────────────────────
+    
     const renderCard = (cert: Certificate) => (
         <div
             key={cert.id}
@@ -228,7 +226,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     </div>
 
                 ) : hasMouse ? (
-                    /* ── DESKTOP / MOUSE-DEVICE — framer-motion carousel ── */
+                    
                     <div
                         ref={outerRef}
                         style={{
@@ -248,7 +246,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     </div>
 
                 ) : (
-                    /* ── TOUCH TABLET (no mouse) — native horizontal scroll, no arrows ── */
+
                     <div
                         className="no-scrollbar"
                         style={{
