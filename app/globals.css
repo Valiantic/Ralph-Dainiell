@@ -172,7 +172,6 @@ html, body {
 @media (max-width: 1024px) {
   html, body {
     overflow-x: hidden;
-    /* INALIS: overflow: hidden at height: 100% — nagtatabon kasi sa footer */
   }
 
   main {
