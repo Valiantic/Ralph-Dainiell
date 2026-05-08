@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PortfolioData } from '../types/portfolio';
 import { GoFileZip } from 'react-icons/go';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -16,6 +16,83 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredContact, setHoveredContact] = useState(false);
     const [hoveredGithub, setHoveredGithub] = useState(false);
     const [hoveredCvButton, setHoveredCvButton] = useState(false);
+
+    // ─────────────────────────────────────────────────────────────────────
+    //  CURSOR DETECTION — JavaScript matchMedia (not CSS media queries)
+    //
+    //  Why JS instead of CSS?
+    //  • styled-jsx scoping conflicts with globals.css .card rules
+    //  • CSS @media (hover:hover) can't dynamically react to a mouse
+    //    being plugged/unplugged at runtime (iPad + mouse use case)
+    //  • JS matchMedia fires a 'change' event immediately when the
+    //    device type changes → UI updates instantly, no page reload
+    //
+    //  hasCursor starts as FALSE (SSR-safe: touch UI renders on server,
+    //  correct UI applies after first client paint via useEffect)
+    // ─────────────────────────────────────────────────────────────────────
+    const [hasCursor, setHasCursor] = useState(false);
+    const [emailHovered, setEmailHovered] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+        // Set initial value
+        setHasCursor(mq.matches);
+
+        // Listen for dynamic changes (mouse plugged/unplugged on iPad etc.)
+        const handler = (e: MediaQueryListEvent) => {
+            setHasCursor(e.matches);
+            if (!e.matches) setEmailHovered(false); // reset hover if mouse removed
+        };
+
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
+
+    // ─────────────────────────────────────────────────────────────────────
+    //  EMAIL ROW — inline styles driven by React state
+    //  No CSS class dependency for the hover effect → zero scoping issues
+    // ─────────────────────────────────────────────────────────────────────
+
+    // The slide-in "SEND EMAIL" label for cursor devices
+    const hoverLabelStyle: React.CSSProperties = {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        bottom: 0,
+        background: '#000',
+        color: '#fff',
+        fontSize: '11px',
+        fontWeight: 700,
+        letterSpacing: '0.5px',
+        padding: '0 20px',
+        borderRadius: '0 12px 12px 0',
+        whiteSpace: 'nowrap',
+        pointerEvents: 'none',
+        userSelect: 'none',
+        // Animate with opacity + transform — NOT display, which can't transition
+        opacity: emailHovered ? 1 : 0,
+        transform: emailHovered ? 'translateX(0)' : 'translateX(100%)',
+        transition: 'opacity 0.28s ease, transform 0.28s ease',
+    };
+
+    // The always-visible pill badge for touch/no-cursor devices
+    const touchPillStyle: React.CSSProperties = {
+        display: 'inline-flex',
+        alignItems: 'center',
+        flexShrink: 0,
+        fontSize: '11px',
+        fontWeight: 700,
+        color: '#000',
+        border: '1.5px solid #000',
+        borderRadius: '20px',
+        padding: '4px 10px',
+        whiteSpace: 'nowrap',
+        userSelect: 'none',
+    };
 
     return (
         <section className="profile-hero" style={{
@@ -41,7 +118,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 border: '1.5px solid #000'
             }}>
                 {data.profileImage ? (
-                    <Image src={data.profileImage} alt={data.name} fill style={{ objectFit: 'cover', objectPosition: 'center top' }} />
+                    <Image
+                        src={data.profileImage}
+                        alt={data.name}
+                        fill
+                        style={{ objectFit: 'cover', objectPosition: 'center top' }}
+                    />
                 ) : (
                     <span style={{ fontSize: '12px', opacity: 0.5 }}>image here</span>
                 )}
@@ -49,7 +131,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
             {/* 2. Main Bio Info */}
             <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
-                <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
+                <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000' }}>
+                    {data.name}
+                </h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1px', color: '#000', fontSize: '15px' }}>
                     <IoLocationOutline size={18} color="#000" />
                     <span style={{ paddingTop: '2px' }}>{data.location}</span>
@@ -57,8 +141,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 <div style={{ fontSize: '24px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
                     {data.roles.join(' \\ ')}
                 </div>
+
                 <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                    {/* Download CV Button */}
+                    {/* Download CV */}
                     <a
                         href="/resume/GonzagaRalphDainiellCVresume-.pdf"
                         target="_blank"
@@ -77,7 +162,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         Download CV
                     </a>
 
-                    {/* GitHub Button */}
+                    {/* GitHub */}
                     <a
                         href="https://github.com/Dainiell"
                         target="_blank"
@@ -95,7 +180,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             transition: 'all 0.3s ease'
                         }}
                     >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill={hoveredGithub ? '#fff' : '#000'} style={{ transition: 'fill 0.3s ease', flexShrink: 0 }}>
+                        <svg
+                            width="20" height="20" viewBox="0 0 24 24"
+                            fill={hoveredGithub ? '#fff' : '#000'}
+                            style={{ transition: 'fill 0.3s ease', flexShrink: 0 }}
+                        >
                             <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
                         </svg>
                         GitHub
@@ -103,31 +192,41 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
+            {/* 3. Cards Row */}
             <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'stretch' }}>
 
-                {/* 3. LEFT CARD — Email + Socials */}
-                <div className="card contact-card" style={{
-                    padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px',
-                    flex: '1 1 300px', borderRadius: '24px', border: '1.5px solid #000',
-                    justifyContent: 'center', boxSizing: 'border-box'
-                }}>
-                    {/*
-                     * EMAIL ROW — two-label strategy
+                {/* LEFT CARD — Email + Socials */}
+                {/*
+                 * "no-lift" prevents the global .card:hover { transform: translateY(-2px) }
+                 * from firing and disrupting the email row's absolutely-positioned
+                 * slide-in label. Without it, the card lifts and the label clips awkwardly.
+                 */}
+                <div
+                    className="card no-lift contact-card"
+                    style={{
+                        padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px',
+                        flex: '1 1 300px', borderRadius: '24px', border: '1.5px solid #000',
+                        justifyContent: 'center', boxSizing: 'border-box'
+                    }}
+                >
+                    {/* ── EMAIL ROW ───────────────────────────────────────────
                      *
-                     * .send-email-touch  Pill badge. display:inline-flex always.
-                     *                    Hidden via display:none on cursor devices.
+                     *  hasCursor = true  (mouse/trackpad)
+                     *    → whole row is clickable, no pill visible,
+                     *      "SEND EMAIL" black label slides in from the right on hover
                      *
-                     * .send-email-hover  Slide-in label. display:flex ALWAYS
-                     *                    (position:absolute = zero layout impact).
-                     *                    opacity:0 + transform:translateX(100%)
-                     *                    by default → transitions to visible on
-                     *                    cursor-device hover.
-                     *                    KEY: we NEVER toggle display on this one
-                     *                    because display is not animatable in CSS.
-                     */}
+                     *  hasCursor = false (touch-only: phone, tablet, iPad no mouse)
+                     *    → row still tappable (whole row = mailto: link),
+                     *      "SEND EMAIL" pill badge always visible on the right
+                     *
+                     *  Both states are driven purely by React state — no CSS
+                     *  media queries involved, so nothing can break due to
+                     *  styled-jsx scoping or globals.css rule conflicts.
+                     * ────────────────────────────────────────────────────── */}
                     <Link
                         href={`mailto:${data.contact.email}`}
-                        className="email-row"
+                        onMouseEnter={() => { if (hasCursor) setEmailHovered(true); }}
+                        onMouseLeave={() => setEmailHovered(false)}
                         style={{
                             border: '1.5px solid #000',
                             borderRadius: '14px',
@@ -140,33 +239,54 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             color: 'inherit',
                             position: 'relative',
                             overflow: 'hidden',
+                            // Border subtly darkens on hover for cursor devices
+                            borderColor: emailHovered ? '#000' : '#000',
+                            transition: 'border-color 0.28s ease',
+                            cursor: hasCursor ? 'pointer' : 'default',
                         }}
                     >
                         {/* Email icon */}
                         <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
-                            <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
+                            <Image
+                                src="/Images/Icons/email icon.png"
+                                alt="Email"
+                                fill
+                                style={{ objectFit: 'contain' }}
+                            />
                         </div>
 
-                        {/* Email address — flex:1 so it fills all remaining space */}
-                        <span className="email-text">
+                        {/* Email address — flex:1 fills all leftover width */}
+                        <span style={{
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            wordBreak: 'break-all',
+                            flex: 1,
+                            minWidth: 0,
+                        }}>
                             {data.contact.email}
                         </span>
 
-                        {/* Touch/no-cursor: always-visible pill badge */}
-                        <span className="send-email-touch">SEND EMAIL</span>
+                        {/* TOUCH: always-visible pill badge (hidden on cursor devices) */}
+                        {!hasCursor && (
+                            <span style={touchPillStyle}>SEND EMAIL</span>
+                        )}
 
-                        {/* Cursor: slide-in black label (opacity-driven, NEVER display-toggled) */}
-                        <span className="send-email-hover">SEND EMAIL</span>
+                        {/* CURSOR: slide-in black label (only rendered on cursor devices) */}
+                        {hasCursor && (
+                            <span style={hoverLabelStyle}>SEND EMAIL</span>
+                        )}
                     </Link>
 
-                    {/* Social Media */}
+                    {/* Social Media Grid */}
                     <div style={{
                         border: '1.5px solid #000', borderRadius: '14px', padding: '12px 14px',
                         display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px',
                         boxSizing: 'border-box'
                     }}>
                         {/* Facebook */}
-                        <Link href={data.socials.facebook || '#'} target="_blank" rel="noopener noreferrer"
+                        <Link
+                            href={data.socials.facebook || '#'}
+                            target="_blank" rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('facebook')}
                             onMouseLeave={() => setHoveredSocial(null)}
                             style={{
@@ -175,8 +295,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'facebook' ? '#1877F2' : '#fff',
                                 transition: 'all 0.3s ease'
-                            }}>
-                            <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'facebook' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
                                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                                 </svg>
@@ -185,7 +306,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </Link>
 
                         {/* Instagram */}
-                        <Link href={data.socials.instagram || '#'} target="_blank" rel="noopener noreferrer"
+                        <Link
+                            href={data.socials.instagram || '#'}
+                            target="_blank" rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('instagram')}
                             onMouseLeave={() => setHoveredSocial(null)}
                             style={{
@@ -194,9 +317,10 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #8134af -20%, #dd2a7b 50%, #f58529 120%)' : '#fff',
                                 transition: 'all 0.3s ease'
-                            }}>
-                            <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transition: 'all 0.3s ease' }}>
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ transition: 'all 0.3s ease' }}>
                                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none"/>
                                     <circle cx="12" cy="12" r="4" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none"/>
                                     <circle cx="17.5" cy="6.5" r="1.5" fill={hoveredSocial === 'instagram' ? '#fff' : '#555'}/>
@@ -206,7 +330,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </Link>
 
                         {/* YouTube */}
-                        <Link href={data.socials.youtube || '#'} target="_blank" rel="noopener noreferrer"
+                        <Link
+                            href={data.socials.youtube || '#'}
+                            target="_blank" rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('youtube')}
                             onMouseLeave={() => setHoveredSocial(null)}
                             style={{
@@ -215,8 +341,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'youtube' ? '#FF0000' : '#fff',
                                 transition: 'all 0.3s ease'
-                            }}>
-                            <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'youtube' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
                                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                                 </svg>
@@ -225,7 +352,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </Link>
 
                         {/* LinkedIn */}
-                        <Link href={data.socials.linkedin || '#'} target="_blank" rel="noopener noreferrer"
+                        <Link
+                            href={data.socials.linkedin || '#'}
+                            target="_blank" rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('linkedin')}
                             onMouseLeave={() => setHoveredSocial(null)}
                             style={{
@@ -234,8 +363,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'linkedin' ? '#0A66C2' : '#fff',
                                 transition: 'all 0.3s ease'
-                            }}>
-                            <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            }}
+                        >
+                            <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'linkedin' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
                                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                                 </svg>
@@ -245,12 +375,15 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </div>
                 </div>
 
-                {/* 4. RIGHT CARD — Opportunities */}
-                <div className="card opportunities-card" style={{
-                    padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px',
-                    flex: '1 1 240px', borderRadius: '24px', border: '1.5px solid #000',
-                    background: '#fff', justifyContent: 'center', boxSizing: 'border-box'
-                }}>
+                {/* RIGHT CARD — Opportunities */}
+                <div
+                    className="card opportunities-card"
+                    style={{
+                        padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px',
+                        flex: '1 1 240px', borderRadius: '24px', border: '1.5px solid #000',
+                        background: '#fff', justifyContent: 'center', boxSizing: 'border-box'
+                    }}
+                >
                     <div style={{
                         display: 'inline-flex', alignItems: 'center', gap: '6px',
                         background: '#e8f5e9', borderRadius: '20px', padding: '4px 12px', width: 'fit-content'
@@ -264,7 +397,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </p>
 
                     <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
-                        Actively pursuing opportunities in iOS development full-time, internship, or volunteer.<br />
+                        Actively pursuing opportunities in iOS development full-time, internship, or volunteer.
                     </p>
 
                     <Link
@@ -288,108 +421,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             </div>
 
             <style jsx>{`
-                /* ══════════════════════════════════════════════════
-                   EMAIL TEXT
-                   flex:1 + min-width:0 = fills all leftover space
-                   and wraps/breaks long addresses gracefully
-                ══════════════════════════════════════════════════ */
-                .email-text {
-                    font-size: 13px;
-                    font-weight: 700;
-                    word-break: break-all;
-                    flex: 1;
-                    min-width: 0;
-                }
-
-                /* ══════════════════════════════════════════════════
-                   SEND EMAIL — TOUCH PILL
-                   Shown on touch / no-cursor devices.
-                   Suppressed on cursor devices (see media block).
-                ══════════════════════════════════════════════════ */
-                .send-email-touch {
-                    display: inline-flex;
-                    align-items: center;
-                    flex-shrink: 0;
-                    font-size: 11px;
-                    font-weight: 700;
-                    color: #000;
-                    border: 1.5px solid #000;
-                    border-radius: 20px;
-                    padding: 4px 10px;
-                    white-space: nowrap;
-                    user-select: none;
-                }
-
-                /* ══════════════════════════════════════════════════
-                   SEND EMAIL — HOVER SLIDE-IN LABEL
-                   Always display:flex — position:absolute means it
-                   has zero effect on the row's layout.
-                   Starts invisible (opacity:0) and shifted off the
-                   right edge (translateX 100%).
-                   Transition is always applied; it fires on hover.
-
-                   WHY NOT display:none?
-                   CSS cannot transition the display property.
-                   Switching display:none → display:flex would make
-                   the label snap in instantly with no animation.
-                   Using opacity + transform keeps it smooth.
-                ══════════════════════════════════════════════════ */
-                .send-email-hover {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                    bottom: 0;
-                    background: #000;
-                    color: #fff;
-                    font-size: 11px;
-                    font-weight: 700;
-                    letter-spacing: 0.5px;
-                    padding: 0 20px;
-                    border-radius: 0 12px 12px 0;
-                    white-space: nowrap;
-                    pointer-events: none;
-                    user-select: none;
-                    /* Hidden and pushed off to the right */
-                    opacity: 0;
-                    transform: translateX(100%);
-                    /* Transition ready — fires the moment hover state changes */
-                    transition: opacity 0.28s ease, transform 0.28s ease;
-                }
-
-                /* ══════════════════════════════════════════════════
-                   CURSOR DEVICES ONLY
-                   (hover:hover) = device can hover
-                   (pointer:fine) = device has a precise pointer
-                   Together: true for mouse/trackpad, false for finger
-                ══════════════════════════════════════════════════ */
-                @media (hover: hover) and (pointer: fine) {
-                    /* Suppress touch pill — cursor users use hover instead */
-                    .send-email-touch {
-                        display: none;
-                    }
-
-                    /* Make row look clickable */
-                    .email-row {
-                        cursor: pointer;
-                        transition: border-color 0.28s ease;
-                    }
-
-                    /* On hover: tighten border + slide label in */
-                    .email-row:hover {
-                        border-color: #000;
-                    }
-                    .email-row:hover .send-email-hover {
-                        opacity: 1;
-                        transform: translateX(0);
-                    }
-                }
-
-                /* ══════════════════════════════════════════════════
-                   RESPONSIVE — mobile / narrow viewport
-                ══════════════════════════════════════════════════ */
+                /* ── Responsive layout ── */
                 @media (max-width: 1024px) {
                     .profile-hero {
                         display: grid !important;
