@@ -17,7 +17,7 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
             boxSizing: 'border-box'
         }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', flexShrink: 0 }}>
-                <div style={{ width: '32px', height: '32px', position: 'relative' }}>
+                <div style={{ width: '30px', height: '30px', position: 'relative' }}>
                     <Image src="/Images/Icons/experience icon.png" alt="Experience" fill style={{ objectFit: 'contain' }} />
                 </div>
                 <h2 style={{ fontSize: 'clamp(20px, 5vw, 22px)', fontWeight: 800 }}>Experience</h2>
