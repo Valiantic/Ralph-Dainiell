@@ -53,7 +53,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                     WebkitOverflowScrolling: 'touch',
                 }}
             >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '20px' }}>
                     <div style={{ width: '34px', height: '34px', position: 'relative' }}>
                         <Image src="/Images/Icons/skills icon.png" alt="Skills" fill style={{ objectFit: 'contain' }} />
                     </div>
