@@ -16,35 +16,27 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredContact, setHoveredContact] = useState(false);
     const [hoveredGithub, setHoveredGithub] = useState(false);
     const [hoveredCvButton, setHoveredCvButton] = useState(false);
-
-  
     const [hasCursor, setHasCursor] = useState(false);
     const [emailHovered, setEmailHovered] = useState(false);
+    const [pillHovered, setPillHovered] = useState(false);
 
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
-
-    
         setHasCursor(mq.matches);
-
-        
         const handler = (e: MediaQueryListEvent) => {
             setHasCursor(e.matches);
-            if (!e.matches) setEmailHovered(false); 
+            if (!e.matches) setEmailHovered(false);
         };
-
         mq.addEventListener('change', handler);
         return () => mq.removeEventListener('change', handler);
     }, []);
 
-
-
-    // The slide-in "SEND EMAIL" label for cursor devices
     const hoverLabelStyle: React.CSSProperties = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
+        left: 0,
         right: 0,
         top: 0,
         bottom: 0,
@@ -53,8 +45,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         fontSize: '11px',
         fontWeight: 700,
         letterSpacing: '0.5px',
-        padding: '0 20px',
-        borderRadius: '0 12px 12px 0',
+        borderRadius: '12px',
         whiteSpace: 'nowrap',
         pointerEvents: 'none',
         userSelect: 'none',
@@ -63,19 +54,36 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         transition: 'opacity 0.28s ease, transform 0.28s ease',
     };
 
-    // The always-visible pill badge for touch/no-cursor devices
     const touchPillStyle: React.CSSProperties = {
         display: 'inline-flex',
         alignItems: 'center',
         flexShrink: 0,
         fontSize: '11px',
         fontWeight: 700,
-        color: '#000',
+        color: pillHovered ? '#fff' : '#000',
+        background: pillHovered ? '#000' : 'transparent',
         border: '1.5px solid #000',
         borderRadius: '20px',
         padding: '4px 10px',
         whiteSpace: 'nowrap',
         userSelect: 'none',
+        textDecoration: 'none',
+        transition: 'all 0.25s ease',
+    };
+
+    const emailRowBase: React.CSSProperties = {
+        border: '1.5px solid #000',
+        borderRadius: '14px',
+        padding: '12px 16px',
+        display: 'flex',
+        alignItems: 'center',
+        boxSizing: 'border-box',
+        gap: '10px',
+        textDecoration: 'none',
+        color: 'inherit',
+        position: 'relative',
+        overflow: 'hidden',
+        transition: 'border-color 0.28s ease',
     };
 
     return (
@@ -86,7 +94,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             width: '100%',
             flexWrap: 'wrap'
         }}>
-            {/* 1. Profile Pic */}
             <div className="hero-img-container" style={{
                 width: '180px',
                 height: '180px',
@@ -113,7 +120,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 )}
             </div>
 
-            {/* 2. Main Bio Info */}
             <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
                 <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000' }}>
                     {data.name}
@@ -127,7 +133,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
 
                 <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                    {/* Download CV */}
                     <a
                         href="/resume/GonzagaRalphDainiellCVresume-.pdf"
                         target="_blank"
@@ -146,7 +151,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         Download CV
                     </a>
 
-                    {/* GitHub */}
                     <a
                         href="https://github.com/Dainiell"
                         target="_blank"
@@ -176,9 +180,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
-            {/* 3. Cards Row */}
             <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'stretch' }}>
-
                 <div
                     className="card no-lift contact-card"
                     style={{
@@ -187,68 +189,45 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         justifyContent: 'center', boxSizing: 'border-box'
                     }}
                 >
-
-                    <Link
-                        href={`mailto:${data.contact.email}`}
-                        onMouseEnter={() => { if (hasCursor) setEmailHovered(true); }}
-                        onMouseLeave={() => setEmailHovered(false)}
-                        style={{
-                            border: '1.5px solid #000',
-                            borderRadius: '14px',
-                            padding: '12px 16px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            boxSizing: 'border-box',
-                            gap: '10px',
-                            textDecoration: 'none',
-                            color: 'inherit',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            borderColor: emailHovered ? '#000' : '#000',
-                            transition: 'border-color 0.28s ease',
-                            cursor: hasCursor ? 'pointer' : 'default',
-                        }}
-                    >
-                        {/* Email icon */}
-                        <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
-                            <Image
-                                src="/Images/Icons/email icon.png"
-                                alt="Email"
-                                fill
-                                style={{ objectFit: 'contain' }}
-                            />
-                        </div>
-
-                        
-                        <span style={{
-                            fontSize: '13px',
-                
-                            fontWeight: 700,
-                            wordBreak: 'break-all',
-                            flex: 1,
-                            minWidth: 0,
-                        }}>
-                            {data.contact.email}
-                        </span>
-
-                  
-                        {!hasCursor && (
-                            <span style={touchPillStyle}>SEND EMAIL</span>
-                        )}
-
-                       
-                        {hasCursor && (
+                    {hasCursor ? (
+                        <Link
+                            href={`mailto:${data.contact.email}`}
+                            onMouseEnter={() => setEmailHovered(true)}
+                            onMouseLeave={() => setEmailHovered(false)}
+                            style={{ ...emailRowBase, cursor: 'pointer' }}
+                        >
+                            <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
+                                <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
+                            </div>
+                            <span style={{ fontSize: '13px', fontWeight: 700, flex: 1, minWidth: 0, wordBreak: 'break-all' }}>
+                                {data.contact.email}
+                            </span>
                             <span style={hoverLabelStyle}>SEND EMAIL</span>
-                        )}
-                    </Link>
+                        </Link>
+                    ) : (
+                        <div style={{ ...emailRowBase, cursor: 'default' }}>
+                            <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
+                                <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
+                            </div>
+                            <span style={{ fontSize: '13px', fontWeight: 700, flex: 1, minWidth: 0, wordBreak: 'break-all' }}>
+                                {data.contact.email}
+                            </span>
+                            <a
+                                href={`mailto:${data.contact.email}`}
+                                onMouseEnter={() => setPillHovered(true)}
+                                onMouseLeave={() => setPillHovered(false)}
+                                style={touchPillStyle}
+                            >
+                                SEND EMAIL
+                            </a>
+                        </div>
+                    )}
 
-                    {/* Social Media Grid */}
                     <div style={{
                         border: '1.5px solid #000', borderRadius: '14px', padding: '12px 14px',
                         display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px',
                         boxSizing: 'border-box'
                     }}>
-                        {/* Facebook */}
                         <Link
                             href={data.socials.facebook || '#'}
                             target="_blank" rel="noopener noreferrer"
@@ -270,7 +249,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'facebook' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Facebook</span>
                         </Link>
 
-                        {/* Instagram */}
                         <Link
                             href={data.socials.instagram || '#'}
                             target="_blank" rel="noopener noreferrer"
@@ -294,7 +272,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Instagram</span>
                         </Link>
 
-                        {/* YouTube */}
                         <Link
                             href={data.socials.youtube || '#'}
                             target="_blank" rel="noopener noreferrer"
@@ -316,7 +293,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'youtube' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>YouTube</span>
                         </Link>
 
-                        {/* LinkedIn */}
                         <Link
                             href={data.socials.linkedin || '#'}
                             target="_blank" rel="noopener noreferrer"
@@ -340,7 +316,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </div>
                 </div>
 
-                {/* RIGHT CARD — Opportunities */}
                 <div
                     className="card opportunities-card"
                     style={{
@@ -385,8 +360,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
-            <style jsx>{`
-                /* ── Responsive layout ── */
+            <style>{`
                 @media (max-width: 1024px) {
                     .profile-hero {
                         display: grid !important;
