@@ -54,17 +54,17 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                 }}
             >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                    <div style={{ width: '27px', height: '27px', position: 'relative' }}>
+                    <div style={{ width: '34px', height: '34px', position: 'relative' }}>
                         <Image src="/Images/Icons/skills icon.png" alt="Skills" fill style={{ objectFit: 'contain' }} />
                     </div>
-                    <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800 }}>Tech Skills</h2>
+                    <h2 style={{ fontSize: 'clamp(18px, 5vw, 22px)', fontWeight: 800 }}>Tech Skills</h2>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     {categories.map((category) => (
                         <div key={category}>
                             <h3 style={{
-                                fontSize: '14px',
+                                fontSize: '15px',
                                 fontWeight: 700,
                                 color: '#666',
                                 marginBottom: '12px',
@@ -94,7 +94,6 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                 </div>
             </div>
 
-            {/* Custom iOS-style scrollbar thumb */}
             <div className="scroll-thumb" style={{
                 position: 'absolute',
                 right: '4px',
