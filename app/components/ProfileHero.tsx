@@ -16,27 +16,35 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredContact, setHoveredContact] = useState(false);
     const [hoveredGithub, setHoveredGithub] = useState(false);
     const [hoveredCvButton, setHoveredCvButton] = useState(false);
+
+  
     const [hasCursor, setHasCursor] = useState(false);
     const [emailHovered, setEmailHovered] = useState(false);
-    const [pillHovered, setPillHovered] = useState(false);
 
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+    
         setHasCursor(mq.matches);
+
+        
         const handler = (e: MediaQueryListEvent) => {
             setHasCursor(e.matches);
-            if (!e.matches) setEmailHovered(false);
+            if (!e.matches) setEmailHovered(false); 
         };
+
         mq.addEventListener('change', handler);
         return () => mq.removeEventListener('change', handler);
     }, []);
 
+
+
+    // The slide-in "SEND EMAIL" label for cursor devices
     const hoverLabelStyle: React.CSSProperties = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        left: 0,
         right: 0,
         top: 0,
         bottom: 0,
@@ -45,7 +53,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         fontSize: '11px',
         fontWeight: 700,
         letterSpacing: '0.5px',
-        borderRadius: '12px',
+        padding: '0 20px',
+        borderRadius: '0 12px 12px 0',
         whiteSpace: 'nowrap',
         pointerEvents: 'none',
         userSelect: 'none',
@@ -54,36 +63,19 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         transition: 'opacity 0.28s ease, transform 0.28s ease',
     };
 
+    // The always-visible pill badge for touch/no-cursor devices
     const touchPillStyle: React.CSSProperties = {
         display: 'inline-flex',
         alignItems: 'center',
         flexShrink: 0,
         fontSize: '11px',
         fontWeight: 700,
-        color: pillHovered ? '#fff' : '#000',
-        background: pillHovered ? '#000' : 'transparent',
+        color: '#000',
         border: '1.5px solid #000',
         borderRadius: '20px',
         padding: '4px 10px',
         whiteSpace: 'nowrap',
         userSelect: 'none',
-        textDecoration: 'none',
-        transition: 'all 0.25s ease',
-    };
-
-    const emailRowBase: React.CSSProperties = {
-        border: '1.5px solid #000',
-        borderRadius: '14px',
-        padding: '12px 16px',
-        display: 'flex',
-        alignItems: 'center',
-        boxSizing: 'border-box',
-        gap: '10px',
-        textDecoration: 'none',
-        color: 'inherit',
-        position: 'relative',
-        overflow: 'hidden',
-        transition: 'border-color 0.28s ease',
     };
 
     return (
@@ -92,8 +84,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             gap: '24px',
             alignItems: 'center',
             width: '100%',
-            flexWrap: 'wrap',
+            flexWrap: 'wrap'
         }}>
+            {/* 1. Profile Pic */}
             <div className="hero-img-container" style={{
                 width: '180px',
                 height: '180px',
@@ -106,7 +99,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 flexShrink: 0,
                 position: 'relative',
                 overflow: 'hidden',
-                border: '1.5px solid #000',
+                border: '1.5px solid #000'
             }}>
                 {data.profileImage ? (
                     <Image
@@ -120,6 +113,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 )}
             </div>
 
+            {/* 2. Main Bio Info */}
             <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
                 <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000' }}>
                     {data.name}
@@ -133,6 +127,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
 
                 <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                    {/* Download CV */}
                     <a
                         href="/resume/GonzagaRalphDainiellCVresume-.pdf"
                         target="_blank"
@@ -144,13 +139,14 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             background: '#2b6ef2', color: '#fff', padding: '12px 24px',
                             borderRadius: '16px', fontWeight: 700, display: 'flex',
                             alignItems: 'center', gap: '10px', textDecoration: 'none',
-                            fontSize: '15px', height: '52px', boxSizing: 'border-box',
+                            fontSize: '15px', height: '52px', boxSizing: 'border-box'
                         }}
                     >
                         <GoFileZip size={18} color="#fff" />
                         Download CV
                     </a>
 
+                    {/* GitHub */}
                     <a
                         href="https://github.com/Dainiell"
                         target="_blank"
@@ -165,10 +161,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             border: '1.5px solid #000', textDecoration: 'none',
                             background: hoveredGithub ? '#000' : '#fff',
                             color: hoveredGithub ? '#fff' : '#000',
-                            transition: 'all 0.3s ease',
+                            transition: 'all 0.3s ease'
                         }}
                     >
-                        <svg width="20" height="20" viewBox="0 0 24 24"
+                        <svg
+                            width="20" height="20" viewBox="0 0 24 24"
                             fill={hoveredGithub ? '#fff' : '#000'}
                             style={{ transition: 'fill 0.3s ease', flexShrink: 0 }}
                         >
@@ -179,69 +176,79 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
-            {/*
-                KEY FIX: switched from flexbox to CSS grid for the cards wrapper.
-                Grid rows are auto-sized so cells only take up their content height.
-                This completely eliminates the stretch problem that flexbox had.
-            */}
-            <div className="hero-cards-wrapper" style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '16px',
-                flex: '1 1 600px',
-                alignItems: 'start',
-            }}>
+            {/* 3. Cards Row */}
+            <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'stretch' }}>
+
                 <div
                     className="card no-lift contact-card"
                     style={{
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '10px',
-                        borderRadius: '24px',
-                        border: '1.5px solid #000',
-                        boxSizing: 'border-box',
+                        padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px',
+                        flex: '1 1 300px', borderRadius: '24px', border: '1.5px solid #000',
+                        justifyContent: 'center', boxSizing: 'border-box'
                     }}
                 >
-                    {hasCursor ? (
-                        <Link
-                            href={`mailto:${data.contact.email}`}
-                            onMouseEnter={() => setEmailHovered(true)}
-                            onMouseLeave={() => setEmailHovered(false)}
-                            style={{ ...emailRowBase, cursor: 'pointer' }}
-                        >
-                            <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
-                                <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
-                            </div>
-                            <span style={{ fontSize: '13px', fontWeight: 700, flex: 1, minWidth: 0, wordBreak: 'break-all' }}>
-                                {data.contact.email}
-                            </span>
-                            <span style={hoverLabelStyle}>SEND EMAIL</span>
-                        </Link>
-                    ) : (
-                        <div style={{ ...emailRowBase, cursor: 'default' }}>
-                            <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
-                                <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
-                            </div>
-                            <span style={{ fontSize: '13px', fontWeight: 700, flex: 1, minWidth: 0, wordBreak: 'break-all' }}>
-                                {data.contact.email}
-                            </span>
-                            <a
-                                href={`mailto:${data.contact.email}`}
-                                onMouseEnter={() => setPillHovered(true)}
-                                onMouseLeave={() => setPillHovered(false)}
-                                style={touchPillStyle}
-                            >
-                                SEND EMAIL
-                            </a>
-                        </div>
-                    )}
 
+                    <Link
+                        href={`mailto:${data.contact.email}`}
+                        onMouseEnter={() => { if (hasCursor) setEmailHovered(true); }}
+                        onMouseLeave={() => setEmailHovered(false)}
+                        style={{
+                            border: '1.5px solid #000',
+                            borderRadius: '14px',
+                            padding: '12px 16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            boxSizing: 'border-box',
+                            gap: '10px',
+                            textDecoration: 'none',
+                            color: 'inherit',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            borderColor: emailHovered ? '#000' : '#000',
+                            transition: 'border-color 0.28s ease',
+                            cursor: hasCursor ? 'pointer' : 'default',
+                        }}
+                    >
+                        {/* Email icon */}
+                        <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
+                            <Image
+                                src="/Images/Icons/email icon.png"
+                                alt="Email"
+                                fill
+                                style={{ objectFit: 'contain' }}
+                            />
+                        </div>
+
+                        
+                        <span style={{
+                            fontSize: '13px',
+                
+                            fontWeight: 700,
+                            wordBreak: 'break-all',
+                            flex: 1,
+                            minWidth: 0,
+                        }}>
+                            {data.contact.email}
+                        </span>
+
+                  
+                        {!hasCursor && (
+                            <span style={touchPillStyle}>SEND EMAIL</span>
+                        )}
+
+                       
+                        {hasCursor && (
+                            <span style={hoverLabelStyle}>SEND EMAIL</span>
+                        )}
+                    </Link>
+
+                    {/* Social Media Grid */}
                     <div style={{
                         border: '1.5px solid #000', borderRadius: '14px', padding: '12px 14px',
                         display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px',
-                        boxSizing: 'border-box',
+                        boxSizing: 'border-box'
                     }}>
+                        {/* Facebook */}
                         <Link
                             href={data.socials.facebook || '#'}
                             target="_blank" rel="noopener noreferrer"
@@ -252,7 +259,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'facebook' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'facebook' ? '#1877F2' : '#fff',
-                                transition: 'all 0.3s ease',
+                                transition: 'all 0.3s ease'
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -263,6 +270,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'facebook' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Facebook</span>
                         </Link>
 
+                        {/* Instagram */}
                         <Link
                             href={data.socials.instagram || '#'}
                             target="_blank" rel="noopener noreferrer"
@@ -273,7 +281,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'instagram' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #8134af -20%, #dd2a7b 50%, #f58529 120%)' : '#fff',
-                                transition: 'all 0.3s ease',
+                                transition: 'all 0.3s ease'
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -286,6 +294,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Instagram</span>
                         </Link>
 
+                        {/* YouTube */}
                         <Link
                             href={data.socials.youtube || '#'}
                             target="_blank" rel="noopener noreferrer"
@@ -296,7 +305,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'youtube' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'youtube' ? '#FF0000' : '#fff',
-                                transition: 'all 0.3s ease',
+                                transition: 'all 0.3s ease'
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -307,6 +316,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'youtube' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>YouTube</span>
                         </Link>
 
+                        {/* LinkedIn */}
                         <Link
                             href={data.socials.linkedin || '#'}
                             target="_blank" rel="noopener noreferrer"
@@ -317,7 +327,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'linkedin' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'linkedin' ? '#0A66C2' : '#fff',
-                                transition: 'all 0.3s ease',
+                                transition: 'all 0.3s ease'
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -330,22 +340,18 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </div>
                 </div>
 
+                {/* RIGHT CARD — Opportunities */}
                 <div
                     className="card opportunities-card"
                     style={{
-                        padding: '24px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '14px',
-                        borderRadius: '24px',
-                        border: '1.5px solid #000',
-                        background: '#fff',
-                        boxSizing: 'border-box',
+                        padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px',
+                        flex: '1 1 240px', borderRadius: '24px', border: '1.5px solid #000',
+                        background: '#fff', justifyContent: 'center', boxSizing: 'border-box'
                     }}
                 >
                     <div style={{
                         display: 'inline-flex', alignItems: 'center', gap: '6px',
-                        background: '#e8f5e9', borderRadius: '20px', padding: '4px 12px', width: 'fit-content',
+                        background: '#e8f5e9', borderRadius: '20px', padding: '4px 12px', width: 'fit-content'
                     }}>
                         <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4caf50', flexShrink: 0 }} />
                         <span style={{ fontSize: '12px', fontWeight: 700, color: '#2e7d32' }}>Available For Opportunities</span>
@@ -371,7 +377,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             color: '#fff', fontWeight: 700, fontSize: '14px',
                             padding: '12px 28px', borderRadius: '12px', textDecoration: 'none',
                             width: 'fit-content', transition: 'all 0.3s ease',
-                            transform: hoveredContact ? 'translateY(-2px)' : 'translateY(0)',
+                            transform: hoveredContact ? 'translateY(-2px)' : 'translateY(0)'
                         }}
                     >
                         WORK WITH ME
@@ -379,7 +385,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
-            <style>{`
+            <style jsx>{`
+                /* ── Responsive layout ── */
                 @media (max-width: 1024px) {
                     .profile-hero {
                         display: grid !important;
@@ -432,13 +439,14 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         grid-row: 3 !important;
                         width: 100% !important;
                         flex: none !important;
-                        display: flex !important;
                         flex-direction: column !important;
                         gap: 12px !important;
                         margin-top: -8px !important;
                     }
                     .contact-card, .opportunities-card {
                         width: 100% !important;
+                        flex: none !important;
+                        height: auto !important;
                         padding: 16px !important;
                     }
                 }
