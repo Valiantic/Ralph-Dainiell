@@ -94,88 +94,101 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             width: '100%',
             flexWrap: 'wrap',
         }}>
-            <div className="hero-img-container" style={{
-                width: '180px',
-                height: '180px',
-                borderRadius: '32px',
-                background: '#000',
+            {/*
+                hero-top-row wraps the image + info together.
+                This allows mobile to use simple flex-direction: column on
+                profile-hero, so hero-cards-wrapper naturally stacks below
+                without any grid-row assignment or implicit empty rows.
+            */}
+            <div className="hero-top-row" style={{
                 display: 'flex',
+                gap: '24px',
                 alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
                 flexShrink: 0,
-                position: 'relative',
-                overflow: 'hidden',
-                border: '1.5px solid #000',
             }}>
-                {data.profileImage ? (
-                    <Image
-                        src={data.profileImage}
-                        alt={data.name}
-                        fill
-                        style={{ objectFit: 'cover', objectPosition: 'center top' }}
-                    />
-                ) : (
-                    <span style={{ fontSize: '12px', opacity: 0.5 }}>image here</span>
-                )}
-            </div>
-
-            <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
-                <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000' }}>
-                    {data.name}
-                </h1>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1px', color: '#000', fontSize: '15px' }}>
-                    <IoLocationOutline size={18} color="#000" />
-                    <span style={{ paddingTop: '2px' }}>{data.location}</span>
+                <div className="hero-img-container" style={{
+                    width: '180px',
+                    height: '180px',
+                    borderRadius: '32px',
+                    background: '#000',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                    flexShrink: 0,
+                    position: 'relative',
+                    overflow: 'hidden',
+                    border: '1.5px solid #000',
+                }}>
+                    {data.profileImage ? (
+                        <Image
+                            src={data.profileImage}
+                            alt={data.name}
+                            fill
+                            style={{ objectFit: 'cover', objectPosition: 'center top' }}
+                        />
+                    ) : (
+                        <span style={{ fontSize: '12px', opacity: 0.5 }}>image here</span>
+                    )}
                 </div>
-                <div style={{ fontSize: '24px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
-                    {data.roles.join(' \\ ')}
-                </div>
 
-                <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                    <a
-                        href="/resume/GonzagaRalphDainiellCVresume-.pdf"
-                        target="_blank"
-                        download
-                        className="cv-button"
-                        onMouseEnter={() => setHoveredCvButton(true)}
-                        onMouseLeave={() => setHoveredCvButton(false)}
-                        style={{
-                            background: '#2b6ef2', color: '#fff', padding: '12px 24px',
-                            borderRadius: '16px', fontWeight: 700, display: 'flex',
-                            alignItems: 'center', gap: '10px', textDecoration: 'none',
-                            fontSize: '15px', height: '52px', boxSizing: 'border-box',
-                        }}
-                    >
-                        <GoFileZip size={18} color="#fff" />
-                        Download CV
-                    </a>
+                <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000' }}>
+                        {data.name}
+                    </h1>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1px', color: '#000', fontSize: '15px' }}>
+                        <IoLocationOutline size={18} color="#000" />
+                        <span style={{ paddingTop: '2px' }}>{data.location}</span>
+                    </div>
+                    <div style={{ fontSize: '24px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
+                        {data.roles.join(' \\ ')}
+                    </div>
 
-                    <a
-                        href="https://github.com/Dainiell"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onMouseEnter={() => setHoveredGithub(true)}
-                        onMouseLeave={() => setHoveredGithub(false)}
-                        className="card github-btn"
-                        style={{
-                            padding: '12px 20px', borderRadius: '16px', display: 'flex',
-                            alignItems: 'center', gap: '10px', fontWeight: 700, fontSize: '16px',
-                            height: '52px', boxSizing: 'border-box',
-                            border: '1.5px solid #000', textDecoration: 'none',
-                            background: hoveredGithub ? '#000' : '#fff',
-                            color: hoveredGithub ? '#fff' : '#000',
-                            transition: 'all 0.3s ease',
-                        }}
-                    >
-                        <svg width="20" height="20" viewBox="0 0 24 24"
-                            fill={hoveredGithub ? '#fff' : '#000'}
-                            style={{ transition: 'fill 0.3s ease', flexShrink: 0 }}
+                    <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                        <a
+                            href="/resume/GonzagaRalphDainiellCVresume-.pdf"
+                            target="_blank"
+                            download
+                            className="cv-button"
+                            onMouseEnter={() => setHoveredCvButton(true)}
+                            onMouseLeave={() => setHoveredCvButton(false)}
+                            style={{
+                                background: '#2b6ef2', color: '#fff', padding: '12px 24px',
+                                borderRadius: '16px', fontWeight: 700, display: 'flex',
+                                alignItems: 'center', gap: '10px', textDecoration: 'none',
+                                fontSize: '15px', height: '52px', boxSizing: 'border-box',
+                            }}
                         >
-                            <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                        GitHub
-                    </a>
+                            <GoFileZip size={18} color="#fff" />
+                            Download CV
+                        </a>
+
+                        <a
+                            href="https://github.com/Dainiell"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onMouseEnter={() => setHoveredGithub(true)}
+                            onMouseLeave={() => setHoveredGithub(false)}
+                            className="card github-btn"
+                            style={{
+                                padding: '12px 20px', borderRadius: '16px', display: 'flex',
+                                alignItems: 'center', gap: '10px', fontWeight: 700, fontSize: '16px',
+                                height: '52px', boxSizing: 'border-box',
+                                border: '1.5px solid #000', textDecoration: 'none',
+                                background: hoveredGithub ? '#000' : '#fff',
+                                color: hoveredGithub ? '#fff' : '#000',
+                                transition: 'all 0.3s ease',
+                            }}
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24"
+                                fill={hoveredGithub ? '#fff' : '#000'}
+                                style={{ transition: 'fill 0.3s ease', flexShrink: 0 }}
+                            >
+                                <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            GitHub
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -381,27 +394,27 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             <style>{`
                 @media (max-width: 1024px) {
                     .profile-hero {
-                        display: grid !important;
-                        grid-template-columns: 90px 1fr !important;
-                        column-gap: 14px !important;
-                        row-gap: 16px !important;
-                        align-items: start !important;
+                        flex-direction: column !important;
+                        flex-wrap: nowrap !important;
+                        gap: 16px !important;
+                        align-items: stretch !important;
+                    }
+                    .hero-top-row {
+                        flex-direction: row !important;
+                        gap: 14px !important;
+                        align-items: flex-start !important;
+                        flex-shrink: 0 !important;
+                        flex-wrap: nowrap !important;
                     }
                     .hero-img-container {
-                        grid-column: 1 !important;
-                        grid-row: 1 !important;
                         width: 90px !important;
                         height: 90px !important;
                         border-radius: 20px !important;
                         flex-shrink: 0 !important;
-                        align-self: flex-start !important;
                     }
                     .hero-info {
-                        grid-column: 2 !important;
-                        grid-row: 1 !important;
-                        width: 100% !important;
+                        flex: 1 !important;
                         min-width: 0 !important;
-                        flex: none !important;
                     }
                     .hero-info h1 {
                         font-size: 26px !important;
@@ -427,20 +440,19 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         justify-content: center !important;
                     }
                     .hero-cards-wrapper {
-                        grid-column: 1 / -1 !important;
-                        grid-row: 3 !important;
-                        width: 100% !important;
                         flex: none !important;
+                        width: 100% !important;
                         display: flex !important;
                         flex-direction: column !important;
                         gap: 12px !important;
-                        margin-top: -8px !important;
                     }
-                    .contact-card, .opportunities-card {
+                    .contact-card,
+                    .opportunities-card {
                         width: 100% !important;
                         padding: 16px !important;
                         height: auto !important;
-                        align-self: flex-start !important;
+                        min-height: 0 !important;
+                        flex-shrink: 0 !important;
                     }
                 }
             `}</style>
