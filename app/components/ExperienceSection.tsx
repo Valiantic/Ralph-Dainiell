@@ -16,11 +16,11 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
             padding: 'clamp(16px, 4vw, 24px)',
             boxSizing: 'border-box'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '16px', flexShrink: 0 }}>
             <div style={{ width: 'clamp(26px, 3vw, 32px)', height: 'clamp(26px, 3vw, 32px)', position: 'relative' }}>
                 <Image src="/Images/Icons/experience icon.png" alt="Experience" fill style={{ objectFit: 'contain' }} />
             </div>
-                <h2 style={{ fontSize: '18px', fontWeight: 800 }}>Experience</h2>
+                <h2 style={{ fontSize: '19.5px', fontWeight: 800, paddingTop: '2px' }}>Experience</h2>
             </div>
 
             <div style={{
