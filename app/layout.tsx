@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
 import "./globals.css";
+import "@fontsource/open-runde/400.css";
+import "@fontsource/open-runde/500.css";
+import "@fontsource/open-runde/700.css";
 
 export const metadata: Metadata = {
   title: "Ralph Gonzaga - iOS Developer",
@@ -19,11 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${GeistSans.className} antialiased`}>
+      <body style={{ fontFamily: "'Open Runde', sans-serif" }} className="antialiased">
         {children}
-
         <div id="modal-root"></div>
-
         <footer
           style={{
             width: "100%",
@@ -33,7 +33,7 @@ export default function RootLayout({
             textAlign: "center",
             padding: "1.5rem 1rem",
             fontSize: "0.875rem",
-            color: "#6b7280"
+            color: "#6b7280",
           }}
         >
           © {new Date().getFullYear()} Ralph Dainiell. All rights reserved.
