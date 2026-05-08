@@ -35,7 +35,7 @@ export default function ProjectsSection() {
           height={25}
           style={{ objectFit: "contain" }}
         />
-        <h2 style={{ fontSize: "22px", fontWeight: "700", margin: 0, paddingTop: '2px' }}>
+        <h2 style={{ fontSize: "22px", fontWeight: "700", margin: 0, paddingTop: '1px' }}>
           Projects
         </h2>
       </div>
