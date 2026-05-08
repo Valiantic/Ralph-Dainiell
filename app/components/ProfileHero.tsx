@@ -17,42 +17,27 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredGithub, setHoveredGithub] = useState(false);
     const [hoveredCvButton, setHoveredCvButton] = useState(false);
 
-    // ─────────────────────────────────────────────────────────────────────
-    //  CURSOR DETECTION — JavaScript matchMedia (not CSS media queries)
-    //
-    //  Why JS instead of CSS?
-    //  • styled-jsx scoping conflicts with globals.css .card rules
-    //  • CSS @media (hover:hover) can't dynamically react to a mouse
-    //    being plugged/unplugged at runtime (iPad + mouse use case)
-    //  • JS matchMedia fires a 'change' event immediately when the
-    //    device type changes → UI updates instantly, no page reload
-    //
-    //  hasCursor starts as FALSE (SSR-safe: touch UI renders on server,
-    //  correct UI applies after first client paint via useEffect)
-    // ─────────────────────────────────────────────────────────────────────
+  
     const [hasCursor, setHasCursor] = useState(false);
     const [emailHovered, setEmailHovered] = useState(false);
 
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
 
-        // Set initial value
+    
         setHasCursor(mq.matches);
 
-        // Listen for dynamic changes (mouse plugged/unplugged on iPad etc.)
+        
         const handler = (e: MediaQueryListEvent) => {
             setHasCursor(e.matches);
-            if (!e.matches) setEmailHovered(false); // reset hover if mouse removed
+            if (!e.matches) setEmailHovered(false); 
         };
 
         mq.addEventListener('change', handler);
         return () => mq.removeEventListener('change', handler);
     }, []);
 
-    // ─────────────────────────────────────────────────────────────────────
-    //  EMAIL ROW — inline styles driven by React state
-    //  No CSS class dependency for the hover effect → zero scoping issues
-    // ─────────────────────────────────────────────────────────────────────
+
 
     // The slide-in "SEND EMAIL" label for cursor devices
     const hoverLabelStyle: React.CSSProperties = {
@@ -73,7 +58,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         whiteSpace: 'nowrap',
         pointerEvents: 'none',
         userSelect: 'none',
-        // Animate with opacity + transform — NOT display, which can't transition
         opacity: emailHovered ? 1 : 0,
         transform: emailHovered ? 'translateX(0)' : 'translateX(100%)',
         transition: 'opacity 0.28s ease, transform 0.28s ease',
@@ -195,12 +179,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             {/* 3. Cards Row */}
             <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'stretch' }}>
 
-                {/* LEFT CARD — Email + Socials */}
-                {/*
-                 * "no-lift" prevents the global .card:hover { transform: translateY(-2px) }
-                 * from firing and disrupting the email row's absolutely-positioned
-                 * slide-in label. Without it, the card lifts and the label clips awkwardly.
-                 */}
                 <div
                     className="card no-lift contact-card"
                     style={{
@@ -209,20 +187,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         justifyContent: 'center', boxSizing: 'border-box'
                     }}
                 >
-                    {/* ── EMAIL ROW ───────────────────────────────────────────
-                     *
-                     *  hasCursor = true  (mouse/trackpad)
-                     *    → whole row is clickable, no pill visible,
-                     *      "SEND EMAIL" black label slides in from the right on hover
-                     *
-                     *  hasCursor = false (touch-only: phone, tablet, iPad no mouse)
-                     *    → row still tappable (whole row = mailto: link),
-                     *      "SEND EMAIL" pill badge always visible on the right
-                     *
-                     *  Both states are driven purely by React state — no CSS
-                     *  media queries involved, so nothing can break due to
-                     *  styled-jsx scoping or globals.css rule conflicts.
-                     * ────────────────────────────────────────────────────── */}
+
                     <Link
                         href={`mailto:${data.contact.email}`}
                         onMouseEnter={() => { if (hasCursor) setEmailHovered(true); }}
@@ -239,7 +204,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             color: 'inherit',
                             position: 'relative',
                             overflow: 'hidden',
-                            // Border subtly darkens on hover for cursor devices
                             borderColor: emailHovered ? '#000' : '#000',
                             transition: 'border-color 0.28s ease',
                             cursor: hasCursor ? 'pointer' : 'default',
@@ -255,9 +219,10 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             />
                         </div>
 
-                        {/* Email address — flex:1 fills all leftover width */}
+                        
                         <span style={{
                             fontSize: '13px',
+                            width: '10px',
                             fontWeight: 700,
                             wordBreak: 'break-all',
                             flex: 1,
@@ -266,12 +231,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             {data.contact.email}
                         </span>
 
-                        {/* TOUCH: always-visible pill badge (hidden on cursor devices) */}
+                  
                         {!hasCursor && (
                             <span style={touchPillStyle}>SEND EMAIL</span>
                         )}
 
-                        {/* CURSOR: slide-in black label (only rendered on cursor devices) */}
+                       
                         {hasCursor && (
                             <span style={hoverLabelStyle}>SEND EMAIL</span>
                         )}
