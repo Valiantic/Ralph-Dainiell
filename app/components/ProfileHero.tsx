@@ -174,7 +174,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
                                 border: hoveredSocial === 'instagram' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
-                                background: hoveredSocial === 'instagram' ? 'linear-gradient(45deg, #F77737, #FD1D1D, #833AB4)' : '#fff',
+                                background: hoveredSocial === 'instagram' ? 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' : '#fff',
                                 transition: 'all 0.3s ease'
                             }}>
                             <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
