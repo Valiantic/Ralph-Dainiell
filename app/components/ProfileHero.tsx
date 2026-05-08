@@ -222,7 +222,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         
                         <span style={{
                             fontSize: '13px',
-                            width: '10px',
                             fontWeight: 700,
                             wordBreak: 'break-all',
                             flex: 1,
