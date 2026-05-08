@@ -51,7 +51,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             {/* 2. Main Bio Info */}
             <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
                 <h1 style={{ fontSize: '42px', fontWeight: 800, letterSpacing: '-1px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#000', fontSize: '15px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#000', fontSize: '15px' }}>
                     <IoLocationOutline size={18} color="#000" />
                     {data.location}
                 </div>
@@ -120,7 +120,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
                             <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
                         </div>
-                        <span style={{ fontSize: '14px', fontWeight: 700, wordBreak: 'break-all', flex: 1 }}>{data.contact.email}</span>
+                        <span style={{ fontSize: '13px', fontWeight: 700, wordBreak: 'break-all', flex: 1 }}>{data.contact.email}</span>
                         <Link
                             href={`mailto:${data.contact.email}`}
                             target="_blank"
