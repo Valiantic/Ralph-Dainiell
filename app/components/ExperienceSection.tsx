@@ -20,7 +20,7 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
                 <div style={{ width: '26px', height: '26px', position: 'relative' }}>
                     <Image src="/Images/Icons/experience icon.png" alt="Experience" fill style={{ objectFit: 'contain' }} />
                 </div>
-                <h2 style={{ fontSize: 'clamp(20px, 5vw, 28px)', fontWeight: 800 }}>Experience</h2>
+                <h2 style={{ fontSize: 'clamp(20px, 5vw, 22px)', fontWeight: 800 }}>Experience</h2>
             </div>
 
             <div style={{
