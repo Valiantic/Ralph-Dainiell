@@ -186,7 +186,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     style={{
                         padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px',
                         flex: '1 1 300px', borderRadius: '24px', border: '1.5px solid #000',
-                        justifyContent: 'center', boxSizing: 'border-box'
+                        justifyContent: 'flex-start', boxSizing: 'border-box'
                     }}
                 >
                     {hasCursor ? (
@@ -321,7 +321,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     style={{
                         padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px',
                         flex: '1 1 240px', borderRadius: '24px', border: '1.5px solid #000',
-                        background: '#fff', justifyContent: 'center', boxSizing: 'border-box'
+                        background: '#fff', justifyContent: 'flex-start', boxSizing: 'border-box'
                     }}
                 >
                     <div style={{
@@ -422,6 +422,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         flex: none !important;
                         height: auto !important;
                         padding: 16px !important;
+                        justify-content: flex-start !important;
                     }
                 }
             `}</style>
