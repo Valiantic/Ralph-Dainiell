@@ -53,7 +53,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1px', color: '#000', fontSize: '15px' }}>
                     <IoLocationOutline size={18} color="#000" />
-                    {data.location}
+                    <span style={{ paddingTop: '2px' }}>{data.location}</span>
                 </div>
                 <div style={{ fontSize: '24px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
                     {data.roles.join(' \\ ')}
@@ -174,7 +174,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
                                 border: hoveredSocial === 'instagram' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
-                                background: hoveredSocial === 'instagram' ? 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' : '#fff',
+                                background: hoveredSocial === 'instagram' ? 'linear-gradient(to top right, #FFDC80, #FCAF45, #F77737, #F56040, #FD1D1D, #E1306C, #C13584, #833AB4)' : '#fff',
                                 transition: 'all 0.3s ease'
                             }}>
                             <div style={{ width: '28px', height: '28px', background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
