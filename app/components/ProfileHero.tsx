@@ -280,7 +280,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
                                 border: hoveredSocial === 'instagram' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
-                                background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #8134af -20%, #dd2a7b 50%, #f58529 120%)' : '#fff',
+                                background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #f58529, #dd2a7b, #8134af)' : '#fff',
                                 transition: 'all 0.3s ease'
                             }}
                         >
