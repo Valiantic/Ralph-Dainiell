@@ -50,7 +50,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
             {/* 2. Main Bio Info */}
             <div className="hero-info" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '300px' }}>
-                <h1 style={{ fontSize: '38px', fontWeight: 700, letterSpacing: '1px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
+                <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000' }}>{data.name}</h1>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#000', fontSize: '15px' }}>
                     <IoLocationOutline size={18} color="#000" />
                     {data.location}
@@ -272,8 +272,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
             <style jsx>{`
                 @media (max-width: 1024px) {
-                    /* ONLY CHANGE: pic + name side by side via grid.
-                       Buttons and cards below — exactly as original. */
                     .profile-hero {
                         display: grid !important;
                         grid-template-columns: 90px 1fr !important;
