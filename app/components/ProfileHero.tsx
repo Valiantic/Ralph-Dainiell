@@ -13,7 +13,6 @@ interface ProfileHeroProps {
 
 export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredSocial, setHoveredSocial] = useState<string | null>(null);
-    const [hoveredSendEmail, setHoveredSendEmail] = useState(false);
     const [hoveredContact, setHoveredContact] = useState(false);
     const [hoveredGithub, setHoveredGithub] = useState(false);
     const [hoveredCvButton, setHoveredCvButton] = useState(false);
@@ -112,34 +111,54 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     flex: '1 1 300px', borderRadius: '24px', border: '1.5px solid #000',
                     justifyContent: 'center', boxSizing: 'border-box'
                 }}>
-                    {/* Email */}
-                    <div style={{
-                        border: '1.5px solid #000', borderRadius: '14px', padding: '12px 16px',
-                        display: 'flex', alignItems: 'center', boxSizing: 'border-box', gap: '10px'
-                    }}>
+                    {/*
+                     * EMAIL ROW
+                     * ─────────────────────────────────────────────────────────────
+                     * • Cursor devices  → whole row is the link; "SEND EMAIL" pill
+                     *   is hidden; a black slide-in label appears on hover.
+                     * • Touch devices   → "SEND EMAIL" pill is always visible;
+                     *   tapping anywhere on the row triggers mailto:.
+                     * ─────────────────────────────────────────────────────────────
+                     */}
+                    <Link
+                        href={`mailto:${data.contact.email}`}
+                        className="email-row"
+                        style={{
+                            border: '1.5px solid #000',
+                            borderRadius: '14px',
+                            padding: '12px 16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            boxSizing: 'border-box',
+                            gap: '10px',
+                            textDecoration: 'none',
+                            color: 'inherit',
+                            position: 'relative',
+                            overflow: 'hidden',
+                        }}
+                    >
+                        {/* Email icon */}
                         <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
                             <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
                         </div>
-                        <span style={{ fontSize: '13px', fontWeight: 700, wordBreak: 'break-all', flex: 1 }}>{data.contact.email}</span>
-                        <Link
-                            href={`mailto:${data.contact.email}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onMouseEnter={() => setHoveredSendEmail(true)}
-                            onMouseLeave={() => setHoveredSendEmail(false)}
-                            style={{
-                                fontSize: '11px', fontWeight: 700,
-                                color: hoveredSendEmail ? '#fff' : '#000',
-                                background: hoveredSendEmail ? '#000' : 'transparent',
-                                border: '1.5px solid #000', borderRadius: '20px',
-                                padding: '4px 10px', textDecoration: 'none',
-                                whiteSpace: 'nowrap', flexShrink: 0,
-                                transition: 'all 0.3s ease'
-                            }}
-                        >
-                            SEND EMAIL
-                        </Link>
-                    </div>
+
+                        {/* Email address — flex: 1 so it fills the available space */}
+                        <span style={{ fontSize: '13px', fontWeight: 700, wordBreak: 'break-all', flex: 1 }}>
+                            {data.contact.email}
+                        </span>
+
+                        {/*
+                         * TOUCH label — always visible on touch/no-cursor devices.
+                         * Hidden on cursor devices via the @media rule below.
+                         */}
+                        <span className="send-email-touch">SEND EMAIL</span>
+
+                        {/*
+                         * HOVER label — invisible by default, slides in from the
+                         * right edge only on cursor-capable devices.
+                         */}
+                        <span className="send-email-hover">SEND EMAIL</span>
+                    </Link>
 
                     {/* Social Media */}
                     <div style={{
@@ -227,7 +246,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </div>
                 </div>
 
-        
+                {/* 4. RIGHT CARD — Opportunities */}
                 <div className="card opportunities-card" style={{
                     padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px',
                     flex: '1 1 240px', borderRadius: '24px', border: '1.5px solid #000',
@@ -248,7 +267,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
                         Actively pursuing opportunities in iOS development full-time, internship, or volunteer.<br />
                     </p>
-
 
                     <Link
                         href={`https://mail.google.com/mail/?view=cm&to=${data.contact.email}`}
@@ -271,6 +289,69 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             </div>
 
             <style jsx>{`
+                /* ─────────────────────────────────────────────────
+                   EMAIL ROW — two-label strategy
+                   .send-email-touch  → for touch/no-cursor devices
+                   .send-email-hover  → for cursor devices (hover)
+                ───────────────────────────────────────────────── */
+
+                /* DEFAULT (touch / no cursor): show pill, hide hover label */
+                .send-email-touch {
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: #000;
+                    border: 1.5px solid #000;
+                    border-radius: 20px;
+                    padding: 4px 10px;
+                    white-space: nowrap;
+                    flex-shrink: 0;
+                    user-select: none;
+                }
+                .send-email-hover {
+                    display: none;
+                }
+
+                /* CURSOR DEVICES: hide pill, enable hover slide-in label */
+                @media (hover: hover) and (pointer: fine) {
+                    .send-email-touch {
+                        display: none;
+                    }
+                    .send-email-hover {
+                        display: flex;
+                        align-items: center;
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        bottom: 0;
+                        background: #000;
+                        color: #fff;
+                        font-size: 11px;
+                        font-weight: 700;
+                        padding: 0 18px;
+                        border-radius: 0 12px 12px 0;
+                        opacity: 0;
+                        transform: translateX(10px);
+                        transition: opacity 0.3s ease, transform 0.3s ease;
+                        pointer-events: none;
+                        white-space: nowrap;
+                        user-select: none;
+                    }
+                    .email-row {
+                        transition: border-color 0.3s ease;
+                        cursor: pointer;
+                    }
+                    .email-row:hover {
+                        border-color: #000;
+                    }
+                    .email-row:hover .send-email-hover {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+
+                /* ─────────────────────────────────────────────────
+                   RESPONSIVE — mobile / narrow viewports
+                ───────────────────────────────────────────────── */
                 @media (max-width: 1024px) {
                     .profile-hero {
                         display: grid !important;
@@ -279,7 +360,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         row-gap: 16px !important;
                         align-items: start !important;
                     }
-                    /* Row 1, Col 1: Profile pic */
                     .hero-img-container {
                         grid-column: 1 !important;
                         grid-row: 1 !important;
@@ -289,7 +369,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         flex-shrink: 0 !important;
                         align-self: flex-start !important;
                     }
-                    /* Row 1, Col 2: Name + location + role (NO buttons here) */
                     .hero-info {
                         grid-column: 2 !important;
                         grid-row: 1 !important;
@@ -302,7 +381,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         letter-spacing: -0.5px !important;
                         line-height: 1.1 !important;
                     }
-                    /* Row 2, full width: extend buttons to match card width */
                     .hero-buttons {
                         display: flex !important;
                         flex-direction: column !important;
@@ -321,7 +399,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         width: 100% !important;
                         justify-content: center !important;
                     }
-                    /* Row 3, full width: Cards */
                     .hero-cards-wrapper {
                         grid-column: 1 / -1 !important;
                         grid-row: 3 !important;
