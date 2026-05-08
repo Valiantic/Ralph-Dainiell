@@ -180,13 +180,15 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
-            <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'stretch' }}>
+            {/* KEY FIX: alignItems changed from 'stretch' to 'flex-start' so cards don't force-expand each other's height */}
+            <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
                 <div
                     className="card no-lift contact-card"
                     style={{
                         padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px',
                         flex: '1 1 300px', borderRadius: '24px', border: '1.5px solid #000',
-                        justifyContent: 'flex-start', boxSizing: 'border-box'
+                        justifyContent: 'flex-start', boxSizing: 'border-box',
+                        height: 'fit-content'
                     }}
                 >
                     {hasCursor ? (
@@ -321,7 +323,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     style={{
                         padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px',
                         flex: '1 1 240px', borderRadius: '24px', border: '1.5px solid #000',
-                        background: '#fff', justifyContent: 'flex-start', boxSizing: 'border-box'
+                        background: '#fff', justifyContent: 'flex-start', boxSizing: 'border-box',
+                        height: 'fit-content'
                     }}
                 >
                     <div style={{
@@ -416,6 +419,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         flex-direction: column !important;
                         gap: 12px !important;
                         margin-top: -8px !important;
+                        align-items: stretch !important;
                     }
                     .contact-card, .opportunities-card {
                         width: 100% !important;
