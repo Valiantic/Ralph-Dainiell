@@ -179,11 +179,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
-            {/*
-                KEY FIX: switched from flexbox to CSS grid for the cards wrapper.
-                Grid rows are auto-sized so cells only take up their content height.
-                This completely eliminates the stretch problem that flexbox had.
-            */}
             <div className="hero-cards-wrapper" style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
@@ -201,6 +196,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         borderRadius: '24px',
                         border: '1.5px solid #000',
                         boxSizing: 'border-box',
+                        alignSelf: 'start',
+                        height: 'auto',
                     }}
                 >
                     {hasCursor ? (
@@ -341,6 +338,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         border: '1.5px solid #000',
                         background: '#fff',
                         boxSizing: 'border-box',
+                        alignSelf: 'start',
+                        height: 'auto',
                     }}
                 >
                     <div style={{
@@ -440,6 +439,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     .contact-card, .opportunities-card {
                         width: 100% !important;
                         padding: 16px !important;
+                        height: auto !important;
+                        align-self: flex-start !important;
                     }
                 }
             `}</style>

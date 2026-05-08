@@ -23,7 +23,6 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
 }
 
 body {
@@ -34,6 +33,7 @@ body {
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  width: 100%;
 }
 
 main {
@@ -156,27 +156,15 @@ button {
   .mobile-span-12 {
     grid-column: span 1 !important;
   }
+
+  main {
+    overflow-y: visible;
+    height: auto;
+  }
 }
 
 @media (min-width: 1025px) {
   .mobile-span-12 {
     display: block;
-  }
-}
-
-html, body {
-  overflow-x: hidden;
-  width: 100%;
-}
-
-@media (max-width: 1024px) {
-  html, body {
-    overflow-x: hidden;
-  }
-
-  main {
-    overflow-y: visible;
-    height: auto;
-    -webkit-overflow-scrolling: touch;
   }
 }
