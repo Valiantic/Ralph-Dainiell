@@ -112,13 +112,18 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     justifyContent: 'center', boxSizing: 'border-box'
                 }}>
                     {/*
-                     * EMAIL ROW
-                     * ─────────────────────────────────────────────────────────────
-                     * • Cursor devices  → whole row is the link; "SEND EMAIL" pill
-                     *   is hidden; a black slide-in label appears on hover.
-                     * • Touch devices   → "SEND EMAIL" pill is always visible;
-                     *   tapping anywhere on the row triggers mailto:.
-                     * ─────────────────────────────────────────────────────────────
+                     * EMAIL ROW — two-label strategy
+                     *
+                     * .send-email-touch  Pill badge. display:inline-flex always.
+                     *                    Hidden via display:none on cursor devices.
+                     *
+                     * .send-email-hover  Slide-in label. display:flex ALWAYS
+                     *                    (position:absolute = zero layout impact).
+                     *                    opacity:0 + transform:translateX(100%)
+                     *                    by default → transitions to visible on
+                     *                    cursor-device hover.
+                     *                    KEY: we NEVER toggle display on this one
+                     *                    because display is not animatable in CSS.
                      */}
                     <Link
                         href={`mailto:${data.contact.email}`}
@@ -142,21 +147,15 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
                         </div>
 
-                        {/* Email address — flex: 1 so it fills the available space */}
-                        <span style={{ fontSize: '13px', fontWeight: 700, wordBreak: 'break-all', flex: 1 }}>
+                        {/* Email address — flex:1 so it fills all remaining space */}
+                        <span className="email-text">
                             {data.contact.email}
                         </span>
 
-                        {/*
-                         * TOUCH label — always visible on touch/no-cursor devices.
-                         * Hidden on cursor devices via the @media rule below.
-                         */}
+                        {/* Touch/no-cursor: always-visible pill badge */}
                         <span className="send-email-touch">SEND EMAIL</span>
 
-                        {/*
-                         * HOVER label — invisible by default, slides in from the
-                         * right edge only on cursor-capable devices.
-                         */}
+                        {/* Cursor: slide-in black label (opacity-driven, NEVER display-toggled) */}
                         <span className="send-email-hover">SEND EMAIL</span>
                     </Link>
 
@@ -289,14 +288,28 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             </div>
 
             <style jsx>{`
-                /* ─────────────────────────────────────────────────
-                   EMAIL ROW — two-label strategy
-                   .send-email-touch  → for touch/no-cursor devices
-                   .send-email-hover  → for cursor devices (hover)
-                ───────────────────────────────────────────────── */
+                /* ══════════════════════════════════════════════════
+                   EMAIL TEXT
+                   flex:1 + min-width:0 = fills all leftover space
+                   and wraps/breaks long addresses gracefully
+                ══════════════════════════════════════════════════ */
+                .email-text {
+                    font-size: 13px;
+                    font-weight: 700;
+                    word-break: break-all;
+                    flex: 1;
+                    min-width: 0;
+                }
 
-                /* DEFAULT (touch / no cursor): show pill, hide hover label */
+                /* ══════════════════════════════════════════════════
+                   SEND EMAIL — TOUCH PILL
+                   Shown on touch / no-cursor devices.
+                   Suppressed on cursor devices (see media block).
+                ══════════════════════════════════════════════════ */
                 .send-email-touch {
+                    display: inline-flex;
+                    align-items: center;
+                    flex-shrink: 0;
                     font-size: 11px;
                     font-weight: 700;
                     color: #000;
@@ -304,42 +317,67 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     border-radius: 20px;
                     padding: 4px 10px;
                     white-space: nowrap;
-                    flex-shrink: 0;
                     user-select: none;
                 }
+
+                /* ══════════════════════════════════════════════════
+                   SEND EMAIL — HOVER SLIDE-IN LABEL
+                   Always display:flex — position:absolute means it
+                   has zero effect on the row's layout.
+                   Starts invisible (opacity:0) and shifted off the
+                   right edge (translateX 100%).
+                   Transition is always applied; it fires on hover.
+
+                   WHY NOT display:none?
+                   CSS cannot transition the display property.
+                   Switching display:none → display:flex would make
+                   the label snap in instantly with no animation.
+                   Using opacity + transform keeps it smooth.
+                ══════════════════════════════════════════════════ */
                 .send-email-hover {
-                    display: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    background: #000;
+                    color: #fff;
+                    font-size: 11px;
+                    font-weight: 700;
+                    letter-spacing: 0.5px;
+                    padding: 0 20px;
+                    border-radius: 0 12px 12px 0;
+                    white-space: nowrap;
+                    pointer-events: none;
+                    user-select: none;
+                    /* Hidden and pushed off to the right */
+                    opacity: 0;
+                    transform: translateX(100%);
+                    /* Transition ready — fires the moment hover state changes */
+                    transition: opacity 0.28s ease, transform 0.28s ease;
                 }
 
-                /* CURSOR DEVICES: hide pill, enable hover slide-in label */
+                /* ══════════════════════════════════════════════════
+                   CURSOR DEVICES ONLY
+                   (hover:hover) = device can hover
+                   (pointer:fine) = device has a precise pointer
+                   Together: true for mouse/trackpad, false for finger
+                ══════════════════════════════════════════════════ */
                 @media (hover: hover) and (pointer: fine) {
+                    /* Suppress touch pill — cursor users use hover instead */
                     .send-email-touch {
                         display: none;
                     }
-                    .send-email-hover {
-                        display: flex;
-                        align-items: center;
-                        position: absolute;
-                        right: 0;
-                        top: 0;
-                        bottom: 0;
-                        background: #000;
-                        color: #fff;
-                        font-size: 11px;
-                        font-weight: 700;
-                        padding: 0 18px;
-                        border-radius: 0 12px 12px 0;
-                        opacity: 0;
-                        transform: translateX(10px);
-                        transition: opacity 0.3s ease, transform 0.3s ease;
-                        pointer-events: none;
-                        white-space: nowrap;
-                        user-select: none;
-                    }
+
+                    /* Make row look clickable */
                     .email-row {
-                        transition: border-color 0.3s ease;
                         cursor: pointer;
+                        transition: border-color 0.28s ease;
                     }
+
+                    /* On hover: tighten border + slide label in */
                     .email-row:hover {
                         border-color: #000;
                     }
@@ -349,9 +387,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     }
                 }
 
-                /* ─────────────────────────────────────────────────
-                   RESPONSIVE — mobile / narrow viewports
-                ───────────────────────────────────────────────── */
+                /* ══════════════════════════════════════════════════
+                   RESPONSIVE — mobile / narrow viewport
+                ══════════════════════════════════════════════════ */
                 @media (max-width: 1024px) {
                     .profile-hero {
                         display: grid !important;
