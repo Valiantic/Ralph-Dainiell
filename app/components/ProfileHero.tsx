@@ -17,51 +17,22 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredGithub, setHoveredGithub] = useState(false);
     const [hoveredCvButton, setHoveredCvButton] = useState(false);
 
-  
     const [hasCursor, setHasCursor] = useState(false);
     const [emailHovered, setEmailHovered] = useState(false);
 
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
 
-    
         setHasCursor(mq.matches);
 
-        
         const handler = (e: MediaQueryListEvent) => {
             setHasCursor(e.matches);
-            if (!e.matches) setEmailHovered(false); 
+            if (!e.matches) setEmailHovered(false);
         };
 
         mq.addEventListener('change', handler);
         return () => mq.removeEventListener('change', handler);
     }, []);
-
-
-
-    // The slide-in "SEND EMAIL" label for cursor devices
-    const hoverLabelStyle: React.CSSProperties = {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        bottom: 0,
-        background: '#000',
-        color: '#fff',
-        fontSize: '11px',
-        fontWeight: 700,
-        letterSpacing: '0.5px',
-        padding: '0 20px',
-        borderRadius: '0 12px 12px 0',
-        whiteSpace: 'nowrap',
-        pointerEvents: 'none',
-        userSelect: 'none',
-        opacity: emailHovered ? 1 : 0,
-        transform: emailHovered ? 'translateX(0)' : 'translateX(100%)',
-        transition: 'opacity 0.28s ease, transform 0.28s ease',
-    };
 
     // The always-visible pill badge for touch/no-cursor devices
     const touchPillStyle: React.CSSProperties = {
@@ -76,6 +47,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         padding: '4px 10px',
         whiteSpace: 'nowrap',
         userSelect: 'none',
+        textDecoration: 'none',
     };
 
     return (
@@ -188,8 +160,17 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     }}
                 >
 
-                    <Link
-                        href={`mailto:${data.contact.email}`}
+                    {/*
+                     * EMAIL ROW
+                     * ─────────────────────────────────────────────────────────────
+                     * The outer element is a plain <div> — NOT a link.
+                     * On cursor devices: a full-overlay <a> fades in on hover and
+                     *   is the ONLY clickable target.
+                     * On touch devices: an always-visible pill <a> on the right is
+                     *   the ONLY clickable target.
+                     * ─────────────────────────────────────────────────────────────
+                     */}
+                    <div
                         onMouseEnter={() => { if (hasCursor) setEmailHovered(true); }}
                         onMouseLeave={() => setEmailHovered(false)}
                         style={{
@@ -200,16 +181,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             alignItems: 'center',
                             boxSizing: 'border-box',
                             gap: '10px',
-                            textDecoration: 'none',
-                            color: 'inherit',
                             position: 'relative',
                             overflow: 'hidden',
-                            borderColor: emailHovered ? '#000' : '#000',
-                            transition: 'border-color 0.28s ease',
-                            cursor: hasCursor ? 'pointer' : 'default',
                         }}
                     >
-                        {/* Email icon */}
+                        {/* Email icon — behind the overlay (z-index default 0) */}
                         <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
                             <Image
                                 src="/Images/Icons/email icon.png"
@@ -219,10 +195,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             />
                         </div>
 
-                        
+                        {/* Email address text */}
                         <span style={{
                             fontSize: '13px',
-                
                             fontWeight: 700,
                             wordBreak: 'break-all',
                             flex: 1,
@@ -231,16 +206,45 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             {data.contact.email}
                         </span>
 
-                  
+                        {/* ── TOUCH / NO-CURSOR: pill badge (always visible) ── */}
                         {!hasCursor && (
-                            <span style={touchPillStyle}>SEND EMAIL</span>
+                            <a
+                                href={`mailto:${data.contact.email}`}
+                                style={touchPillStyle}
+                            >
+                                SEND EMAIL
+                            </a>
                         )}
 
-                       
+                        {/* ── CURSOR DEVICES: full-container overlay link ── */}
                         {hasCursor && (
-                            <span style={hoverLabelStyle}>SEND EMAIL</span>
+                            <a
+                                href={`mailto:${data.contact.email}`}
+                                aria-label="Send Email"
+                                style={{
+                                    position: 'absolute',
+                                    inset: 0,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: '#000',
+                                    color: '#fff',
+                                    fontSize: '12px',
+                                    fontWeight: 700,
+                                    letterSpacing: '1px',
+                                    textDecoration: 'none',
+                                    borderRadius: '12px',
+                                    opacity: emailHovered ? 1 : 0,
+                                    pointerEvents: emailHovered ? 'auto' : 'none',
+                                    transition: 'opacity 0.25s ease',
+                                    cursor: 'pointer',
+                                    userSelect: 'none',
+                                }}
+                            >
+                                SEND EMAIL
+                            </a>
                         )}
-                    </Link>
+                    </div>
 
                     {/* Social Media Grid */}
                     <div style={{
