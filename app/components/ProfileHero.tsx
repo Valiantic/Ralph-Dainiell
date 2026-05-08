@@ -92,7 +92,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             gap: '24px',
             alignItems: 'center',
             width: '100%',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
         }}>
             <div className="hero-img-container" style={{
                 width: '180px',
@@ -106,7 +106,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 flexShrink: 0,
                 position: 'relative',
                 overflow: 'hidden',
-                border: '1.5px solid #000'
+                border: '1.5px solid #000',
             }}>
                 {data.profileImage ? (
                     <Image
@@ -144,7 +144,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             background: '#2b6ef2', color: '#fff', padding: '12px 24px',
                             borderRadius: '16px', fontWeight: 700, display: 'flex',
                             alignItems: 'center', gap: '10px', textDecoration: 'none',
-                            fontSize: '15px', height: '52px', boxSizing: 'border-box'
+                            fontSize: '15px', height: '52px', boxSizing: 'border-box',
                         }}
                     >
                         <GoFileZip size={18} color="#fff" />
@@ -165,11 +165,10 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             border: '1.5px solid #000', textDecoration: 'none',
                             background: hoveredGithub ? '#000' : '#fff',
                             color: hoveredGithub ? '#fff' : '#000',
-                            transition: 'all 0.3s ease'
+                            transition: 'all 0.3s ease',
                         }}
                     >
-                        <svg
-                            width="20" height="20" viewBox="0 0 24 24"
+                        <svg width="20" height="20" viewBox="0 0 24 24"
                             fill={hoveredGithub ? '#fff' : '#000'}
                             style={{ transition: 'fill 0.3s ease', flexShrink: 0 }}
                         >
@@ -180,12 +179,17 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
+            {/*
+                KEY FIX: switched from flexbox to CSS grid for the cards wrapper.
+                Grid rows are auto-sized so cells only take up their content height.
+                This completely eliminates the stretch problem that flexbox had.
+            */}
             <div className="hero-cards-wrapper" style={{
-                display: 'flex',
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
                 gap: '16px',
                 flex: '1 1 600px',
-                flexWrap: 'wrap',
-                alignItems: 'flex-start',
+                alignItems: 'start',
             }}>
                 <div
                     className="card no-lift contact-card"
@@ -194,11 +198,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '10px',
-                        flex: '1 1 300px',
                         borderRadius: '24px',
                         border: '1.5px solid #000',
                         boxSizing: 'border-box',
-                        alignSelf: 'flex-start',
                     }}
                 >
                     {hasCursor ? (
@@ -238,7 +240,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     <div style={{
                         border: '1.5px solid #000', borderRadius: '14px', padding: '12px 14px',
                         display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px',
-                        boxSizing: 'border-box'
+                        boxSizing: 'border-box',
                     }}>
                         <Link
                             href={data.socials.facebook || '#'}
@@ -250,7 +252,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'facebook' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'facebook' ? '#1877F2' : '#fff',
-                                transition: 'all 0.3s ease'
+                                transition: 'all 0.3s ease',
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -271,7 +273,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'instagram' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #8134af -20%, #dd2a7b 50%, #f58529 120%)' : '#fff',
-                                transition: 'all 0.3s ease'
+                                transition: 'all 0.3s ease',
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -294,7 +296,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'youtube' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'youtube' ? '#FF0000' : '#fff',
-                                transition: 'all 0.3s ease'
+                                transition: 'all 0.3s ease',
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -315,7 +317,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'linkedin' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'linkedin' ? '#0A66C2' : '#fff',
-                                transition: 'all 0.3s ease'
+                                transition: 'all 0.3s ease',
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -335,17 +337,15 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '14px',
-                        flex: '1 1 240px',
                         borderRadius: '24px',
                         border: '1.5px solid #000',
                         background: '#fff',
                         boxSizing: 'border-box',
-                        alignSelf: 'flex-start',
                     }}
                 >
                     <div style={{
                         display: 'inline-flex', alignItems: 'center', gap: '6px',
-                        background: '#e8f5e9', borderRadius: '20px', padding: '4px 12px', width: 'fit-content'
+                        background: '#e8f5e9', borderRadius: '20px', padding: '4px 12px', width: 'fit-content',
                     }}>
                         <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4caf50', flexShrink: 0 }} />
                         <span style={{ fontSize: '12px', fontWeight: 700, color: '#2e7d32' }}>Available For Opportunities</span>
@@ -371,7 +371,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             color: '#fff', fontWeight: 700, fontSize: '14px',
                             padding: '12px 28px', borderRadius: '12px', textDecoration: 'none',
                             width: 'fit-content', transition: 'all 0.3s ease',
-                            transform: hoveredContact ? 'translateY(-2px)' : 'translateY(0)'
+                            transform: hoveredContact ? 'translateY(-2px)' : 'translateY(0)',
                         }}
                     >
                         WORK WITH ME
@@ -432,14 +432,13 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         grid-row: 3 !important;
                         width: 100% !important;
                         flex: none !important;
+                        display: flex !important;
                         flex-direction: column !important;
                         gap: 12px !important;
                         margin-top: -8px !important;
                     }
                     .contact-card, .opportunities-card {
                         width: 100% !important;
-                        flex: none !important;
-                        align-self: auto !important;
                         padding: 16px !important;
                     }
                 }
