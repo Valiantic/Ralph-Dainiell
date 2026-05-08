@@ -182,11 +182,11 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 onMouseLeave={handleMouseLeave}
             >
                 {/* ── HEADER ── */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '24px' }}>
                     <div style={{ width: '39px', height: '40px', position: 'relative' }}>
                         <Image src="/Images/Icons/certificate icon.png" alt="Certificates" fill style={{ objectFit: 'contain' }} />
                     </div>
-                    <h2 style={{ fontSize: '22px', fontWeight: 700 }}>Certificates</h2>
+                    <h2 style={{ fontSize: '22px', fontWeight: 700, paddingTop: '2px'}}>Certificates</h2>
                 </div>
 
                 {/* ── MOBILE LIST VIEW — completely unchanged ── */}
