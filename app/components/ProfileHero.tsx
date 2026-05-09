@@ -160,16 +160,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     }}
                 >
 
-                    {/*
-                     * EMAIL ROW
-                     * ─────────────────────────────────────────────────────────────
-                     * The outer element is a plain <div> — NOT a link.
-                     * On cursor devices: a full-overlay <a> fades in on hover and
-                     *   is the ONLY clickable target.
-                     * On touch devices: an always-visible pill <a> on the right is
-                     *   the ONLY clickable target.
-                     * ─────────────────────────────────────────────────────────────
-                     */}
+                 
+                     
                     <div
                         onMouseEnter={() => { if (hasCursor) setEmailHovered(true); }}
                         onMouseLeave={() => setEmailHovered(false)}
@@ -183,6 +175,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             gap: '10px',
                             position: 'relative',
                             overflow: 'hidden',
+                            width: '100%',
                         }}
                     >
                         {/* Email icon — behind the overlay (z-index default 0) */}
