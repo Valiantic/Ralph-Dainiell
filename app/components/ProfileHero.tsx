@@ -151,102 +151,115 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             {/* 3. Cards Row */}
             <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'stretch' }}>
 
+                {/*
+                  FIX: Removed "card" className — the global .card style has overflow:hidden
+                  which clips the lift translateY on child buttons. Set overflow:'visible' here
+                  and on the social grid container so lifted elements render above the border.
+                */}
                 <div
-                    className="card no-lift contact-card"
+                    className="no-lift contact-card"
                     style={{
                         padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px',
                         flex: '1 1 300px', borderRadius: '24px', border: '1.5px solid #000',
-                        justifyContent: 'center', boxSizing: 'border-box'
+                        justifyContent: 'center', boxSizing: 'border-box',
+                        overflow: 'visible',
                     }}
                 >
 
-                    {/* Email Button */}
+                    {/*
+                      EMAIL — Two-layer fix:
+                      OUTER div  → lift transform, NO overflow:hidden
+                      INNER div  → overflow:hidden for the slide overlay animation
+                    */}
                     <div
                         onMouseEnter={() => { if (hasCursor) setEmailHovered(true); }}
                         onMouseLeave={() => setEmailHovered(false)}
                         style={{
-                            border: '1.5px solid #000',
                             borderRadius: '14px',
-                            padding: '12px 16px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            boxSizing: 'border-box',
-                            gap: '10px',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            width: '100%',
-                            // ── LIFT HOVER EFFECT (cursor-only) ──
                             transform: hasCursor && emailHovered ? 'translateY(-4px)' : 'translateY(0)',
                             boxShadow: hasCursor && emailHovered ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                             transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         }}
                     >
-                        {/* Email icon — behind the overlay (z-index default 0) */}
-                        <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
-                            <Image
-                                src="/Images/Icons/email icon.png"
-                                alt="Email"
-                                fill
-                                style={{ objectFit: 'contain' }}
-                            />
+                        <div
+                            style={{
+                                border: '1.5px solid #000',
+                                borderRadius: '14px',
+                                padding: '12px 16px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                boxSizing: 'border-box',
+                                gap: '10px',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                width: '100%',
+                            }}
+                        >
+                            {/* Email icon */}
+                            <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
+                                <Image
+                                    src="/Images/Icons/email icon.png"
+                                    alt="Email"
+                                    fill
+                                    style={{ objectFit: 'contain' }}
+                                />
+                            </div>
+
+                            {/* Email address text */}
+                            <span style={{
+                                fontSize: '13px',
+                                fontWeight: 700,
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                flex: 1,
+                                minWidth: 0,
+                            }}>
+                                {data.contact.email}
+                            </span>
+
+                            {!hasCursor && (
+                                <a href={`mailto:${data.contact.email}`} style={touchPillStyle}>
+                                    SEND EMAIL
+                                </a>
+                            )}
+
+                            {hasCursor && (
+                                <a
+                                    href={`mailto:${data.contact.email}`}
+                                    aria-label="Send Email"
+                                    style={{
+                                        position: 'absolute',
+                                        inset: 0,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        background: '#000',
+                                        color: '#fff',
+                                        fontSize: '12px',
+                                        fontWeight: 700,
+                                        letterSpacing: '1px',
+                                        textDecoration: 'none',
+                                        borderRadius: '12px',
+                                        transform: emailHovered ? 'translateX(0%)' : 'translateX(-100%)',
+                                        pointerEvents: emailHovered ? 'auto' : 'none',
+                                        transition: 'transform 0.35s ease',
+                                        cursor: 'pointer',
+                                        userSelect: 'none',
+                                    }}
+                                >
+                                    SEND EMAIL
+                                </a>
+                            )}
                         </div>
-
-                        {/* Email address text */}
-                        <span style={{
-                            fontSize: '13px',
-                            fontWeight: 700,
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            flex: 1,
-                            minWidth: 0,
-                        }}>
-                            {data.contact.email}
-                        </span>
-
-                        {!hasCursor && (
-                            <a
-                                href={`mailto:${data.contact.email}`}
-                                style={touchPillStyle}
-                            >
-                                SEND EMAIL
-                            </a>
-                        )}
-
-                        {hasCursor && (
-                            <a
-                                href={`mailto:${data.contact.email}`}
-                                aria-label="Send Email"
-                                style={{
-                                    position: 'absolute',
-                                    inset: 0,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    background: '#000',
-                                    color: '#fff',
-                                    fontSize: '12px',
-                                    fontWeight: 700,
-                                    letterSpacing: '1px',
-                                    textDecoration: 'none',
-                                    borderRadius: '12px',
-                                    transform: emailHovered ? 'translateX(0%)' : 'translateX(-100%)',
-                                    pointerEvents: emailHovered ? 'auto' : 'none',
-                                    transition: 'transform 0.35s ease',
-                                    cursor: 'pointer',
-                                    userSelect: 'none',
-                                }}
-                            >
-                                SEND EMAIL
-                            </a>
-                        )}
                     </div>
 
-                    {/* Social Media Grid */}
+                    {/* Social Media Grid — overflow:visible so lifted buttons aren't clipped */}
                     <div style={{
                         border: '1.5px solid #000', borderRadius: '14px', padding: '12px 14px',
                         display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px',
-                        boxSizing: 'border-box'
+                        boxSizing: 'border-box',
+                        overflow: 'visible',
                     }}>
                         {/* Facebook */}
                         <Link
@@ -259,7 +272,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'facebook' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'facebook' ? '#1877F2' : '#fff',
-                                // ── LIFT HOVER EFFECT (cursor-only) ──
                                 transform: hasCursor && hoveredSocial === 'facebook' ? 'translateY(-4px)' : 'translateY(0)',
                                 boxShadow: hasCursor && hoveredSocial === 'facebook' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                                 transition: 'all 0.3s ease'
@@ -284,7 +296,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'instagram' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #f58529, #dd2a7b, #8134af)' : '#fff',
-                                // ── LIFT HOVER EFFECT (cursor-only) ──
                                 transform: hasCursor && hoveredSocial === 'instagram' ? 'translateY(-4px)' : 'translateY(0)',
                                 boxShadow: hasCursor && hoveredSocial === 'instagram' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                                 transition: 'all 0.3s ease'
@@ -311,7 +322,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'youtube' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'youtube' ? '#FF0000' : '#fff',
-                                // ── LIFT HOVER EFFECT (cursor-only) ──
                                 transform: hasCursor && hoveredSocial === 'youtube' ? 'translateY(-4px)' : 'translateY(0)',
                                 boxShadow: hasCursor && hoveredSocial === 'youtube' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                                 transition: 'all 0.3s ease'
@@ -336,7 +346,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'linkedin' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'linkedin' ? '#0A66C2' : '#fff',
-                                // ── LIFT HOVER EFFECT (cursor-only) ──
                                 transform: hasCursor && hoveredSocial === 'linkedin' ? 'translateY(-4px)' : 'translateY(0)',
                                 boxShadow: hasCursor && hoveredSocial === 'linkedin' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                                 transition: 'all 0.3s ease'
