@@ -174,3 +174,35 @@ button {
     display: block;
   }
 }
+
+/* ✅ TOUCH DEVICE ONLY — phones & tablets without mouse */
+/* hover: none = walang hover capability */
+/* pointer: coarse = finger/touch ang ginagamit, hindi mouse */
+@media (hover: none) and (pointer: coarse) {
+  .card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .card.no-lift:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .pill:hover {
+    transform: none !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  .cv-button:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    background: #2b6ef2 !important;
+  }
+
+  .phone-card:hover {
+    transform: none !important;
+    background: #fff !important;
+  }
+}
