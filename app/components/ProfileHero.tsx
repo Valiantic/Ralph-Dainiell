@@ -201,7 +201,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             fontWeight: 700,
                             wordBreak: 'break-all',
                             flex: 1,
-                            minWidth: 0,
+                            minWidth: '100px',
                         }}>
                             {data.contact.email}
                         </span>
