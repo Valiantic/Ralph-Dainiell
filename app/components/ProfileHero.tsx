@@ -200,8 +200,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             fontSize: '13px',
                             fontWeight: 700,
                             wordBreak: 'break-all',
-                            flex: 1,
-                            minWidth: '100px',
+                            width: '150px'
                         }}>
                             {data.contact.email}
                         </span>
@@ -234,9 +233,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     letterSpacing: '1px',
                                     textDecoration: 'none',
                                     borderRadius: '12px',
-                                    opacity: emailHovered ? 1 : 0,
+                                    transform: emailHovered ? 'translateX(0%)' : 'translateX(-100%)',
                                     pointerEvents: emailHovered ? 'auto' : 'none',
-                                    transition: 'opacity 0.25s ease',
+                                    transition: 'transform 0.35s ease', 
                                     cursor: 'pointer',
                                     userSelect: 'none',
                                 }}
