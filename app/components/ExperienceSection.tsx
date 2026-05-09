@@ -7,7 +7,7 @@ interface ExperienceSectionProps {
 
 export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
     return (
-        <div className="card" style={{
+        <div className="card experience-card" style={{
             height: 'var(--bento-height, 650px)',
             display: 'flex',
             flexDirection: 'column',
@@ -97,6 +97,10 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
             </div>
 
             <style jsx global>{`
+                .custom-scrollbar {
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                }
                 .custom-scrollbar::-webkit-scrollbar {
                     width: 4px;
                 }
@@ -112,7 +116,6 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
                     background: #ccc;
                 }
 
-                /* Touch devices */
                 @media (hover: none) and (pointer: coarse) {
                     .custom-scrollbar {
                         scrollbar-width: thin;
@@ -121,13 +124,13 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
                 }
 
                 @media (max-width: 1024px) {
-                    div.card {
+                    .experience-card {
                         height: 480px !important;
                         padding: 20px !important;
                     }
                 }
                 @media (max-width: 480px) {
-                    div.card {
+                    .experience-card {
                         height: 400px !important;
                     }
                 }

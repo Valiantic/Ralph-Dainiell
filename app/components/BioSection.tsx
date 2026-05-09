@@ -1,4 +1,3 @@
-
 interface BioSectionProps {
     bio: string[];
 }
@@ -21,6 +20,10 @@ export const BioSection = ({ bio }: BioSectionProps) => {
                 ))}
             </div>
             <style jsx>{`
+                .no-scrollbar {
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                }
                 .no-scrollbar::-webkit-scrollbar {
                     display: none;
                 }
