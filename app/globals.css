@@ -24,7 +24,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
-  overflow-y: visible;
+  
 }
 
 body {
@@ -165,9 +165,11 @@ button {
   }
 }
 
-html, body {
+html,body {
   overflow-x: hidden;
+  overflow-y: auto; 
   width: 100%;
+  min-height: 100%;
 }
 
 @media (max-width: 1024px) {

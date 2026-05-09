@@ -199,7 +199,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         <span style={{
                             fontSize: '13px',
                             fontWeight: 700,
-                            width: '20px',
                             wordBreak: 'break-all',
                             flex: 1,
                             minWidth: 0,
@@ -207,7 +206,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             {data.contact.email}
                         </span>
 
-                        {/* ── TOUCH / NO-CURSOR: pill badge (always visible) ── */}
+
                         {!hasCursor && (
                             <a
                                 href={`mailto:${data.contact.email}`}
@@ -217,7 +216,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             </a>
                         )}
 
-                        {/* ── CURSOR DEVICES: full-container overlay link ── */}
+                   
                         {hasCursor && (
                             <a
                                 href={`mailto:${data.contact.email}`}
