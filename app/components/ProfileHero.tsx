@@ -163,17 +163,13 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         justifyContent: 'center', boxSizing: 'border-box',
                         overflow: 'visible',
                         // ── LIFT HOVER EFFECT on the whole card (cursor-only) ──
-                        transform: hasCursor && hoveredContactCard ? 'translateY(-6px)' : 'translateY(0)',
+                        transform: hasCursor && hoveredContactCard ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredContactCard ? '0 12px 32px rgba(0,0,0,0.12)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         cursor: 'default',
                     }}
                 >
-                    {/*
-                      EMAIL — Two-layer:
-                      OUTER div  → lift + hover detection (no overflow:hidden)
-                      INNER div  → overflow:hidden for the slide overlay animation
-                    */}
+                   
                     <div
                         onMouseEnter={(e) => { e.stopPropagation(); if (hasCursor) setEmailHovered(true); }}
                         onMouseLeave={(e) => { e.stopPropagation(); setEmailHovered(false); }}
@@ -296,12 +292,13 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             onMouseLeave={() => setHoveredSocial(null)}
                             style={{
                                 display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
-                                border: hoveredSocial === 'instagram' ? '1px solid transparent' : '1px solid #e5e5e5',
+                                border: 'none',
                                 borderRadius: '12px', textDecoration: 'none',
-                                background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #f58529, #dd2a7b, #8134af)' : '#fff',
+                                overflow: 'hidden',
+                                background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #8134af, #dd2a7b, #f58529)' : '#fff',
                                 transform: hasCursor && hoveredSocial === 'instagram' ? 'translateY(-4px)' : 'translateY(0)',
-                                boxShadow: hasCursor && hoveredSocial === 'instagram' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
-                                transition: 'all 0.3s ease'
+                                boxShadow: hoveredSocial === 'instagram' ? hasCursor ? '0 8px 20px rgba(0,0,0,0.12)' : 'none' : 'inset 0 0 0 1px #e5e5e5',
+                                transition: 'transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease'
                             }}
                         >
                             <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
