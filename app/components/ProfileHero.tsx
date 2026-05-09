@@ -94,7 +94,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     <IoLocationOutline size={18} color="#000" />
                     <span style={{ paddingTop: '2px' }}>{data.location}</span>
                 </div>
-                <div style={{ fontSize: '24px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
+                <div style={{ fontSize: '22px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
                     {data.roles.join(' \\ ')}
                 </div>
 
