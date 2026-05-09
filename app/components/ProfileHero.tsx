@@ -160,8 +160,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     }}
                 >
 
-                 
-                     
+                    {/* Email Button */}
                     <div
                         onMouseEnter={() => { if (hasCursor) setEmailHovered(true); }}
                         onMouseLeave={() => setEmailHovered(false)}
@@ -176,6 +175,10 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             position: 'relative',
                             overflow: 'hidden',
                             width: '100%',
+                            // ── LIFT HOVER EFFECT (cursor-only) ──
+                            transform: hasCursor && emailHovered ? 'translateY(-4px)' : 'translateY(0)',
+                            boxShadow: hasCursor && emailHovered ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
+                            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         }}
                     >
                         {/* Email icon — behind the overlay (z-index default 0) */}
@@ -189,18 +192,17 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </div>
 
                         {/* Email address text */}
-                      <span style={{
+                        <span style={{
                             fontSize: '13px',
                             fontWeight: 700,
                             whiteSpace: 'nowrap',
-                            overflow: 'hidden',        
-                            textOverflow: 'ellipsis',  
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
                             flex: 1,
-                            minWidth: 0,               
+                            minWidth: 0,
                         }}>
                             {data.contact.email}
                         </span>
-
 
                         {!hasCursor && (
                             <a
@@ -211,7 +213,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             </a>
                         )}
 
-                   
                         {hasCursor && (
                             <a
                                 href={`mailto:${data.contact.email}`}
@@ -231,7 +232,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     borderRadius: '12px',
                                     transform: emailHovered ? 'translateX(0%)' : 'translateX(-100%)',
                                     pointerEvents: emailHovered ? 'auto' : 'none',
-                                    transition: 'transform 0.35s ease', 
+                                    transition: 'transform 0.35s ease',
                                     cursor: 'pointer',
                                     userSelect: 'none',
                                 }}
@@ -258,6 +259,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'facebook' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'facebook' ? '#1877F2' : '#fff',
+                                // ── LIFT HOVER EFFECT (cursor-only) ──
+                                transform: hasCursor && hoveredSocial === 'facebook' ? 'translateY(-4px)' : 'translateY(0)',
+                                boxShadow: hasCursor && hoveredSocial === 'facebook' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                                 transition: 'all 0.3s ease'
                             }}
                         >
@@ -280,6 +284,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'instagram' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #f58529, #dd2a7b, #8134af)' : '#fff',
+                                // ── LIFT HOVER EFFECT (cursor-only) ──
+                                transform: hasCursor && hoveredSocial === 'instagram' ? 'translateY(-4px)' : 'translateY(0)',
+                                boxShadow: hasCursor && hoveredSocial === 'instagram' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                                 transition: 'all 0.3s ease'
                             }}
                         >
@@ -304,6 +311,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'youtube' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'youtube' ? '#FF0000' : '#fff',
+                                // ── LIFT HOVER EFFECT (cursor-only) ──
+                                transform: hasCursor && hoveredSocial === 'youtube' ? 'translateY(-4px)' : 'translateY(0)',
+                                boxShadow: hasCursor && hoveredSocial === 'youtube' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                                 transition: 'all 0.3s ease'
                             }}
                         >
@@ -326,6 +336,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 border: hoveredSocial === 'linkedin' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
                                 background: hoveredSocial === 'linkedin' ? '#0A66C2' : '#fff',
+                                // ── LIFT HOVER EFFECT (cursor-only) ──
+                                transform: hasCursor && hoveredSocial === 'linkedin' ? 'translateY(-4px)' : 'translateY(0)',
+                                boxShadow: hasCursor && hoveredSocial === 'linkedin' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                                 transition: 'all 0.3s ease'
                             }}
                         >
