@@ -16,6 +16,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredContact, setHoveredContact] = useState(false);
     const [hoveredGithub, setHoveredGithub] = useState(false);
     const [hoveredCvButton, setHoveredCvButton] = useState(false);
+    const [hoveredContactCard, setHoveredContactCard] = useState(false); // ← NEW
 
     const [hasCursor, setHasCursor] = useState(false);
     const [emailHovered, setEmailHovered] = useState(false);
@@ -151,29 +152,31 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             {/* 3. Cards Row */}
             <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'stretch' }}>
 
-                {/*
-                  FIX: Removed "card" className — the global .card style has overflow:hidden
-                  which clips the lift translateY on child buttons. Set overflow:'visible' here
-                  and on the social grid container so lifted elements render above the border.
-                */}
+                {/* LEFT CARD — Contact card with lift on hover (cursor-only) */}
                 <div
                     className="no-lift contact-card"
+                    onMouseEnter={() => { if (hasCursor) setHoveredContactCard(true); }}
+                    onMouseLeave={() => setHoveredContactCard(false)}
                     style={{
                         padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px',
                         flex: '1 1 300px', borderRadius: '24px', border: '1.5px solid #000',
                         justifyContent: 'center', boxSizing: 'border-box',
                         overflow: 'visible',
+                        // ── LIFT HOVER EFFECT on the whole card (cursor-only) ──
+                        transform: hasCursor && hoveredContactCard ? 'translateY(-6px)' : 'translateY(0)',
+                        boxShadow: hasCursor && hoveredContactCard ? '0 12px 32px rgba(0,0,0,0.12)' : 'none',
+                        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                        cursor: 'default',
                     }}
                 >
-
                     {/*
-                      EMAIL — Two-layer fix:
-                      OUTER div  → lift transform, NO overflow:hidden
+                      EMAIL — Two-layer:
+                      OUTER div  → lift + hover detection (no overflow:hidden)
                       INNER div  → overflow:hidden for the slide overlay animation
                     */}
                     <div
-                        onMouseEnter={() => { if (hasCursor) setEmailHovered(true); }}
-                        onMouseLeave={() => setEmailHovered(false)}
+                        onMouseEnter={(e) => { e.stopPropagation(); if (hasCursor) setEmailHovered(true); }}
+                        onMouseLeave={(e) => { e.stopPropagation(); setEmailHovered(false); }}
                         style={{
                             borderRadius: '14px',
                             transform: hasCursor && emailHovered ? 'translateY(-4px)' : 'translateY(0)',
@@ -254,7 +257,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </div>
                     </div>
 
-                    {/* Social Media Grid — overflow:visible so lifted buttons aren't clipped */}
+                    {/* Social Media Grid */}
                     <div style={{
                         border: '1.5px solid #000', borderRadius: '14px', padding: '12px 14px',
                         display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px',
@@ -295,7 +298,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px',
                                 border: hoveredSocial === 'instagram' ? '1px solid transparent' : '1px solid #e5e5e5',
                                 borderRadius: '12px', textDecoration: 'none',
-                                background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #8134af, #dd2a7b, #f58529)': '#fff',
+                                background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #f58529, #dd2a7b, #8134af)' : '#fff',
                                 transform: hasCursor && hoveredSocial === 'instagram' ? 'translateY(-4px)' : 'translateY(0)',
                                 boxShadow: hasCursor && hoveredSocial === 'instagram' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                                 transition: 'all 0.3s ease'
