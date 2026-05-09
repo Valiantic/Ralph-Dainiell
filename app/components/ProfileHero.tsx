@@ -196,11 +196,14 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </div>
 
                         {/* Email address text */}
-                       <span style={{
+                      <span style={{
                             fontSize: '13px',
                             fontWeight: 700,
-                            whiteSpace: 'nowrap', 
-                            width: '160px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',        
+                            textOverflow: 'ellipsis',  
+                            flex: 1,
+                            minWidth: 0,               
                         }}>
                             {data.contact.email}
                         </span>
