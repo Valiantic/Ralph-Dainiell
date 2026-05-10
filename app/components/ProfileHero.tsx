@@ -11,35 +11,62 @@ interface ProfileHeroProps {
     data: PortfolioData;
 }
 
-const SLIDES = [
+type SlideDetail = {
+    label: string;
+    value: string;
+};
+
+type Slide =
+    | { type: 'greeting'; duration: number }
+    | {
+          type: 'content';
+          label: string;
+          title: string;
+          description: string;
+          details?: SlideDetail[];
+          duration: number;
+      };
+
+const SLIDES: Slide[] = [
     {
-        badge: 'GLAD TO HAVE YOU HERE!',
-        title: 'Learning. Building. Improving.',
-        description: 'A focused space for my progress as an aspiring iOS developer.',
+        type: 'greeting',
         duration: 2000,
     },
     {
-        badge: 'Student Developer',
+        type: 'content',
+        label: 'STUDENT DEVELOPER',
         title: 'Building My Skills in Native iOS Development',
-        description: 'Currently learning Swift, SwiftUI, app structure, and clean user interface design through consistent practice and portfolio projects.',
+        description:
+            'Currently learning Swift, SwiftUI, app structure, and clean user interface design through consistent practice and portfolio projects.',
         duration: 4000,
     },
     {
-        badge: 'Career Direction',
+        type: 'content',
+        label: 'CAREER DIRECTION',
         title: 'Open to Voluntary OJT and Learning Opportunities',
-        description: 'Available for voluntary OJT, internships, and beginner-friendly opportunities where I can continue learning and contribute with dedication.',
+        description:
+            'Available for voluntary OJT, internships, and beginner-friendly opportunities where I can continue learning and contribute with dedication.',
         duration: 4000,
     },
     {
-        badge: 'Work Setup',
+        type: 'content',
+        label: 'WORK SETUP',
         title: 'Flexible for Hybrid, Remote, or On-Site Setup',
-        description: 'Open to hybrid, remote, or on-site opportunities, with a stable work setup and the tools needed to support learning and development tasks.',
+        description:
+            'Open to hybrid, remote, or on-site opportunities with a stable work setup, strong Wi-Fi connection, and personal devices ready for learning and development tasks.',
+        details: [
+            { label: 'Device', value: 'Acer Helios 16 / MacBook Neo' },
+            { label: 'Setup', value: 'Hybrid · Remote · On-Site' },
+            { label: 'Connection', value: 'Strong Wi-Fi Signal' },
+        ],
         duration: 4000,
     },
     {
-        badge: 'Learning Journey',
-        title: 'Building My Foundation With Consistency',
-        description: 'Continuously improving through hands-on practice, portfolio development, and focused learning in iOS development.',
+        type: 'content',
+        label: 'LEARNING JOURNEY',
+        title: 'Learning With Consistency and Purpose',
+        description:
+            'Continuously improving through hands-on practice, portfolio development, and focused learning in iOS development.',
         duration: 4000,
     },
 ];
@@ -56,7 +83,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
     const [slideIndex, setSlideIndex] = useState(0);
     const [visible, setVisible] = useState(true);
-    const [displayedSlide, setDisplayedSlide] = useState(SLIDES[0]);
+    const [displayedSlide, setDisplayedSlide] = useState<Slide>(SLIDES[0]);
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
@@ -80,7 +107,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 setSlideIndex(next);
                 setDisplayedSlide(SLIDES[next]);
                 setVisible(true);
-            }, 350);
+            }, 400);
         }, currentSlide.duration);
 
         return () => {
@@ -415,110 +442,152 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     onMouseEnter={() => { if (hasCursor) setHoveredOpportunities(true); }}
                     onMouseLeave={() => setHoveredOpportunities(false)}
                     style={{
-                        padding: '28px 24px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
                         flex: '1 1 240px',
                         borderRadius: '24px',
                         border: '1.5px solid #000',
                         background: '#fff',
                         boxSizing: 'border-box',
-                        minHeight: '200px',
                         overflow: 'hidden',
+                        position: 'relative',
                         transform: hasCursor && hoveredOpportunities ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredOpportunities ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         cursor: 'default',
-                        position: 'relative',
+                        minHeight: '220px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                     }}
                 >
+                    {/* Animated content wrapper */}
                     <div
                         style={{
+                            width: '100%',
+                            height: '100%',
+                            padding: '28px 26px',
+                            boxSizing: 'border-box',
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '12px',
+                            justifyContent: displayedSlide.type === 'greeting' ? 'center' : 'center',
+                            alignItems: displayedSlide.type === 'greeting' ? 'center' : 'flex-start',
+                            gap: '0',
                             opacity: visible ? 1 : 0,
-                            transform: visible ? 'translateY(0px)' : 'translateY(8px)',
-                            transition: 'opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+                            transform: visible ? 'scale(1)' : 'scale(0.97)',
+                            transition: 'opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                             willChange: 'opacity, transform',
                         }}
                     >
-                        {/* Badge */}
-                        <div style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            background: slideIndex === 0 ? '#e8f5e9' : '#f0f4ff',
-                            borderRadius: '20px',
-                            padding: '4px 12px',
-                            width: 'fit-content',
-                            maxWidth: '100%',
-                        }}>
-                            <div style={{
-                                width: '7px',
-                                height: '7px',
-                                borderRadius: '50%',
-                                background: slideIndex === 0 ? '#4caf50' : '#2b6ef2',
-                                flexShrink: 0,
-                            }} />
-                            <span style={{
-                                fontSize: '11px',
-                                fontWeight: 700,
-                                color: slideIndex === 0 ? '#2e7d32' : '#1a3a8f',
-                                letterSpacing: '0.3px',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
+                        {displayedSlide.type === 'greeting' ? (
+                            /* ── GREETING SLIDE ── */
+                            <p style={{
+                                fontSize: 'clamp(18px, 3vw, 24px)',
+                                fontWeight: 800,
+                                color: '#000',
+                                margin: 0,
+                                letterSpacing: '-0.5px',
+                                textAlign: 'center',
+                                lineHeight: 1.2,
                             }}>
-                                {displayedSlide.badge}
-                            </span>
-                        </div>
+                                GLAD YOU&apos;RE HERE!
+                            </p>
+                        ) : (
+                            /* ── CONTENT SLIDES ── */
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
 
-                        {/* Title */}
-                        <p style={{
-                            fontSize: 'clamp(15px, 2vw, 18px)',
-                            fontWeight: 800,
-                            color: '#000',
-                            margin: 0,
-                            lineHeight: 1.3,
-                            letterSpacing: '-0.3px',
-                        }}>
-                            {displayedSlide.title}
-                        </p>
+                                {/* Label */}
+                                <span style={{
+                                    fontSize: '10px',
+                                    fontWeight: 700,
+                                    letterSpacing: '1.8px',
+                                    color: '#999',
+                                    textTransform: 'uppercase',
+                                    lineHeight: 1,
+                                }}>
+                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).label}
+                                </span>
 
-                        {/* Description */}
-                        <p style={{
-                            fontSize: 'clamp(12px, 1.4vw, 13px)',
-                            color: '#666',
-                            margin: 0,
-                            lineHeight: 1.65,
-                            fontWeight: 400,
-                        }}>
-                            {displayedSlide.description}
-                        </p>
+                                {/* Title */}
+                                <p style={{
+                                    fontSize: 'clamp(14px, 1.8vw, 17px)',
+                                    fontWeight: 800,
+                                    color: '#000',
+                                    margin: 0,
+                                    lineHeight: 1.3,
+                                    letterSpacing: '-0.3px',
+                                }}>
+                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).title}
+                                </p>
 
-                        {/* Progress dots */}
-                        <div style={{
-                            display: 'flex',
-                            gap: '5px',
-                            alignItems: 'center',
-                            marginTop: '4px',
-                        }}>
-                            {SLIDES.map((_, i) => (
-                                <div
-                                    key={i}
-                                    style={{
-                                        width: slideIndex === i ? '18px' : '5px',
-                                        height: '5px',
-                                        borderRadius: '3px',
-                                        background: slideIndex === i ? '#000' : '#d0d0d0',
-                                        transition: 'width 0.35s cubic-bezier(0.4, 0, 0.2, 1), background 0.35s ease',
-                                        flexShrink: 0,
-                                    }}
-                                />
-                            ))}
-                        </div>
+                                {/* Divider */}
+                                <div style={{
+                                    width: '32px',
+                                    height: '1.5px',
+                                    background: '#e0e0e0',
+                                    borderRadius: '2px',
+                                    margin: '2px 0',
+                                    flexShrink: 0,
+                                }} />
+
+                                {/* Description */}
+                                <p style={{
+                                    fontSize: 'clamp(11px, 1.3vw, 12.5px)',
+                                    color: '#666',
+                                    margin: 0,
+                                    lineHeight: 1.65,
+                                    fontWeight: 400,
+                                }}>
+                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).description}
+                                </p>
+
+                                {/* Details (Work Setup slide only) */}
+                                {(displayedSlide as Extract<Slide, { type: 'content' }>).details && (
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '0',
+                                        marginTop: '4px',
+                                        borderTop: '1px solid #f0f0f0',
+                                        paddingTop: '10px',
+                                        width: '100%',
+                                    }}>
+                                        {(displayedSlide as Extract<Slide, { type: 'content' }>).details!.map((detail, i, arr) => (
+                                            <div
+                                                key={detail.label}
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center',
+                                                    padding: '7px 0',
+                                                    borderBottom: i < arr.length - 1 ? '1px solid #f5f5f5' : 'none',
+                                                    gap: '12px',
+                                                }}
+                                            >
+                                                <span style={{
+                                                    fontSize: '10px',
+                                                    fontWeight: 600,
+                                                    color: '#aaa',
+                                                    letterSpacing: '1px',
+                                                    textTransform: 'uppercase',
+                                                    flexShrink: 0,
+                                                    lineHeight: 1,
+                                                }}>
+                                                    {detail.label}
+                                                </span>
+                                                <span style={{
+                                                    fontSize: '11.5px',
+                                                    fontWeight: 600,
+                                                    color: '#111',
+                                                    textAlign: 'right',
+                                                    lineHeight: 1.3,
+                                                }}>
+                                                    {detail.value}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -584,7 +653,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         width: 100% !important;
                         flex: none !important;
                         height: auto !important;
-                        padding: 16px !important;
+                        padding: 0 !important;
                     }
                 }
             `}</style>
