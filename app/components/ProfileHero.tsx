@@ -138,6 +138,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             width: '100%',
             flexWrap: 'wrap'
         }}>
+
             {/* 1. Profile Pic */}
             <div className="hero-img-container" style={{
                 width: '180px',
@@ -228,25 +229,43 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
-            {/* 3. Cards Row */}
-            <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'stretch' }}>
+        
+            <div
+                className="hero-cards-wrapper"
+                style={{
+                    display: 'flex',
+                    gap: '16px',
+                    flex: '1 1 600px',
+                    flexWrap: 'wrap',
+                    alignItems: 'flex-start',  
+                }}
+            >
 
-                {/* LEFT CARD — Contact card */}
+              
                 <div
                     className="no-lift contact-card"
                     onMouseEnter={() => { if (hasCursor) setHoveredContactCard(true); }}
                     onMouseLeave={() => setHoveredContactCard(false)}
                     style={{
-                        padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px',
-                        flex: '1 1 300px', borderRadius: '24px', border: '1.5px solid #000',
-                        justifyContent: 'center', boxSizing: 'border-box',
+                        padding: '16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px',
+                        flex: '1 1 300px',
+                        borderRadius: '24px',
+                        border: '1.5px solid #000',
+                        justifyContent: 'center',
+                        boxSizing: 'border-box',
                         overflow: 'visible',
+                        height: 'auto',              
+                        alignSelf: 'flex-start',     
                         transform: hasCursor && hoveredContactCard ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredContactCard ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         cursor: 'default',
                     }}
                 >
+                    {/* Email row */}
                     <div
                         onMouseEnter={(e) => { e.stopPropagation(); if (hasCursor) setEmailHovered(true); }}
                         onMouseLeave={(e) => { e.stopPropagation(); setEmailHovered(false); }}
@@ -330,8 +349,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
                     {/* Social Media Grid */}
                     <div style={{
-                        border: '1.5px solid #000', borderRadius: '14px', padding: '12px 14px',
-                        display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px',
+                        border: '1.5px solid #000',
+                        borderRadius: '14px',
+                        padding: '12px 14px',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                        gap: '8px',
                         boxSizing: 'border-box',
                         overflow: 'visible',
                     }}>
@@ -435,12 +458,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </Link>
                     </div>
                 </div>
+               
 
-                {/* ─────────────────────────────────────────────────────────────────
-                    RIGHT CARD — Rotating Content Card
-                    FIX: Fixed height + position:absolute on inner content
-                    so the card NEVER resizes when slides change.
-                ───────────────────────────────────────────────────────────────── */}
+               
                 <div
                     className="card opportunities-card"
                     onMouseEnter={() => { if (hasCursor) setHoveredOpportunities(true); }}
@@ -451,25 +471,19 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         border: '1.5px solid #000',
                         background: '#fff',
                         boxSizing: 'border-box',
-                        /* overflow:hidden clips the absolutely-positioned slide content */
                         overflow: 'hidden',
-                        /* Fixed height — card never grows or shrinks between slides */
-                        height: '290px',
-                        /* position:relative is the anchor for the absolute inner div */
+                        height: '290px',           /* desktop fixed height      */
                         position: 'relative',
+                        alignSelf: 'flex-start',   /* never stretches to sibling */
                         transform: hasCursor && hoveredOpportunities ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredOpportunities ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         cursor: 'default',
                     }}
                 >
-                    {/*
-                        Animated content wrapper.
-                        position:absolute + inset:0 makes it fill the fixed-height parent
-                        exactly — no height negotiation, no layout shift.
-                        Only opacity and translateY are animated (no layout properties).
-                    */}
+                    
                     <div
+                        className="slide-inner"
                         style={{
                             position: 'absolute',
                             inset: 0,
@@ -479,17 +493,14 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             flexDirection: 'column',
                             justifyContent: displayedSlide.type === 'greeting' ? 'center' : 'flex-start',
                             alignItems: displayedSlide.type === 'greeting' ? 'center' : 'flex-start',
-                            /* Animate only opacity + translateY — zero layout impact */
                             opacity: visible ? 1 : 0,
-                            transform: visible
-                                ? 'translateY(0px)'
-                                : 'translateY(8px)',
+                            transform: visible ? 'translateY(0px)' : 'translateY(8px)',
                             transition: 'opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1), transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)',
                             willChange: 'opacity, transform',
                         }}
                     >
                         {displayedSlide.type === 'greeting' ? (
-                            /* ── GREETING SLIDE ── */
+                           
                             <p style={{
                                 fontSize: 'clamp(18px, 3vw, 24px)',
                                 fontWeight: 800,
@@ -502,7 +513,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 GLAD YOU&apos;RE HERE!
                             </p>
                         ) : (
-                            /* ── CONTENT SLIDES ── */
+                          
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
 
                                 {/* Label */}
@@ -529,7 +540,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).title}
                                 </p>
 
-                                {/* Divider */}
+                              
                                 <div style={{
                                     width: '32px',
                                     height: '1.5px',
@@ -539,7 +550,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     flexShrink: 0,
                                 }} />
 
-                                {/* Description */}
+                                
                                 <p style={{
                                     fontSize: 'clamp(11px, 1.3vw, 12.5px)',
                                     color: '#666',
@@ -550,7 +561,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).description}
                                 </p>
 
-                                {/* Details (Work Setup slide only) */}
+                             
                                 {(displayedSlide as Extract<Slide, { type: 'content' }>).details && (
                                     <div style={{
                                         display: 'flex',
@@ -601,11 +612,14 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         )}
                     </div>
                 </div>
-                {/* ── END RIGHT CARD ── */}
+                
 
             </div>
+            
 
             <style jsx>{`
+
+             
                 @media (max-width: 1024px) {
                     .profile-hero {
                         display: grid !important;
@@ -653,21 +667,70 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         width: 100% !important;
                         justify-content: center !important;
                     }
+
+                    /* Cards wrapper — stacked column, no cross-axis stretch */
                     .hero-cards-wrapper {
                         grid-column: 1 / -1 !important;
                         grid-row: 3 !important;
                         width: 100% !important;
                         flex: none !important;
                         flex-direction: column !important;
+                        align-items: stretch !important;
                         gap: 12px !important;
                         margin-top: -8px !important;
                     }
-                    .contact-card, .opportunities-card {
+
+                    /* Contact card — natural height, no imposed sizing */
+                    .contact-card {
                         width: 100% !important;
                         flex: none !important;
-                        /* Keep a stable fixed height on mobile too — no auto sizing */
-                        height: 290px !important;
-                        padding: 0 !important;
+                        height: auto !important;
+                        align-self: stretch !important;
+                        padding: 14px !important;
+                    }
+
+                    /* Rotating card — compact stable height for tablet */
+                    .opportunities-card {
+                        width: 100% !important;
+                        flex: none !important;
+                        height: 260px !important;
+                        align-self: stretch !important;
+                    }
+
+                    /* Slide inner — slightly tighter padding on tablet */
+                    .slide-inner {
+                        padding: 22px 22px !important;
+                    }
+                }
+
+           
+                @media (max-width: 430px) {
+                    /* Rotating card — compact height for phones */
+                    .opportunities-card {
+                        height: 248px !important;
+                    }
+
+                    /* Slide inner — tighter padding on small phones */
+                    .slide-inner {
+                        padding: 18px 18px !important;
+                    }
+
+                    /* Contact card — tighter padding */
+                    .contact-card {
+                        padding: 12px !important;
+                    }
+                }
+
+              
+                @media (max-width: 360px) {
+                    .opportunities-card {
+                        height: 240px !important;
+                    }
+                    .slide-inner {
+                        padding: 16px 16px !important;
+                    }
+                    .contact-card {
+                        padding: 10px !important;
                     }
                 }
             `}</style>
