@@ -28,35 +28,30 @@ type Slide =
       };
 
 const SLIDES: Slide[] = [
-    {
-        type: 'greeting',
-        duration: 2000,
-    },
+    { type: 'greeting', duration: 2000 },
     {
         type: 'content',
         label: 'STUDENT DEVELOPER',
         title: 'Building My Skills in Native iOS Development',
-        description:
-            'Learning Swift, SwiftUI, app structure, and clean UI design through consistent practice and portfolio projects.',
+        description: 'Learning Swift, SwiftUI, app structure, and clean UI design through consistent practice and portfolio projects.',
         duration: 4000,
     },
     {
         type: 'content',
         label: 'CAREER DIRECTION',
         title: 'Open to Voluntary OJT and Learning Opportunities',
-        description:
-            'Available for voluntary OJT, internships, and beginner-friendly opportunities where I can learn, contribute, and grow.',
+        description: 'Available for voluntary OJT, internships, and beginner-friendly opportunities where I can learn, contribute, and grow.',
         duration: 4000,
     },
     {
         type: 'content',
         label: 'WORK SETUP',
         title: 'Flexible for Hybrid, Remote, or On-Site Setup',
-        description:
-            'Ready for hybrid, remote, or on-site opportunities with a stable setup, strong Wi-Fi, and personal devices for learning and development tasks.',
+        description: 'Ready for hybrid, remote, or on-site opportunities with a stable setup, strong Wi-Fi, and personal devices for learning and development tasks.',
         details: [
             { label: 'Device', value: 'Acer Helios 16 / MacBook Neo' },
-            { label: 'Setup', value: 'Hybrid · Remote · On-Site' },
+            { label: 'Setup', value: 'Hybrid / Remote / On-Site' },
+            { label: 'Connection', value: 'Strong Wi-Fi Signal' },
         ],
         duration: 4000,
     },
@@ -64,8 +59,7 @@ const SLIDES: Slide[] = [
         type: 'content',
         label: 'LEARNING JOURNEY',
         title: 'Learning With Consistency and Purpose',
-        description:
-            'Continuously improving through hands-on practice, portfolio development, and focused learning in iOS development.',
+        description: 'Continuously improving through hands-on practice, portfolio development, and focused learning in iOS development.',
         duration: 4000,
     },
 ];
@@ -84,10 +78,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [visible, setVisible] = useState(true);
     const [displayedSlide, setDisplayedSlide] = useState<Slide>(SLIDES[0]);
     const [isPaused, setIsPaused] = useState(false);
+    const [cursorPos, setCursorPos] = useState({ x: 50, y: 50 });
 
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const elapsedRef = useRef(0);
     const startTimeRef = useRef<number>(0);
+    const cardRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -119,13 +115,22 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 setSlideIndex(next);
                 setDisplayedSlide(SLIDES[next]);
                 setVisible(true);
-            }, 380);
+            }, 440);
         }, remaining > 0 ? remaining : 0);
 
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
     }, [slideIndex, isPaused]);
+
+    const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        setCursorPos({
+            x: ((e.clientX - rect.left) / rect.width) * 100,
+            y: ((e.clientY - rect.top) / rect.height) * 100,
+        });
+    };
 
     const touchPillStyle: React.CSSProperties = {
         display: 'inline-flex',
@@ -242,16 +247,15 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             <div
                 className="hero-cards-wrapper"
                 style={{
-                    display: 'flex',
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
                     gap: '16px',
                     flex: '1 1 600px',
-                    flexWrap: 'wrap',
-                    alignItems: 'stretch',
                 }}
             >
 
                 <div
-                    className="no-lift contact-card pair-card"
+                    className="no-lift contact-card"
                     onMouseEnter={() => { if (hasCursor) setHoveredContactCard(true); }}
                     onMouseLeave={() => setHoveredContactCard(false)}
                     style={{
@@ -259,8 +263,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '10px',
-                        flex: '1 1 0',
-                        minWidth: '260px',
                         borderRadius: '24px',
                         border: '1.5px solid #000',
                         background: '#fff',
@@ -424,7 +426,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
 
                 <div
-                    className="card opportunities-card pair-card"
+                    ref={cardRef}
+                    className="card opportunities-card"
                     onMouseEnter={() => {
                         if (hasCursor) {
                             setHoveredOpportunities(true);
@@ -435,9 +438,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         setHoveredOpportunities(false);
                         setIsPaused(false);
                     }}
+                    onMouseMove={handleCardMouseMove}
                     style={{
-                        flex: '1 1 0',
-                        minWidth: '260px',
                         borderRadius: '24px',
                         border: '1.5px solid #000',
                         background: '#fff',
@@ -451,30 +453,47 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     }}
                 >
                     <div
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            pointerEvents: 'none',
+                            zIndex: 2,
+                            borderRadius: '22px',
+                            opacity: hasCursor && hoveredOpportunities ? 1 : 0,
+                            background: `radial-gradient(ellipse 160px 120px at ${cursorPos.x}% ${cursorPos.y}%, rgba(0,0,0,0.04) 0%, transparent 75%)`,
+                            transition: 'opacity 0.55s ease',
+                        }}
+                    />
+
+                    <div
                         className="slide-inner"
                         style={{
                             position: 'absolute',
                             inset: 0,
-                            padding: '22px 22px',
+                            padding: '26px',
                             boxSizing: 'border-box',
                             display: 'flex',
                             flexDirection: 'column',
-                            justifyContent: displayedSlide.type === 'greeting' ? 'center' : 'flex-start',
-                            alignItems: displayedSlide.type === 'greeting' ? 'center' : 'flex-start',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            zIndex: 1,
                             opacity: visible ? 1 : 0,
-                            transform: visible ? 'translateY(0px)' : 'translateY(7px)',
-                            transition: 'opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1), transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)',
-                            willChange: 'opacity, transform',
+                            transform: visible
+                                ? 'translateY(0px) scale(1)'
+                                : 'translateY(11px) scale(0.965)',
+                            filter: visible ? 'blur(0px)' : 'blur(2.5px)',
+                            transition: 'opacity 0.44s cubic-bezier(0.4, 0, 0.2, 1), transform 0.44s cubic-bezier(0.4, 0, 0.2, 1), filter 0.44s cubic-bezier(0.4, 0, 0.2, 1)',
+                            willChange: 'opacity, transform, filter',
                         }}
                     >
                         {displayedSlide.type === 'greeting' ? (
 
                             <p style={{
-                                fontSize: 'clamp(18px, 2.8vw, 23px)',
+                                fontSize: 'clamp(20px, 2.6vw, 27px)',
                                 fontWeight: 800,
                                 color: '#000',
                                 margin: 0,
-                                letterSpacing: '-0.5px',
+                                letterSpacing: '-0.6px',
                                 textAlign: 'center',
                                 lineHeight: 1.2,
                             }}>
@@ -483,13 +502,17 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
                         ) : (
 
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '9px', width: '100%' }}>
-
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '11px',
+                                width: '100%',
+                            }}>
                                 <span style={{
-                                    fontSize: '9.5px',
+                                    fontSize: '9px',
                                     fontWeight: 700,
-                                    letterSpacing: '1.8px',
-                                    color: '#999',
+                                    letterSpacing: '2.2px',
+                                    color: '#b0b0b0',
                                     textTransform: 'uppercase',
                                     lineHeight: 1,
                                 }}>
@@ -497,27 +520,29 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 </span>
 
                                 <p style={{
-                                    fontSize: 'clamp(13px, 1.6vw, 16px)',
+                                    fontSize: 'clamp(14px, 1.55vw, 17px)',
                                     fontWeight: 800,
                                     color: '#000',
                                     margin: 0,
                                     lineHeight: 1.3,
-                                    letterSpacing: '-0.3px',
+                                    letterSpacing: '-0.45px',
                                 }}>
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).title}
                                 </p>
 
                                 <div style={{
-                                    width: '28px', height: '1.5px',
-                                    background: '#e0e0e0', borderRadius: '2px',
-                                    margin: '1px 0', flexShrink: 0,
+                                    width: '30px',
+                                    height: '1.5px',
+                                    background: '#e2e2e2',
+                                    borderRadius: '2px',
+                                    flexShrink: 0,
                                 }} />
 
                                 <p style={{
-                                    fontSize: 'clamp(10.5px, 1.2vw, 12px)',
-                                    color: '#666',
+                                    fontSize: 'clamp(11px, 1.05vw, 12.5px)',
+                                    color: '#787878',
                                     margin: 0,
-                                    lineHeight: 1.6,
+                                    lineHeight: 1.68,
                                     fontWeight: 400,
                                 }}>
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).description}
@@ -529,7 +554,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                         flexDirection: 'column',
                                         marginTop: '2px',
                                         borderTop: '1px solid #efefef',
-                                        paddingTop: '8px',
+                                        paddingTop: '10px',
                                         width: '100%',
                                         gap: 0,
                                     }}>
@@ -538,20 +563,27 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                                 display: 'flex',
                                                 justifyContent: 'space-between',
                                                 alignItems: 'center',
-                                                padding: '6px 0',
-                                                borderBottom: i < arr.length - 1 ? '1px solid #f5f5f5' : 'none',
+                                                padding: '5px 0',
+                                                borderBottom: i < arr.length - 1 ? '1px solid #f6f6f6' : 'none',
                                                 gap: '10px',
                                             }}>
                                                 <span style={{
-                                                    fontSize: '9.5px', fontWeight: 600,
-                                                    color: '#aaa', letterSpacing: '0.9px',
-                                                    textTransform: 'uppercase', flexShrink: 0, lineHeight: 1,
+                                                    fontSize: '9px',
+                                                    fontWeight: 600,
+                                                    color: '#c0c0c0',
+                                                    letterSpacing: '1px',
+                                                    textTransform: 'uppercase',
+                                                    flexShrink: 0,
+                                                    lineHeight: 1,
                                                 }}>
                                                     {detail.label}
                                                 </span>
                                                 <span style={{
-                                                    fontSize: '11px', fontWeight: 600,
-                                                    color: '#111', textAlign: 'right', lineHeight: 1.3,
+                                                    fontSize: '11px',
+                                                    fontWeight: 600,
+                                                    color: '#111',
+                                                    textAlign: 'right',
+                                                    lineHeight: 1.3,
                                                 }}>
                                                     {detail.value}
                                                 </span>
@@ -560,6 +592,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     </div>
                                 )}
                             </div>
+
                         )}
                     </div>
                 </div>
@@ -615,35 +648,27 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         width: 100% !important;
                         justify-content: center !important;
                     }
-
                     .hero-cards-wrapper {
                         grid-column: 1 / -1 !important;
                         grid-row: 3 !important;
                         width: 100% !important;
                         flex: none !important;
-                        flex-direction: column !important;
-                        align-items: stretch !important;
+                        display: grid !important;
+                        grid-template-columns: 1fr !important;
                         gap: 12px !important;
                         margin-top: -8px !important;
                     }
-
                     .contact-card {
                         width: 100% !important;
-                        flex: none !important;
                         height: auto !important;
-                        min-width: 0 !important;
                         padding: 14px !important;
                     }
-
                     .opportunities-card {
                         width: 100% !important;
-                        flex: none !important;
-                        min-width: 0 !important;
                         height: 230px !important;
                     }
-
                     .slide-inner {
-                        padding: 20px 20px !important;
+                        padding: 20px !important;
                     }
                 }
 
@@ -655,7 +680,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         padding: 12px !important;
                     }
                     .slide-inner {
-                        padding: 18px 18px !important;
+                        padding: 18px !important;
                     }
                 }
 
@@ -667,9 +692,10 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         padding: 10px !important;
                     }
                     .slide-inner {
-                        padding: 16px 16px !important;
+                        padding: 16px !important;
                     }
                 }
+
             `}</style>
         </section>
     );
