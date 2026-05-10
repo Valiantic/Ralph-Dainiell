@@ -16,7 +16,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredContact, setHoveredContact] = useState(false);
     const [hoveredGithub, setHoveredGithub] = useState(false);
     const [hoveredCvButton, setHoveredCvButton] = useState(false);
-    const [hoveredContactCard, setHoveredContactCard] = useState(false); // ← NEW
+    const [hoveredContactCard, setHoveredContactCard] = useState(false);
+    const [hoveredOpportunities, setHoveredOpportunities] = useState(false);
 
     const [hasCursor, setHasCursor] = useState(false);
     const [emailHovered, setEmailHovered] = useState(false);
@@ -35,7 +36,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         return () => mq.removeEventListener('change', handler);
     }, []);
 
-    // The always-visible pill badge for touch/no-cursor devices
+   
     const touchPillStyle: React.CSSProperties = {
         display: 'inline-flex',
         alignItems: 'center',
@@ -162,9 +163,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         flex: '1 1 300px', borderRadius: '24px', border: '1.5px solid #000',
                         justifyContent: 'center', boxSizing: 'border-box',
                         overflow: 'visible',
-                        // ── LIFT HOVER EFFECT on the whole card (cursor-only) ──
                         transform: hasCursor && hoveredContactCard ? 'translateY(-2px)' : 'translateY(0)',
-                        boxShadow: hasCursor && hoveredContactCard ? '0 12px 32px rgba(0,0,0,0.12)' : 'none',
+                        boxShadow: hasCursor && hoveredContactCard ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         cursor: 'default',
                     }}
@@ -364,10 +364,16 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 {/* RIGHT CARD — Opportunities */}
                 <div
                     className="card opportunities-card"
+                    onMouseEnter={() => { if (hasCursor) setHoveredOpportunities(true); }}
+                    onMouseLeave={() => setHoveredOpportunities(false)}
                     style={{
                         padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px',
                         flex: '1 1 240px', borderRadius: '24px', border: '1.5px solid #000',
-                        background: '#fff', justifyContent: 'center', boxSizing: 'border-box'
+                        background: '#fff', justifyContent: 'center', boxSizing: 'border-box',
+                        transform: hasCursor && hoveredOpportunities ? 'translateY(-2px)' : 'translateY(0)',
+                        boxShadow: hasCursor && hoveredOpportunities ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
+                        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                        cursor: 'default',
                     }}
                 >
                     <div style={{
@@ -407,7 +413,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             </div>
 
             <style jsx>{`
-                /* ── Responsive layout ── */
                 @media (max-width: 1024px) {
                     .profile-hero {
                         display: grid !important;
