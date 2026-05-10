@@ -37,7 +37,7 @@ const SLIDES: Slide[] = [
         label: 'STUDENT DEVELOPER',
         title: 'Building My Skills in Native iOS Development',
         description:
-            'Currently learning Swift, SwiftUI, app structure, and clean user interface design through consistent practice and portfolio projects.',
+            'Learning Swift, SwiftUI, app structure, and clean UI design through consistent practice and portfolio projects.',
         duration: 4000,
     },
     {
@@ -45,7 +45,7 @@ const SLIDES: Slide[] = [
         label: 'CAREER DIRECTION',
         title: 'Open to Voluntary OJT and Learning Opportunities',
         description:
-            'Available for voluntary OJT, internships, and beginner-friendly opportunities where I can continue learning and contribute with dedication.',
+            'Available for voluntary OJT, internships, and beginner-friendly opportunities where I can learn, contribute, and grow.',
         duration: 4000,
     },
     {
@@ -53,7 +53,7 @@ const SLIDES: Slide[] = [
         label: 'WORK SETUP',
         title: 'Flexible for Hybrid, Remote, or On-Site Setup',
         description:
-            'Open to hybrid, remote, or on-site opportunities with a stable work setup, strong Wi-Fi connection, and personal devices ready for learning and development tasks.',
+            'Ready for hybrid, remote, or on-site opportunities with a stable setup, strong Wi-Fi, and personal devices for learning and development tasks.',
         details: [
             { label: 'Device', value: 'Acer Helios 16 / MacBook Neo' },
             { label: 'Setup', value: 'Hybrid · Remote · On-Site' },
@@ -436,7 +436,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </div>
                 </div>
 
-                {/* RIGHT CARD — Rotating Content Card */}
+                {/* ─────────────────────────────────────────────────────────────────
+                    RIGHT CARD — Rotating Content Card
+                    FIX: Fixed height + position:absolute on inner content
+                    so the card NEVER resizes when slides change.
+                ───────────────────────────────────────────────────────────────── */}
                 <div
                     className="card opportunities-card"
                     onMouseEnter={() => { if (hasCursor) setHoveredOpportunities(true); }}
@@ -447,33 +451,40 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         border: '1.5px solid #000',
                         background: '#fff',
                         boxSizing: 'border-box',
+                        /* overflow:hidden clips the absolutely-positioned slide content */
                         overflow: 'hidden',
+                        /* Fixed height — card never grows or shrinks between slides */
+                        height: '290px',
+                        /* position:relative is the anchor for the absolute inner div */
                         position: 'relative',
                         transform: hasCursor && hoveredOpportunities ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredOpportunities ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         cursor: 'default',
-                        minHeight: '220px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
                     }}
                 >
-                    {/* Animated content wrapper */}
+                    {/*
+                        Animated content wrapper.
+                        position:absolute + inset:0 makes it fill the fixed-height parent
+                        exactly — no height negotiation, no layout shift.
+                        Only opacity and translateY are animated (no layout properties).
+                    */}
                     <div
                         style={{
-                            width: '100%',
-                            height: '100%',
+                            position: 'absolute',
+                            inset: 0,
                             padding: '28px 26px',
                             boxSizing: 'border-box',
                             display: 'flex',
                             flexDirection: 'column',
-                            justifyContent: displayedSlide.type === 'greeting' ? 'center' : 'center',
+                            justifyContent: displayedSlide.type === 'greeting' ? 'center' : 'flex-start',
                             alignItems: displayedSlide.type === 'greeting' ? 'center' : 'flex-start',
-                            gap: '0',
+                            /* Animate only opacity + translateY — zero layout impact */
                             opacity: visible ? 1 : 0,
-                            transform: visible ? 'scale(1)' : 'scale(0.97)',
-                            transition: 'opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                            transform: visible
+                                ? 'translateY(0px)'
+                                : 'translateY(8px)',
+                            transition: 'opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1), transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)',
                             willChange: 'opacity, transform',
                         }}
                     >
@@ -590,6 +601,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         )}
                     </div>
                 </div>
+                {/* ── END RIGHT CARD ── */}
+
             </div>
 
             <style jsx>{`
@@ -652,7 +665,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     .contact-card, .opportunities-card {
                         width: 100% !important;
                         flex: none !important;
-                        height: auto !important;
+                        /* Keep a stable fixed height on mobile too — no auto sizing */
+                        height: 290px !important;
                         padding: 0 !important;
                     }
                 }
