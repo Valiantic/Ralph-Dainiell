@@ -30,7 +30,7 @@ type Slide =
 const SLIDES: Slide[] = [
     {
         type: 'greeting',
-        duration: 2000,
+        duration: 4000,
     },
     {
         type: 'content',
@@ -38,7 +38,7 @@ const SLIDES: Slide[] = [
         title: 'Building My Skills in Native iOS Development',
         description:
             'Learning Swift, SwiftUI, app structure, and clean UI design through consistent practice and portfolio projects.',
-        duration: 4000,
+        duration: 5000,
     },
     {
         type: 'content',
@@ -46,7 +46,7 @@ const SLIDES: Slide[] = [
         title: 'Open to Voluntary OJT and Learning Opportunities',
         description:
             'Available for voluntary OJT, internships, and beginner-friendly opportunities where I can learn, contribute, and grow.',
-        duration: 4000,
+        duration: 5000,
     },
     {
         type: 'content',
@@ -58,7 +58,7 @@ const SLIDES: Slide[] = [
             { label: 'Device', value: 'Acer Helios 16 / MacBook Neo' },
             { label: 'Setup', value: 'Hybrid · Remote · On-Site' },
         ],
-        duration: 4000,
+        duration: 5000,
     },
     {
         type: 'content',
@@ -66,7 +66,7 @@ const SLIDES: Slide[] = [
         title: 'Learning With Consistency and Purpose',
         description:
             'Continuously improving through hands-on practice, portfolio development, and focused learning in iOS development.',
-        duration: 4000,
+        duration: 5000,
     },
 ];
 
