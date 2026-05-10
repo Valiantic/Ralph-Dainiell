@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { PortfolioData } from '../types/portfolio';
 import { GoFileZip } from 'react-icons/go';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -11,9 +11,41 @@ interface ProfileHeroProps {
     data: PortfolioData;
 }
 
+const SLIDES = [
+    {
+        badge: 'GLAD TO HAVE YOU HERE!',
+        title: 'Learning. Building. Improving.',
+        description: 'A focused space for my progress as an aspiring iOS developer.',
+        duration: 2000,
+    },
+    {
+        badge: 'Student Developer',
+        title: 'Building My Skills in Native iOS Development',
+        description: 'Currently learning Swift, SwiftUI, app structure, and clean user interface design through consistent practice and portfolio projects.',
+        duration: 4000,
+    },
+    {
+        badge: 'Career Direction',
+        title: 'Open to Voluntary OJT and Learning Opportunities',
+        description: 'Available for voluntary OJT, internships, and beginner-friendly opportunities where I can continue learning and contribute with dedication.',
+        duration: 4000,
+    },
+    {
+        badge: 'Work Setup',
+        title: 'Flexible for Hybrid, Remote, or On-Site Setup',
+        description: 'Open to hybrid, remote, or on-site opportunities, with a stable work setup and the tools needed to support learning and development tasks.',
+        duration: 4000,
+    },
+    {
+        badge: 'Learning Journey',
+        title: 'Building My Foundation With Consistency',
+        description: 'Continuously improving through hands-on practice, portfolio development, and focused learning in iOS development.',
+        duration: 4000,
+    },
+];
+
 export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredSocial, setHoveredSocial] = useState<string | null>(null);
-    const [hoveredContact, setHoveredContact] = useState(false);
     const [hoveredGithub, setHoveredGithub] = useState(false);
     const [hoveredCvButton, setHoveredCvButton] = useState(false);
     const [hoveredContactCard, setHoveredContactCard] = useState(false);
@@ -22,21 +54,40 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hasCursor, setHasCursor] = useState(false);
     const [emailHovered, setEmailHovered] = useState(false);
 
+    const [slideIndex, setSlideIndex] = useState(0);
+    const [visible, setVisible] = useState(true);
+    const [displayedSlide, setDisplayedSlide] = useState(SLIDES[0]);
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
-
         setHasCursor(mq.matches);
-
         const handler = (e: MediaQueryListEvent) => {
             setHasCursor(e.matches);
             if (!e.matches) setEmailHovered(false);
         };
-
         mq.addEventListener('change', handler);
         return () => mq.removeEventListener('change', handler);
     }, []);
 
-   
+    useEffect(() => {
+        const currentSlide = SLIDES[slideIndex];
+
+        timerRef.current = setTimeout(() => {
+            setVisible(false);
+            setTimeout(() => {
+                const next = (slideIndex + 1) % SLIDES.length;
+                setSlideIndex(next);
+                setDisplayedSlide(SLIDES[next]);
+                setVisible(true);
+            }, 350);
+        }, currentSlide.duration);
+
+        return () => {
+            if (timerRef.current) clearTimeout(timerRef.current);
+        };
+    }, [slideIndex]);
+
     const touchPillStyle: React.CSSProperties = {
         display: 'inline-flex',
         alignItems: 'center',
@@ -153,7 +204,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             {/* 3. Cards Row */}
             <div className="hero-cards-wrapper" style={{ display: 'flex', gap: '16px', flex: '1 1 600px', flexWrap: 'wrap', alignItems: 'stretch' }}>
 
-                {/* LEFT CARD — Contact card with lift on hover (cursor-only) */}
+                {/* LEFT CARD — Contact card */}
                 <div
                     className="no-lift contact-card"
                     onMouseEnter={() => { if (hasCursor) setHoveredContactCard(true); }}
@@ -169,7 +220,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         cursor: 'default',
                     }}
                 >
-                   
                     <div
                         onMouseEnter={(e) => { e.stopPropagation(); if (hasCursor) setEmailHovered(true); }}
                         onMouseLeave={(e) => { e.stopPropagation(); setEmailHovered(false); }}
@@ -194,7 +244,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 width: '100%',
                             }}
                         >
-                            {/* Email icon */}
                             <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
                                 <Image
                                     src="/Images/Icons/email icon.png"
@@ -204,7 +253,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 />
                             </div>
 
-                            {/* Email address text */}
                             <span style={{
                                 fontSize: '13px',
                                 fontWeight: 700,
@@ -361,54 +409,117 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </div>
                 </div>
 
-                {/* RIGHT CARD — Opportunities */}
+                {/* RIGHT CARD — Rotating Content Card */}
                 <div
                     className="card opportunities-card"
                     onMouseEnter={() => { if (hasCursor) setHoveredOpportunities(true); }}
                     onMouseLeave={() => setHoveredOpportunities(false)}
                     style={{
-                        padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px',
-                        flex: '1 1 240px', borderRadius: '24px', border: '1.5px solid #000',
-                        background: '#fff', justifyContent: 'center', boxSizing: 'border-box',
+                        padding: '28px 24px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        flex: '1 1 240px',
+                        borderRadius: '24px',
+                        border: '1.5px solid #000',
+                        background: '#fff',
+                        boxSizing: 'border-box',
+                        minHeight: '200px',
+                        overflow: 'hidden',
                         transform: hasCursor && hoveredOpportunities ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredOpportunities ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         cursor: 'default',
+                        position: 'relative',
                     }}
                 >
-                    <div style={{
-                        display: 'inline-flex', alignItems: 'center', gap: '6px',
-                        background: '#e8f5e9', borderRadius: '20px', padding: '4px 12px', width: 'fit-content'
-                    }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4caf50', flexShrink: 0 }} />
-                        <span style={{ fontSize: '12px', fontWeight: 700, color: '#2e7d32' }}>Available For Opportunities</span>
-                    </div>
-
-                    <p style={{ fontSize: '18px', fontWeight: 800, color: '#000', margin: 0, lineHeight: 1.3 }}>
-                        Turning Ideas Into iOS Applications
-                    </p>
-
-                    <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.6 }}>
-                        Actively pursuing opportunities in iOS development full-time, internship, or volunteer.
-                    </p>
-
-                    <Link
-                        href={`https://mail.google.com/mail/?view=cm&to=${data.contact.email}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onMouseEnter={() => setHoveredContact(true)}
-                        onMouseLeave={() => setHoveredContact(false)}
+                    <div
                         style={{
-                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                            background: hoveredContact ? '#333' : '#1a1a1a',
-                            color: '#fff', fontWeight: 700, fontSize: '14px',
-                            padding: '12px 28px', borderRadius: '12px', textDecoration: 'none',
-                            width: 'fit-content', transition: 'all 0.3s ease',
-                            transform: hoveredContact ? 'translateY(-2px)' : 'translateY(0)'
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '12px',
+                            opacity: visible ? 1 : 0,
+                            transform: visible ? 'translateY(0px)' : 'translateY(8px)',
+                            transition: 'opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+                            willChange: 'opacity, transform',
                         }}
                     >
-                        WORK WITH ME
-                    </Link>
+                        {/* Badge */}
+                        <div style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            background: slideIndex === 0 ? '#e8f5e9' : '#f0f4ff',
+                            borderRadius: '20px',
+                            padding: '4px 12px',
+                            width: 'fit-content',
+                            maxWidth: '100%',
+                        }}>
+                            <div style={{
+                                width: '7px',
+                                height: '7px',
+                                borderRadius: '50%',
+                                background: slideIndex === 0 ? '#4caf50' : '#2b6ef2',
+                                flexShrink: 0,
+                            }} />
+                            <span style={{
+                                fontSize: '11px',
+                                fontWeight: 700,
+                                color: slideIndex === 0 ? '#2e7d32' : '#1a3a8f',
+                                letterSpacing: '0.3px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                            }}>
+                                {displayedSlide.badge}
+                            </span>
+                        </div>
+
+                        {/* Title */}
+                        <p style={{
+                            fontSize: 'clamp(15px, 2vw, 18px)',
+                            fontWeight: 800,
+                            color: '#000',
+                            margin: 0,
+                            lineHeight: 1.3,
+                            letterSpacing: '-0.3px',
+                        }}>
+                            {displayedSlide.title}
+                        </p>
+
+                        {/* Description */}
+                        <p style={{
+                            fontSize: 'clamp(12px, 1.4vw, 13px)',
+                            color: '#666',
+                            margin: 0,
+                            lineHeight: 1.65,
+                            fontWeight: 400,
+                        }}>
+                            {displayedSlide.description}
+                        </p>
+
+                        {/* Progress dots */}
+                        <div style={{
+                            display: 'flex',
+                            gap: '5px',
+                            alignItems: 'center',
+                            marginTop: '4px',
+                        }}>
+                            {SLIDES.map((_, i) => (
+                                <div
+                                    key={i}
+                                    style={{
+                                        width: slideIndex === i ? '18px' : '5px',
+                                        height: '5px',
+                                        borderRadius: '3px',
+                                        background: slideIndex === i ? '#000' : '#d0d0d0',
+                                        transition: 'width 0.35s cubic-bezier(0.4, 0, 0.2, 1), background 0.35s ease',
+                                        flexShrink: 0,
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
 
