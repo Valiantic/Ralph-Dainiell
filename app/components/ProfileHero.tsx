@@ -38,7 +38,7 @@ const SLIDES: Slide[] = [
         title: 'Building My Skills in Native iOS Development',
         description:
             'Learning Swift, SwiftUI, app structure, and clean UI design through consistent practice and portfolio projects.',
-        duration: 5000,
+        duration: 4000,
     },
     {
         type: 'content',
@@ -46,7 +46,7 @@ const SLIDES: Slide[] = [
         title: 'Open to Voluntary OJT and Learning Opportunities',
         description:
             'Available for voluntary OJT, internships, and beginner-friendly opportunities where I can learn, contribute, and grow.',
-        duration: 5000,
+        duration: 4000,
     },
     {
         type: 'content',
@@ -58,7 +58,7 @@ const SLIDES: Slide[] = [
             { label: 'Device', value: 'Acer Helios 16 / MacBook Neo' },
             { label: 'Setup', value: 'Hybrid · Remote · On-Site' },
         ],
-        duration: 5000,
+        duration: 4000,
     },
     {
         type: 'content',
@@ -66,7 +66,7 @@ const SLIDES: Slide[] = [
         title: 'Learning With Consistency and Purpose',
         description:
             'Continuously improving through hands-on practice, portfolio development, and focused learning in iOS development.',
-        duration: 5000,
+        duration: 4000,
     },
 ];
 
@@ -83,7 +83,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [slideIndex, setSlideIndex] = useState(0);
     const [visible, setVisible] = useState(true);
     const [displayedSlide, setDisplayedSlide] = useState<Slide>(SLIDES[0]);
+    const [isPaused, setIsPaused] = useState(false);
+
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const elapsedRef = useRef(0);
+    const startTimeRef = useRef<number>(0);
 
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -97,20 +101,31 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     }, []);
 
     useEffect(() => {
+        if (isPaused) {
+            if (timerRef.current) clearTimeout(timerRef.current);
+            elapsedRef.current += Date.now() - startTimeRef.current;
+            return;
+        }
+
         const currentSlide = SLIDES[slideIndex];
+        const remaining = currentSlide.duration - elapsedRef.current;
+        startTimeRef.current = Date.now();
+
         timerRef.current = setTimeout(() => {
             setVisible(false);
             setTimeout(() => {
                 const next = (slideIndex + 1) % SLIDES.length;
+                elapsedRef.current = 0;
                 setSlideIndex(next);
                 setDisplayedSlide(SLIDES[next]);
                 setVisible(true);
             }, 380);
-        }, currentSlide.duration);
+        }, remaining > 0 ? remaining : 0);
+
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
-    }, [slideIndex]);
+    }, [slideIndex, isPaused]);
 
     const touchPillStyle: React.CSSProperties = {
         display: 'inline-flex',
@@ -136,7 +151,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             flexWrap: 'wrap',
         }}>
 
-            {/* 1. Profile Photo */}
             <div className="hero-img-container" style={{
                 width: '180px',
                 height: '180px',
@@ -163,7 +177,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 )}
             </div>
 
-            {/* 2. Bio Info */}
             <div className="hero-info" style={{
                 flex: '1 1 300px',
                 display: 'flex',
@@ -226,7 +239,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
-          
             <div
                 className="hero-cards-wrapper"
                 style={{
@@ -234,11 +246,10 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     gap: '16px',
                     flex: '1 1 600px',
                     flexWrap: 'wrap',
-                    alignItems: 'stretch', 
+                    alignItems: 'stretch',
                 }}
             >
 
-                
                 <div
                     className="no-lift contact-card pair-card"
                     onMouseEnter={() => { if (hasCursor) setHoveredContactCard(true); }}
@@ -248,21 +259,19 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '10px',
-                        flex: '1 1 0',         
+                        flex: '1 1 0',
                         minWidth: '260px',
                         borderRadius: '24px',
                         border: '1.5px solid #000',
                         background: '#fff',
                         boxSizing: 'border-box',
                         overflow: 'visible',
-                        height: 'auto',         
                         transform: hasCursor && hoveredContactCard ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredContactCard ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         cursor: 'default',
                     }}
                 >
-                    {/* Email row */}
                     <div
                         onMouseEnter={(e) => { e.stopPropagation(); if (hasCursor) setEmailHovered(true); }}
                         onMouseLeave={(e) => { e.stopPropagation(); setEmailHovered(false); }}
@@ -322,7 +331,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </div>
                     </div>
 
-                    {/* Social grid */}
                     <div style={{
                         border: '1.5px solid #000',
                         borderRadius: '14px',
@@ -332,7 +340,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         gap: '8px',
                         boxSizing: 'border-box',
                     }}>
-                        {/* Facebook */}
                         <Link href={data.socials.facebook || '#'} target="_blank" rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('facebook')}
                             onMouseLeave={() => setHoveredSocial(null)}
@@ -353,7 +360,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'facebook' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Facebook</span>
                         </Link>
 
-                        {/* Instagram */}
                         <Link href={data.socials.instagram || '#'} target="_blank" rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('instagram')}
                             onMouseLeave={() => setHoveredSocial(null)}
@@ -375,7 +381,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>Instagram</span>
                         </Link>
 
-                        {/* YouTube */}
                         <Link href={data.socials.youtube || '#'} target="_blank" rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('youtube')}
                             onMouseLeave={() => setHoveredSocial(null)}
@@ -396,7 +401,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'youtube' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>YouTube</span>
                         </Link>
 
-                        {/* LinkedIn */}
                         <Link href={data.socials.linkedin || '#'} target="_blank" rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('linkedin')}
                             onMouseLeave={() => setHoveredSocial(null)}
@@ -418,13 +422,21 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         </Link>
                     </div>
                 </div>
-       
+
                 <div
                     className="card opportunities-card pair-card"
-                    onMouseEnter={() => { if (hasCursor) setHoveredOpportunities(true); }}
-                    onMouseLeave={() => setHoveredOpportunities(false)}
+                    onMouseEnter={() => {
+                        if (hasCursor) {
+                            setHoveredOpportunities(true);
+                            setIsPaused(true);
+                        }
+                    }}
+                    onMouseLeave={() => {
+                        setHoveredOpportunities(false);
+                        setIsPaused(false);
+                    }}
                     style={{
-                        flex: '1 1 0',          
+                        flex: '1 1 0',
                         minWidth: '260px',
                         borderRadius: '24px',
                         border: '1.5px solid #000',
@@ -438,8 +450,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         cursor: 'default',
                     }}
                 >
-                
-                  
                     <div
                         className="slide-inner"
                         style={{
@@ -451,7 +461,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             flexDirection: 'column',
                             justifyContent: displayedSlide.type === 'greeting' ? 'center' : 'flex-start',
                             alignItems: displayedSlide.type === 'greeting' ? 'center' : 'flex-start',
-                            /* Apple-style motion: opacity + translateY only */
                             opacity: visible ? 1 : 0,
                             transform: visible ? 'translateY(0px)' : 'translateY(7px)',
                             transition: 'opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1), transform 0.38s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -460,7 +469,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     >
                         {displayedSlide.type === 'greeting' ? (
 
-                          
                             <p style={{
                                 fontSize: 'clamp(18px, 2.8vw, 23px)',
                                 fontWeight: 800,
@@ -470,15 +478,13 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 textAlign: 'center',
                                 lineHeight: 1.2,
                             }}>
-                                GLAD TO HAVE YOU HERE!
+                                GLAD YOU'RE HERE!
                             </p>
 
                         ) : (
 
-                           
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '9px', width: '100%' }}>
 
-                                {/* Label */}
                                 <span style={{
                                     fontSize: '9.5px',
                                     fontWeight: 700,
@@ -490,7 +496,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).label}
                                 </span>
 
-                                {/* Title */}
                                 <p style={{
                                     fontSize: 'clamp(13px, 1.6vw, 16px)',
                                     fontWeight: 800,
@@ -502,14 +507,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).title}
                                 </p>
 
-                                {/* Divider */}
                                 <div style={{
                                     width: '28px', height: '1.5px',
                                     background: '#e0e0e0', borderRadius: '2px',
                                     margin: '1px 0', flexShrink: 0,
                                 }} />
 
-                                {/* Description */}
                                 <p style={{
                                     fontSize: 'clamp(10.5px, 1.2vw, 12px)',
                                     color: '#666',
@@ -520,7 +523,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).description}
                                 </p>
 
-                                {/* Details — Work Setup slide only */}
                                 {(displayedSlide as Extract<Slide, { type: 'content' }>).details && (
                                     <div style={{
                                         display: 'flex',
@@ -561,10 +563,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         )}
                     </div>
                 </div>
-              
 
             </div>
-       
 
             <style jsx>{`
 
@@ -616,7 +616,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         justify-content: center !important;
                     }
 
-                    /* Wrapper: column, stretch makes cards full width */
                     .hero-cards-wrapper {
                         grid-column: 1 / -1 !important;
                         grid-row: 3 !important;
@@ -628,7 +627,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         margin-top: -8px !important;
                     }
 
-                    /* Contact card: full width, auto height (content-driven) */
                     .contact-card {
                         width: 100% !important;
                         flex: none !important;
@@ -637,8 +635,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         padding: 14px !important;
                     }
 
-                    /* Rotating card: full width, fixed height for tablet.
-                       Must be visually close to the contact card height. */
                     .opportunities-card {
                         width: 100% !important;
                         flex: none !important;
@@ -651,7 +647,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     }
                 }
 
-       
                 @media (max-width: 480px) {
                     .opportunities-card {
                         height: 220px !important;
