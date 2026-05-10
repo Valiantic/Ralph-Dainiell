@@ -470,7 +470,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 textAlign: 'center',
                                 lineHeight: 1.2,
                             }}>
-                                GLAD YOU&apos;RE HERE!
+                                GLAD TO HAVE YOU&apos;RE HERE!
                             </p>
 
                         ) : (
