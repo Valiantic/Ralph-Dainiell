@@ -30,7 +30,7 @@ type Slide =
 const SLIDES: Slide[] = [
     {
         type: 'greeting',
-        duration: 4000,
+        duration: 2000,
     },
     {
         type: 'content',
