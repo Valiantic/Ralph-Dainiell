@@ -63,7 +63,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
             id: "1",
             role: "Audit Assistant",
             company: "Tagaytay Highlands",
-            duration: "May 2023 - Aug 2024",
+            duration: "2024",
             description: [
                 "Provided support to the internal audit team by examining financial records, validating transactions, and ensuring adherence to established policies and procedures. Assisted in inventory and cash audits, prepared audit documentation and reports, and contributed to the strengthening of internal control processes."
             ],
@@ -73,7 +73,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
             id: "2",
             role: "Police Clerk",
             company: "NPC Silang Cavite",
-            duration: "Nov 2022 - Jan 2023",
+            duration: "2023",
             description: ["Delivered frontline administrative support for police clearance services by assisting citizens with registration and application processing. Managed payment collection, verified applicant information, and conducted biometric data capture. Ensured accurate record keeping, proper documentation, and efficient processing of police clearance requests in accordance with standard procedures."],
             logo: "/Images/experience/police.png"
         },
