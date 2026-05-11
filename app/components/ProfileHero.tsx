@@ -95,11 +95,15 @@ const styleBlock = `
         .contact-card {
             width: 100% !important;
             height: auto !important;
+            min-height: unset !important;
             padding: 16px !important;
+            align-self: start !important;
         }
         .opportunities-card {
             width: 100% !important;
             height: 200px !important;
+            min-height: unset !important;
+            align-self: start !important;
         }
         .slide-inner {
             padding: 22px !important;
@@ -367,6 +371,14 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
+            {/*
+                DESKTOP FIX:
+                - alignItems changed from 'start' to 'stretch' so the CSS grid makes
+                  both column cells the exact same height (the max of the two).
+                - No alignSelf on either card child so stretch is respected.
+                - Rotating card uses minHeight so it anchors the row height on desktop.
+                - Mobile media queries restore align-items: start and explicit heights.
+            */}
             <div
                 className="hero-cards-wrapper"
                 style={{
@@ -374,9 +386,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     gridTemplateColumns: '1fr 1fr',
                     gap: '16px',
                     flex: '1 1 600px',
-                    alignItems: 'start',
+                    alignItems: 'stretch',
                 }}
             >
+                {/* ── CONTACT CARD ──────────────────────────────────────────────
+                    No alignSelf here — let the grid stretch both cells equally.
+                    overflow: visible is intentional for the email slide animation. */}
                 <div
                     className="no-lift contact-card"
                     onMouseEnter={() => { if (hasCursor) setHoveredContactCard(true); }}
@@ -391,7 +406,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         background: '#fff',
                         boxSizing: 'border-box',
                         overflow: 'visible',
-                        alignSelf: 'start',
                         transform: hasCursor && hoveredContactCard ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredContactCard ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -609,6 +623,10 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </div>
                 </div>
 
+                {/* ── ROTATING CARD ─────────────────────────────────────────────
+                    No alignSelf here — let the grid stretch both cells equally.
+                    minHeight anchors the row so it never collapses below 240px.
+                    height is NOT set; the grid cell height drives both cards. */}
                 <div
                     ref={cardRef}
                     className="card opportunities-card"
@@ -622,8 +640,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         boxSizing: 'border-box',
                         overflow: 'hidden',
                         position: 'relative',
-                        height: '240px',
-                        alignSelf: 'start',
+                        minHeight: '240px',
                         transform: hasCursor && hoveredOpportunities ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredOpportunities
                             ? '0 12px 32px rgba(0,0,0,0.13), inset 0 0 0 0.5px rgba(0,0,0,0.05)'
