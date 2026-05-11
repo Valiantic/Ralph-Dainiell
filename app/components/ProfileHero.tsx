@@ -11,85 +11,27 @@ interface ProfileHeroProps {
     data: PortfolioData;
 }
 
-type SlideDetail = {
-    label: string;
-    value: string;
-};
-
 type Slide =
     | { type: 'greeting'; duration: number }
-    | {
-          type: 'content';
-          label: string;
-          title: string;
-          description: string;
-          details?: SlideDetail[];
-          duration: number;
-      };
+    | { type: 'content'; main: string; secondary: string; duration: number };
 
 const SLIDES: Slide[] = [
     { type: 'greeting', duration: 2000 },
-    {
-        type: 'content',
-        label: 'IOS FOCUS',
-        title: 'Learning to Build Clean iOS Experiences',
-        description: 'Focused on Swift, SwiftUI, and thoughtful mobile interfaces.',
-        duration: 4000,
-    },
-    {
-        type: 'content',
-        label: 'DESIGN + LOGIC',
-        title: 'Where UI Detail Meets App Thinking',
-        description: 'Practicing layouts, interactions, and clean user flows for better mobile experiences.',
-        duration: 4000,
-    },
-    {
-        type: 'content',
-        label: 'BUILDING PHASE',
-        title: 'Improving Through Real Portfolio Work',
-        description: 'Turning practice, feedback, and small projects into stronger development habits.',
-        duration: 4000,
-    },
-    {
-        type: 'content',
-        label: 'CAREER DIRECTION',
-        title: 'Open to Voluntary OJT and Learning Opportunities',
-        description: 'Ready to learn, contribute, and grow through beginner-friendly experience.',
-        duration: 4000,
-    },
-    {
-        type: 'content',
-        label: 'WORK SETUP',
-        title: 'Flexible for Hybrid, Remote, or On-Site Setup',
-        description: 'Prepared with personal devices for learning, development tasks, and portfolio work.',
-        details: [
-            { label: 'Device', value: 'Acer Helios 16 / MacBook Neo' },
-            { label: 'Setup', value: 'Hybrid / Remote / On-Site' },
-            { label: 'Availability', value: 'Voluntary OJT / Internship / Learning Opportunities' },
-        ],
-        duration: 4000,
-    },
+    { type: 'content', main: 'iOS Focus', secondary: 'Clean Interfaces', duration: 4000 },
+    { type: 'content', main: 'Design Motion', secondary: 'Purposeful Flow', duration: 4000 },
+    { type: 'content', main: 'Swift Journey', secondary: 'Building Daily', duration: 4000 },
+    { type: 'content', main: 'Student Developer', secondary: 'Learning Forward', duration: 4000 },
+    { type: 'content', main: 'Open To OJT', secondary: 'Hybrid \u2022 Remote \u2022 On-Site', duration: 4000 },
+    { type: 'content', main: 'Ready Setup', secondary: 'Acer Helios 16 \u2022 MacBook Neo', duration: 4000 },
 ];
 
-const GREETING_WORDS = ['GLAD', "YOU\u2019RE", 'HERE!'];
+const GREETING_WORDS = ['GLAD', 'YOU\u2019RE', 'HERE!'];
 
-const mobileStyles = `
+const styleBlock = `
     @keyframes blurWordReveal {
-        0% {
-            opacity: 0;
-            filter: blur(14px);
-            transform: translateY(-7px);
-        }
-        60% {
-            opacity: 1;
-            filter: blur(1px);
-            transform: translateY(1px);
-        }
-        100% {
-            opacity: 1;
-            filter: blur(0px);
-            transform: translateY(0px);
-        }
+        0%   { opacity: 0; filter: blur(14px); transform: translateY(-7px); }
+        60%  { opacity: 1; filter: blur(1px);  transform: translateY(1px);  }
+        100% { opacity: 1; filter: blur(0px);  transform: translateY(0px);  }
     }
 
     @media (max-width: 1024px) {
@@ -146,8 +88,9 @@ const mobileStyles = `
             flex: none !important;
             display: grid !important;
             grid-template-columns: 1fr !important;
-            gap: 16px !important;
+            gap: 14px !important;
             margin-top: 0 !important;
+            align-items: start !important;
         }
         .contact-card {
             width: 100% !important;
@@ -156,13 +99,10 @@ const mobileStyles = `
         }
         .opportunities-card {
             width: 100% !important;
-            height: auto !important;
-            min-height: 220px !important;
+            height: 200px !important;
         }
         .slide-inner {
             padding: 22px !important;
-            position: relative !important;
-            inset: unset !important;
         }
     }
 
@@ -171,10 +111,10 @@ const mobileStyles = `
             row-gap: 16px !important;
         }
         .hero-cards-wrapper {
-            gap: 14px !important;
+            gap: 12px !important;
         }
         .opportunities-card {
-            min-height: 210px !important;
+            height: 188px !important;
         }
         .contact-card {
             padding: 14px !important;
@@ -186,7 +126,7 @@ const mobileStyles = `
 
     @media (max-width: 375px) {
         .opportunities-card {
-            min-height: 200px !important;
+            height: 178px !important;
         }
         .contact-card {
             padding: 12px !important;
@@ -299,6 +239,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         textDecoration: 'none',
     };
 
+    const contentSlide = displayedSlide as Extract<Slide, { type: 'content' }>;
+
     return (
         <section
             className="profile-hero"
@@ -310,7 +252,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 flexWrap: 'wrap',
             }}
         >
-            <style dangerouslySetInnerHTML={{ __html: mobileStyles }} />
+            <style dangerouslySetInnerHTML={{ __html: styleBlock }} />
 
             <div
                 className="hero-img-container"
@@ -432,6 +374,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     gridTemplateColumns: '1fr 1fr',
                     gap: '16px',
                     flex: '1 1 600px',
+                    alignItems: 'start',
                 }}
             >
                 <div
@@ -448,6 +391,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         background: '#fff',
                         boxSizing: 'border-box',
                         overflow: 'visible',
+                        alignSelf: 'start',
                         transform: hasCursor && hoveredContactCard ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredContactCard ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -678,10 +622,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         boxSizing: 'border-box',
                         overflow: 'hidden',
                         position: 'relative',
-                        height: '260px',
+                        height: '240px',
+                        alignSelf: 'start',
                         transform: hasCursor && hoveredOpportunities ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredOpportunities
-                            ? '0 12px 32px rgba(0,0,0,0.14), inset 0 0 0 0.5px rgba(0,0,0,0.06)'
+                            ? '0 12px 32px rgba(0,0,0,0.13), inset 0 0 0 0.5px rgba(0,0,0,0.05)'
                             : 'none',
                         transition: 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s cubic-bezier(0.34,1.56,0.64,1)',
                         cursor: 'default',
@@ -696,7 +641,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             height: '100%',
                             pointerEvents: 'none',
                             zIndex: 0,
-                            opacity: hoveredOpportunities ? 0.045 : 0,
+                            opacity: hoveredOpportunities ? 0.04 : 0,
                             transition: 'opacity 0.5s ease',
                         }}
                     >
@@ -716,7 +661,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             zIndex: 1,
                             borderRadius: '22px',
                             opacity: hasCursor && hoveredOpportunities ? 1 : 0,
-                            background: `radial-gradient(ellipse 180px 140px at ${cursorPos.x}% ${cursorPos.y}%, rgba(0,0,0,0.055) 0%, transparent 70%)`,
+                            background: `radial-gradient(ellipse 180px 140px at ${cursorPos.x}% ${cursorPos.y}%, rgba(0,0,0,0.05) 0%, transparent 70%)`,
                             transition: 'opacity 0.4s ease',
                         }}
                     />
@@ -729,7 +674,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             zIndex: 2,
                             borderRadius: '22px',
                             opacity: hasCursor && hoveredOpportunities ? 1 : 0,
-                            background: `radial-gradient(ellipse 90px 70px at ${cursorPos.x}% ${cursorPos.y}%, rgba(255,255,255,0.55) 0%, transparent 65%)`,
+                            background: `radial-gradient(ellipse 90px 70px at ${cursorPos.x}% ${cursorPos.y}%, rgba(255,255,255,0.5) 0%, transparent 65%)`,
                             transition: 'opacity 0.35s ease',
                         }}
                     />
@@ -743,30 +688,21 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             boxSizing: 'border-box',
                             display: 'flex',
                             flexDirection: 'column',
-                            justifyContent:
-                                displayedSlide.type === 'content' &&
-                                (displayedSlide as Extract<Slide, { type: 'content' }>).details
-                                    ? 'flex-start'
-                                    : 'center',
-                            alignItems:
-                                displayedSlide.type === 'content' &&
-                                (displayedSlide as Extract<Slide, { type: 'content' }>).details
-                                    ? 'flex-start'
-                                    : 'center',
+                            justifyContent: 'center',
+                            alignItems: 'center',
                             zIndex: 3,
                             opacity: visible ? 1 : 0,
                             transform: visible
                                 ? contentLifted
-                                    ? 'translateY(-4px) scale(1.012)'
+                                    ? 'translateY(-5px) scale(1.014)'
                                     : 'translateY(0px) scale(1)'
-                                : 'translateY(11px) scale(0.965)',
+                                : 'translateY(10px) scale(0.97)',
                             filter: visible ? 'blur(0px)' : 'blur(2px)',
                             transition: 'opacity 0.44s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1)',
                             willChange: 'opacity, transform, filter',
                         }}
                     >
                         {displayedSlide.type === 'greeting' ? (
-
                             <div
                                 key={greetingAnimKey}
                                 style={{
@@ -796,176 +732,52 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     </span>
                                 ))}
                             </div>
-
-                        ) : (displayedSlide as Extract<Slide, { type: 'content' }>).details ? (
-
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', width: '100%' }}>
-                                <span
-                                    style={{
-                                        fontSize: '8.5px',
-                                        fontWeight: 700,
-                                        letterSpacing: '2px',
-                                        color: '#b0b0b0',
-                                        textTransform: 'uppercase',
-                                        lineHeight: 1,
-                                    }}
-                                >
-                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).label}
-                                </span>
-
-                                <p
-                                    style={{
-                                        fontSize: 'clamp(12px, 1.3vw, 14.5px)',
-                                        fontWeight: 800,
-                                        color: '#000',
-                                        margin: 0,
-                                        lineHeight: 1.25,
-                                        letterSpacing: '-0.35px',
-                                    }}
-                                >
-                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).title}
-                                </p>
-
-                                <div
-                                    style={{
-                                        width: '24px',
-                                        height: '1.5px',
-                                        background: '#e2e2e2',
-                                        borderRadius: '2px',
-                                        flexShrink: 0,
-                                    }}
-                                />
-
-                                <p
-                                    style={{
-                                        fontSize: 'clamp(10px, 0.88vw, 11px)',
-                                        color: '#787878',
-                                        margin: 0,
-                                        lineHeight: 1.55,
-                                        fontWeight: 400,
-                                    }}
-                                >
-                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).description}
-                                </p>
-
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        marginTop: '1px',
-                                        borderTop: '1px solid #efefef',
-                                        paddingTop: '7px',
-                                        width: '100%',
-                                        gap: 0,
-                                    }}
-                                >
-                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).details!.map((detail, i, arr) => (
-                                        <div
-                                            key={detail.label}
-                                            style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'flex-start',
-                                                padding: '4px 0',
-                                                borderBottom: i < arr.length - 1 ? '1px solid #f6f6f6' : 'none',
-                                                gap: '10px',
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    fontSize: '8.5px',
-                                                    fontWeight: 600,
-                                                    color: '#c0c0c0',
-                                                    letterSpacing: '0.9px',
-                                                    textTransform: 'uppercase',
-                                                    flexShrink: 0,
-                                                    lineHeight: 1.4,
-                                                    paddingTop: '1px',
-                                                }}
-                                            >
-                                                {detail.label}
-                                            </span>
-                                            <span
-                                                style={{
-                                                    fontSize: '10px',
-                                                    fontWeight: 600,
-                                                    color: '#111',
-                                                    textAlign: 'right',
-                                                    lineHeight: 1.35,
-                                                }}
-                                            >
-                                                {detail.value}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
                         ) : (
-
                             <div
                                 style={{
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
-                                    gap: '10px',
-                                    width: '100%',
-                                    maxWidth: '260px',
+                                    justifyContent: 'center',
+                                    gap: '12px',
                                     textAlign: 'center',
+                                    width: '100%',
                                 }}
                             >
-                                <span
-                                    style={{
-                                        fontSize: '9px',
-                                        fontWeight: 700,
-                                        letterSpacing: '2.2px',
-                                        color: '#b0b0b0',
-                                        textTransform: 'uppercase',
-                                        lineHeight: 1,
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).label}
-                                </span>
-
                                 <p
                                     style={{
-                                        fontSize: 'clamp(13px, 1.45vw, 16px)',
+                                        fontSize: 'clamp(22px, 2.6vw, 30px)',
                                         fontWeight: 800,
                                         color: '#000',
                                         margin: 0,
-                                        lineHeight: 1.3,
-                                        letterSpacing: '-0.4px',
-                                        textAlign: 'center',
+                                        letterSpacing: '-0.8px',
+                                        lineHeight: 1.1,
                                     }}
                                 >
-                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).title}
+                                    {contentSlide.main}
                                 </p>
-
                                 <div
                                     style={{
                                         width: '28px',
                                         height: '1.5px',
-                                        background: '#e2e2e2',
+                                        background: '#e0e0e0',
                                         borderRadius: '2px',
                                         flexShrink: 0,
                                     }}
                                 />
-
                                 <p
                                     style={{
-                                        fontSize: 'clamp(10.5px, 0.95vw, 12px)',
-                                        color: '#787878',
+                                        fontSize: 'clamp(11px, 1vw, 13px)',
+                                        fontWeight: 500,
+                                        color: '#a0a0a0',
                                         margin: 0,
-                                        lineHeight: 1.65,
-                                        fontWeight: 400,
-                                        textAlign: 'center',
+                                        letterSpacing: '0.3px',
+                                        lineHeight: 1.4,
                                     }}
                                 >
-                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).description}
+                                    {contentSlide.secondary}
                                 </p>
                             </div>
-
                         )}
                     </div>
                 </div>
