@@ -45,12 +45,10 @@ interface DotFieldProps {
 
 const SLIDES: Slide[] = [
     { type: 'greeting', duration: 2000 },
-    { type: 'content', main: 'iOS Focus', secondary: 'Clean Interfaces', duration: 4000 },
-    { type: 'content', main: 'Design Motion', secondary: 'Purposeful Flow', duration: 4000 },
-    { type: 'content', main: 'Swift Journey', secondary: 'Building Daily', duration: 4000 },
-    { type: 'content', main: 'Student Developer', secondary: 'Learning Forward', duration: 4000 },
-    { type: 'content', main: 'Open To OJT', secondary: 'Hybrid • Remote • On-Site', duration: 4000 },
-    { type: 'content', main: 'Ready Setup', secondary: 'Acer Helios 16 • MacBook Neo', duration: 4000 },
+    { type: 'content', main: 'Junior Developer', secondary: '', duration: 4000 },
+    { type: 'content', main: 'Native iOS', secondary: 'Developer', duration: 4000 },
+    { type: 'content', main: 'Available', secondary: 'Hybrid • Remote • On-Site', duration: 4000 },
+    { type: 'content', main: 'Devices', secondary: 'Acer Helios 16 • MacBook Neo', duration: 4000 },
 ];
 
 const GREETING_WORDS = ['GLAD', 'YOU’RE', 'HERE!'];
