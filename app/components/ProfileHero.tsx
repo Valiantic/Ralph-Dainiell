@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
+import { memo, useState, useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
 import { PortfolioData } from '../types/portfolio';
 import { GoFileZip } from 'react-icons/go';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -15,20 +15,355 @@ type Slide =
     | { type: 'greeting'; duration: number }
     | { type: 'content'; main: string; secondary: string; duration: number };
 
+type Dot = {
+    ax: number;
+    ay: number;
+    sx: number;
+    sy: number;
+    vx: number;
+    vy: number;
+    x: number;
+    y: number;
+};
+
+interface DotFieldProps {
+    dotRadius?: number;
+    dotSpacing?: number;
+    cursorRadius?: number;
+    cursorForce?: number;
+    bulgeOnly?: boolean;
+    bulgeStrength?: number;
+    glowRadius?: number;
+    sparkle?: boolean;
+    waveAmplitude?: number;
+    gradientFrom?: string;
+    gradientTo?: string;
+    glowColor?: string;
+    className?: string;
+    style?: CSSProperties;
+}
+
 const SLIDES: Slide[] = [
-    { type: 'greeting', duration: 4000 },
-    { type: 'content', main: 'iOS Focus', secondary: 'Clean Interfaces', duration: 5000 },
-    { type: 'content', main: 'Design Motion', secondary: 'Purposeful Flow', duration: 5000 },
-    { type: 'content', main: 'Swift Journey', secondary: 'Building Daily', duration: 5000 },
-    { type: 'content', main: 'Student Developer', secondary: 'Learning Forward', duration: 5000 },
-    { type: 'content', main: 'Open To OJT', secondary: 'Hybrid • Remote • On-Site', duration: 5000 },
-    { type: 'content', main: 'Ready Setup', secondary: 'Acer Helios 16 • MacBook Neo', duration: 5000 },
+    { type: 'greeting', duration: 2000 },
+    { type: 'content', main: 'iOS Focus', secondary: 'Clean Interfaces', duration: 4000 },
+    { type: 'content', main: 'Design Motion', secondary: 'Purposeful Flow', duration: 4000 },
+    { type: 'content', main: 'Swift Journey', secondary: 'Building Daily', duration: 4000 },
+    { type: 'content', main: 'Student Developer', secondary: 'Learning Forward', duration: 4000 },
+    { type: 'content', main: 'Open To OJT', secondary: 'Hybrid • Remote • On-Site', duration: 4000 },
+    { type: 'content', main: 'Ready Setup', secondary: 'Acer Helios 16 • MacBook Neo', duration: 4000 },
 ];
 
 const GREETING_WORDS = ['GLAD', 'YOU’RE', 'HERE!'];
-const MAGNET_ROWS = 7;
-const MAGNET_COLUMNS = 10;
-const MAGNET_LINES = Array.from({ length: MAGNET_ROWS * MAGNET_COLUMNS }, (_, index) => index);
+const TWO_PI = Math.PI * 2;
+
+const DotField = memo(({
+    dotRadius = 1.5,
+    dotSpacing = 14,
+    cursorRadius = 420,
+    cursorForce = 0.1,
+    bulgeOnly = true,
+    bulgeStrength = 34,
+    glowRadius = 150,
+    sparkle = false,
+    waveAmplitude = 0,
+    gradientFrom = '#000000',
+    gradientTo = '#000000',
+    glowColor = '#000000',
+    className = '',
+    style = {},
+}: DotFieldProps) => {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const glowRef = useRef<SVGCircleElement | null>(null);
+    const dotsRef = useRef<Dot[]>([]);
+    const mouseRef = useRef({ x: -9999, y: -9999, prevX: -9999, prevY: -9999, speed: 0 });
+    const rafRef = useRef<number | null>(null);
+    const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 });
+    const glowOpacity = useRef(0);
+    const engagement = useRef(0);
+    const rebuildRef = useRef<(() => void) | null>(null);
+    const glowIdRef = useRef(`dot-field-glow-${Math.random().toString(36).slice(2, 9)}`);
+    const propsRef = useRef({
+        dotRadius,
+        dotSpacing,
+        cursorRadius,
+        cursorForce,
+        bulgeOnly,
+        bulgeStrength,
+        sparkle,
+        waveAmplitude,
+        gradientFrom,
+        gradientTo,
+    });
+
+    propsRef.current = {
+        dotRadius,
+        dotSpacing,
+        cursorRadius,
+        cursorForce,
+        bulgeOnly,
+        bulgeStrength,
+        sparkle,
+        waveAmplitude,
+        gradientFrom,
+        gradientTo,
+    };
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        const glowEl = glowRef.current;
+        const parent = canvas?.parentElement;
+
+        if (!canvas || !parent) return;
+
+        const ctx = canvas.getContext('2d', { alpha: true });
+        if (!ctx) return;
+
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+
+        const buildDots = (w: number, h: number) => {
+            const p = propsRef.current;
+            const step = p.dotRadius + p.dotSpacing;
+            const cols = Math.max(1, Math.floor(w / step));
+            const rows = Math.max(1, Math.floor(h / step));
+            const padX = (w % step) / 2;
+            const padY = (h % step) / 2;
+            const dots: Dot[] = [];
+
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    const ax = padX + col * step + step / 2;
+                    const ay = padY + row * step + step / 2;
+
+                    dots.push({
+                        ax,
+                        ay,
+                        sx: ax,
+                        sy: ay,
+                        vx: 0,
+                        vy: 0,
+                        x: ax,
+                        y: ay,
+                    });
+                }
+            }
+
+            dotsRef.current = dots;
+        };
+
+        const doResize = () => {
+            const rect = parent.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
+
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = `${w}px`;
+            canvas.style.height = `${h}px`;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            sizeRef.current = {
+                w,
+                h,
+                offsetX: rect.left + window.scrollX,
+                offsetY: rect.top + window.scrollY,
+            };
+
+            buildDots(w, h);
+        };
+
+        const resize = () => {
+            if (resizeTimer) clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(doResize, 100);
+        };
+
+        const onMouseMove = (e: globalThis.MouseEvent) => {
+            const s = sizeRef.current;
+            mouseRef.current.x = e.pageX - s.offsetX;
+            mouseRef.current.y = e.pageY - s.offsetY;
+        };
+
+        const updateMouseSpeed = () => {
+            const m = mouseRef.current;
+            const dx = m.prevX - m.x;
+            const dy = m.prevY - m.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            m.speed += (dist - m.speed) * 0.5;
+            if (m.speed < 0.001) m.speed = 0;
+            m.prevX = m.x;
+            m.prevY = m.y;
+        };
+
+        const speedInterval = window.setInterval(updateMouseSpeed, 20);
+        let frameCount = 0;
+
+        const tick = () => {
+            frameCount += 1;
+
+            const dots = dotsRef.current;
+            const m = mouseRef.current;
+            const { w, h } = sizeRef.current;
+            const p = propsRef.current;
+            const t = frameCount * 0.02;
+
+            const targetEngagement = Math.min(m.speed / 5, 1);
+            engagement.current += (targetEngagement - engagement.current) * 0.06;
+
+            if (engagement.current < 0.001) engagement.current = 0;
+
+            const eng = engagement.current;
+            glowOpacity.current += (eng - glowOpacity.current) * 0.08;
+
+            if (glowEl) {
+                glowEl.setAttribute('cx', String(m.x));
+                glowEl.setAttribute('cy', String(m.y));
+                glowEl.style.opacity = String(glowOpacity.current * 0.35);
+            }
+
+            ctx.clearRect(0, 0, w, h);
+
+            const grad = ctx.createLinearGradient(0, 0, w, h);
+            grad.addColorStop(0, p.gradientFrom);
+            grad.addColorStop(1, p.gradientTo);
+            ctx.fillStyle = grad;
+
+            const cr = p.cursorRadius;
+            const crSq = cr * cr;
+            const rad = p.dotRadius / 2;
+            const isBulge = p.bulgeOnly;
+
+            ctx.beginPath();
+
+            for (let i = 0; i < dots.length; i++) {
+                const d = dots[i];
+                const dx = m.x - d.ax;
+                const dy = m.y - d.ay;
+                const distSq = dx * dx + dy * dy;
+
+                if (distSq < crSq && eng > 0.01) {
+                    const dist = Math.sqrt(distSq);
+
+                    if (isBulge) {
+                        const amount = 1 - dist / cr;
+                        const push = amount * amount * p.bulgeStrength * eng;
+                        const angle = Math.atan2(dy, dx);
+
+                        d.sx += (d.ax - Math.cos(angle) * push - d.sx) * 0.15;
+                        d.sy += (d.ay - Math.sin(angle) * push - d.sy) * 0.15;
+                    } else {
+                        const angle = Math.atan2(dy, dx);
+                        const move = (500 / Math.max(dist, 1)) * (m.speed * p.cursorForce);
+
+                        d.vx += Math.cos(angle) * -move;
+                        d.vy += Math.sin(angle) * -move;
+                    }
+                } else if (isBulge) {
+                    d.sx += (d.ax - d.sx) * 0.1;
+                    d.sy += (d.ay - d.sy) * 0.1;
+                }
+
+                if (!isBulge) {
+                    d.vx *= 0.9;
+                    d.vy *= 0.9;
+                    d.x = d.ax + d.vx;
+                    d.y = d.ay + d.vy;
+                    d.sx += (d.x - d.sx) * 0.1;
+                    d.sy += (d.y - d.sy) * 0.1;
+                }
+
+                let drawX = d.sx;
+                let drawY = d.sy;
+
+                if (p.waveAmplitude > 0) {
+                    drawY += Math.sin(d.ax * 0.03 + t) * p.waveAmplitude;
+                    drawX += Math.cos(d.ay * 0.03 + t * 0.7) * p.waveAmplitude * 0.5;
+                }
+
+                if (p.sparkle) {
+                    const hash = ((i * 2654435761) ^ (frameCount >> 3)) >>> 0;
+
+                    if ((hash % 100) < 3) {
+                        ctx.moveTo(drawX + rad * 1.8, drawY);
+                        ctx.arc(drawX, drawY, rad * 1.8, 0, TWO_PI);
+                    } else {
+                        ctx.moveTo(drawX + rad, drawY);
+                        ctx.arc(drawX, drawY, rad, 0, TWO_PI);
+                    }
+                } else {
+                    ctx.moveTo(drawX + rad, drawY);
+                    ctx.arc(drawX, drawY, rad, 0, TWO_PI);
+                }
+            }
+
+            ctx.fill();
+            rafRef.current = requestAnimationFrame(tick);
+        };
+
+        doResize();
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', onMouseMove, { passive: true });
+        rafRef.current = requestAnimationFrame(tick);
+
+        rebuildRef.current = () => {
+            const { w, h } = sizeRef.current;
+            if (w > 0 && h > 0) buildDots(w, h);
+        };
+
+        return () => {
+            if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+            window.clearInterval(speedInterval);
+            if (resizeTimer) clearTimeout(resizeTimer);
+            window.removeEventListener('resize', resize);
+            window.removeEventListener('mousemove', onMouseMove);
+        };
+    }, []);
+
+    useEffect(() => {
+        rebuildRef.current?.();
+    }, [dotRadius, dotSpacing]);
+
+    return (
+        <div className={`dot-field-container ${className}`} style={style}>
+            <canvas
+                ref={canvasRef}
+                style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                }}
+            />
+            <svg
+                style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    pointerEvents: 'none',
+                }}
+            >
+                <defs>
+                    <radialGradient id={glowIdRef.current}>
+                        <stop offset="0%" stopColor={glowColor} />
+                        <stop offset="100%" stopColor="transparent" />
+                    </radialGradient>
+                </defs>
+                <circle
+                    ref={glowRef}
+                    cx="-9999"
+                    cy="-9999"
+                    r={glowRadius}
+                    fill={`url(#${glowIdRef.current})`}
+                    style={{ opacity: 0, willChange: 'opacity' }}
+                />
+            </svg>
+        </div>
+    );
+});
+
+DotField.displayName = 'DotField';
 
 const styleBlock = `
     @keyframes blurWordReveal {
@@ -71,42 +406,19 @@ const styleBlock = `
         animation: softSheen 1.5s ease forwards;
     }
 
-    .magnet-lines-layer {
+    .dot-field-container {
         position: absolute;
-        inset: 18px;
-        display: grid;
-        grid-template-columns: repeat(10, 1fr);
-        grid-template-rows: repeat(7, 1fr);
-        justify-items: center;
-        align-items: center;
+        inset: 0;
+        width: 100%;
+        height: 100%;
         pointer-events: none;
         z-index: 1;
+        opacity: 0.08;
+        transition: opacity 0.45s ease;
+    }
+
+    .opportunities-card:hover .dot-field-container {
         opacity: 0.2;
-        transition: opacity 0.45s ease, transform 0.45s ease;
-        transform: scale(0.98);
-    }
-
-    .opportunities-card:hover .magnet-lines-layer {
-        opacity: 0.42;
-        transform: scale(1);
-    }
-
-    .magnet-lines-layer span {
-        display: block;
-        width: 1.5px;
-        height: 16px;
-        border-radius: 99px;
-        background: #d9d9d9;
-        transform-origin: center;
-        transform: rotate(-10deg);
-        will-change: transform;
-        transition: transform 0.12s linear, background 0.3s ease, opacity 0.3s ease;
-        opacity: 0.9;
-    }
-
-    .opportunities-card:hover .magnet-lines-layer span {
-        background: #bdbdbd;
-        opacity: 1;
     }
 
     @media (max-width: 767px) {
@@ -222,6 +534,7 @@ const styleBlock = `
             padding: 8px 9px !important;
             gap: 8px !important;
             min-height: 48px !important;
+            justify-content: center !important;
         }
 
         .social-icon-box {
@@ -237,6 +550,7 @@ const styleBlock = `
         .social-label {
             font-size: 12px !important;
             line-height: 1.1 !important;
+            text-align: center !important;
         }
 
         .slide-inner {
@@ -263,19 +577,6 @@ const styleBlock = `
         .ambient-orb {
             width: 160px !important;
             height: 160px !important;
-        }
-
-        .magnet-lines-layer {
-            inset: 16px;
-            opacity: 0.16;
-            grid-template-columns: repeat(8, 1fr);
-            grid-template-rows: repeat(6, 1fr);
-        }
-
-        .magnet-lines-layer span {
-            width: 1.25px;
-            height: 13px;
-            background: #dddddd;
         }
     }
 
@@ -313,6 +614,7 @@ const styleBlock = `
         .social-link {
             padding: 8px !important;
             gap: 7px !important;
+            justify-content: center !important;
         }
 
         .slide-inner {
@@ -329,15 +631,6 @@ const styleBlock = `
 
         .greeting-word {
             font-size: 26px !important;
-        }
-
-        .magnet-lines-layer {
-            inset: 15px;
-            opacity: 0.14;
-        }
-
-        .magnet-lines-layer span {
-            height: 12px;
         }
     }
 
@@ -389,10 +682,12 @@ const styleBlock = `
         .social-link {
             min-height: 44px !important;
             padding: 7px !important;
+            justify-content: center !important;
         }
 
         .social-label {
             font-size: 11px !important;
+            text-align: center !important;
         }
 
         .slide-inner {
@@ -409,16 +704,6 @@ const styleBlock = `
 
         .greeting-word {
             font-size: 24px !important;
-        }
-
-        .magnet-lines-layer {
-            inset: 14px;
-            opacity: 0.12;
-        }
-
-        .magnet-lines-layer span {
-            width: 1px;
-            height: 11px;
         }
     }
 `;
@@ -443,15 +728,19 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const elapsedRef = useRef(0);
     const startTimeRef = useRef<number>(0);
     const cardRef = useRef<HTMLDivElement>(null);
-    const magnetLinesRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+        const mq = window.matchMedia('(any-hover: hover) and (any-pointer: fine)');
         setHasCursor(mq.matches);
 
         const handler = (e: MediaQueryListEvent) => {
             setHasCursor(e.matches);
-            if (!e.matches) setEmailHovered(false);
+            if (!e.matches) {
+                setEmailHovered(false);
+                setHoveredOpportunities(false);
+                setIsPaused(false);
+                setContentLifted(false);
+            }
         };
 
         mq.addEventListener('change', handler);
@@ -486,35 +775,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         };
     }, [slideIndex, isPaused]);
 
-    const updateMagnetLines = (clientX: number, clientY: number) => {
-        const container = magnetLinesRef.current;
-        if (!container) return;
-
-        const items = container.querySelectorAll<HTMLSpanElement>('span');
-
-        items.forEach((item) => {
-            const rect = item.getBoundingClientRect();
-            const centerX = rect.x + rect.width / 2;
-            const centerY = rect.y + rect.height / 2;
-            const b = clientX - centerX;
-            const a = clientY - centerY;
-            const c = Math.sqrt(a * a + b * b) || 1;
-            const r = ((Math.acos(b / c) * 180) / Math.PI) * (clientY > centerY ? 1 : -1);
-
-            item.style.transform = `rotate(${r}deg)`;
-        });
-    };
-
-    const resetMagnetLines = () => {
-        const container = magnetLinesRef.current;
-        if (!container) return;
-
-        const items = container.querySelectorAll<HTMLSpanElement>('span');
-        items.forEach((item) => {
-            item.style.transform = 'rotate(-10deg)';
-        });
-    };
-
     const handleCardMouseMove = (e: MouseEvent<HTMLDivElement>) => {
         if (!cardRef.current) return;
         const rect = cardRef.current.getBoundingClientRect();
@@ -523,8 +783,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             x: ((e.clientX - rect.left) / rect.width) * 100,
             y: ((e.clientY - rect.top) / rect.height) * 100,
         });
-
-        if (hasCursor) updateMagnetLines(e.clientX, e.clientY);
     };
 
     const handleOpportunitiesEnter = () => {
@@ -539,7 +797,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         setHoveredOpportunities(false);
         setIsPaused(false);
         setContentLifted(false);
-        resetMagnetLines();
     };
 
     const touchPillStyle: CSSProperties = {
@@ -556,6 +813,22 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         userSelect: 'none',
         textDecoration: 'none',
     };
+
+    const socialLinkBaseStyle = (isActive: boolean, activeBackground: string): CSSProperties => ({
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        gap: '10px',
+        padding: '10px 14px',
+        border: isActive ? '1px solid transparent' : '1px solid #e5e5e5',
+        borderRadius: '12px',
+        textDecoration: 'none',
+        background: isActive ? activeBackground : '#fff',
+        transform: hasCursor && isActive ? 'translateY(-4px)' : 'translateY(0)',
+        boxShadow: hasCursor && isActive ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
+        transition: 'all 0.3s ease',
+    });
 
     const contentSlide = displayedSlide as Extract<Slide, { type: 'content' }>;
 
@@ -837,26 +1110,14 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('facebook')}
                             onMouseLeave={() => setHoveredSocial(null)}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '10px',
-                                padding: '10px 14px',
-                                border: hoveredSocial === 'facebook' ? '1px solid transparent' : '1px solid #e5e5e5',
-                                borderRadius: '12px',
-                                textDecoration: 'none',
-                                background: hoveredSocial === 'facebook' ? '#1877F2' : '#fff',
-                                transform: hasCursor && hoveredSocial === 'facebook' ? 'translateY(-4px)' : 'translateY(0)',
-                                boxShadow: hasCursor && hoveredSocial === 'facebook' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
-                                transition: 'all 0.3s ease',
-                            }}
+                            style={socialLinkBaseStyle(hoveredSocial === 'facebook', '#1877F2')}
                         >
                             <div className="social-icon-box" style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'facebook' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
                                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                                 </svg>
                             </div>
-                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'facebook' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
+                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'facebook' ? '#fff' : '#333', transition: 'all 0.3s ease', textAlign: 'center' }}>
                                 Facebook
                             </span>
                         </Link>
@@ -869,13 +1130,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             onMouseEnter={() => setHoveredSocial('instagram')}
                             onMouseLeave={() => setHoveredSocial(null)}
                             style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '10px',
-                                padding: '10px 14px',
+                                ...socialLinkBaseStyle(false, '#fff'),
                                 border: 'none',
-                                borderRadius: '12px',
-                                textDecoration: 'none',
                                 overflow: 'hidden',
                                 background: hoveredSocial === 'instagram' ? 'linear-gradient(to right, #8134af, #dd2a7b, #f58529)' : '#fff',
                                 transform: hasCursor && hoveredSocial === 'instagram' ? 'translateY(-4px)' : 'translateY(0)',
@@ -890,7 +1146,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     <circle cx="17.5" cy="6.5" r="1.5" fill={hoveredSocial === 'instagram' ? '#fff' : '#555'} />
                                 </svg>
                             </div>
-                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
+                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease', textAlign: 'center' }}>
                                 Instagram
                             </span>
                         </Link>
@@ -902,26 +1158,14 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('youtube')}
                             onMouseLeave={() => setHoveredSocial(null)}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '10px',
-                                padding: '10px 14px',
-                                border: hoveredSocial === 'youtube' ? '1px solid transparent' : '1px solid #e5e5e5',
-                                borderRadius: '12px',
-                                textDecoration: 'none',
-                                background: hoveredSocial === 'youtube' ? '#FF0000' : '#fff',
-                                transform: hasCursor && hoveredSocial === 'youtube' ? 'translateY(-4px)' : 'translateY(0)',
-                                boxShadow: hasCursor && hoveredSocial === 'youtube' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
-                                transition: 'all 0.3s ease',
-                            }}
+                            style={socialLinkBaseStyle(hoveredSocial === 'youtube', '#FF0000')}
                         >
                             <div className="social-icon-box" style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'youtube' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
                                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                                 </svg>
                             </div>
-                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'youtube' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
+                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'youtube' ? '#fff' : '#333', transition: 'all 0.3s ease', textAlign: 'center' }}>
                                 YouTube
                             </span>
                         </Link>
@@ -933,26 +1177,14 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             rel="noopener noreferrer"
                             onMouseEnter={() => setHoveredSocial('linkedin')}
                             onMouseLeave={() => setHoveredSocial(null)}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '10px',
-                                padding: '10px 14px',
-                                border: hoveredSocial === 'linkedin' ? '1px solid transparent' : '1px solid #e5e5e5',
-                                borderRadius: '12px',
-                                textDecoration: 'none',
-                                background: hoveredSocial === 'linkedin' ? '#0A66C2' : '#fff',
-                                transform: hasCursor && hoveredSocial === 'linkedin' ? 'translateY(-4px)' : 'translateY(0)',
-                                boxShadow: hasCursor && hoveredSocial === 'linkedin' ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
-                                transition: 'all 0.3s ease',
-                            }}
+                            style={socialLinkBaseStyle(hoveredSocial === 'linkedin', '#0A66C2')}
                         >
                             <div className="social-icon-box" style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'linkedin' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
                                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                 </svg>
                             </div>
-                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'linkedin' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
+                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'linkedin' ? '#fff' : '#333', transition: 'all 0.3s ease', textAlign: 'center' }}>
                                 LinkedIn
                             </span>
                         </Link>
@@ -981,15 +1213,20 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         cursor: 'default',
                     }}
                 >
-                    <div
-                        ref={magnetLinesRef}
-                        className="magnet-lines-layer"
-                        aria-hidden="true"
-                    >
-                        {MAGNET_LINES.map((line) => (
-                            <span key={line} />
-                        ))}
-                    </div>
+                    {hasCursor && (
+                        <DotField
+                            dotRadius={2}
+                            dotSpacing={14}
+                            cursorRadius={420}
+                            bulgeStrength={34}
+                            glowRadius={150}
+                            sparkle={false}
+                            waveAmplitude={0}
+                            gradientFrom="#000000"
+                            gradientTo="#000000"
+                            glowColor="#000000"
+                        />
+                    )}
 
                     <div
                         className="ambient-orb"
