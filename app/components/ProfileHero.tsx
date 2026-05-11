@@ -517,8 +517,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             boxSizing: 'border-box',
                             display: 'flex',
                             flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            justifyContent: displayedSlide.type === 'content' && (displayedSlide as Extract<Slide, { type: 'content' }>).details ? 'flex-start' : 'center',
+                            alignItems: displayedSlide.type === 'content' && (displayedSlide as Extract<Slide, { type: 'content' }>).details ? 'flex-start' : 'center',
                             zIndex: 3,
                             opacity: visible ? 1 : 0,
                             transform: visible
@@ -544,6 +544,98 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             }}>
                                 GLAD YOU'RE HERE!
                             </p>
+
+                        ) : (displayedSlide as Extract<Slide, { type: 'content' }>).details ? (
+
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '7px',
+                                width: '100%',
+                            }}>
+                                <span style={{
+                                    fontSize: '8.5px',
+                                    fontWeight: 700,
+                                    letterSpacing: '2px',
+                                    color: '#b0b0b0',
+                                    textTransform: 'uppercase',
+                                    lineHeight: 1,
+                                }}>
+                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).label}
+                                </span>
+
+                                <p style={{
+                                    fontSize: 'clamp(12px, 1.3vw, 14.5px)',
+                                    fontWeight: 800,
+                                    color: '#000',
+                                    margin: 0,
+                                    lineHeight: 1.25,
+                                    letterSpacing: '-0.35px',
+                                }}>
+                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).title}
+                                </p>
+
+                                <div style={{
+                                    width: '24px',
+                                    height: '1.5px',
+                                    background: '#e2e2e2',
+                                    borderRadius: '2px',
+                                    flexShrink: 0,
+                                }} />
+
+                                <p style={{
+                                    fontSize: 'clamp(10px, 0.88vw, 11px)',
+                                    color: '#787878',
+                                    margin: 0,
+                                    lineHeight: 1.55,
+                                    fontWeight: 400,
+                                }}>
+                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).description}
+                                </p>
+
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    marginTop: '1px',
+                                    borderTop: '1px solid #efefef',
+                                    paddingTop: '7px',
+                                    width: '100%',
+                                    gap: 0,
+                                }}>
+                                    {(displayedSlide as Extract<Slide, { type: 'content' }>).details!.map((detail, i, arr) => (
+                                        <div key={detail.label} style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'flex-start',
+                                            padding: '4px 0',
+                                            borderBottom: i < arr.length - 1 ? '1px solid #f6f6f6' : 'none',
+                                            gap: '10px',
+                                        }}>
+                                            <span style={{
+                                                fontSize: '8.5px',
+                                                fontWeight: 600,
+                                                color: '#c0c0c0',
+                                                letterSpacing: '0.9px',
+                                                textTransform: 'uppercase',
+                                                flexShrink: 0,
+                                                lineHeight: 1.4,
+                                                paddingTop: '1px',
+                                            }}>
+                                                {detail.label}
+                                            </span>
+                                            <span style={{
+                                                fontSize: '10px',
+                                                fontWeight: 600,
+                                                color: '#111',
+                                                textAlign: 'right',
+                                                lineHeight: 1.35,
+                                            }}>
+                                                {detail.value}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
 
                         ) : (
 
@@ -598,51 +690,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 }}>
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).description}
                                 </p>
-
-                                {(displayedSlide as Extract<Slide, { type: 'content' }>).details && (
-                                    <div style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        marginTop: '2px',
-                                        borderTop: '1px solid #efefef',
-                                        paddingTop: '10px',
-                                        width: '100%',
-                                        gap: 0,
-                                    }}>
-                                        {(displayedSlide as Extract<Slide, { type: 'content' }>).details!.map((detail, i, arr) => (
-                                            <div key={detail.label} style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                padding: '5px 0',
-                                                borderBottom: i < arr.length - 1 ? '1px solid #f6f6f6' : 'none',
-                                                gap: '10px',
-                                            }}>
-                                                <span style={{
-                                                    fontSize: '9px',
-                                                    fontWeight: 600,
-                                                    color: '#c0c0c0',
-                                                    letterSpacing: '1px',
-                                                    textTransform: 'uppercase',
-                                                    flexShrink: 0,
-                                                    lineHeight: 1,
-                                                    textAlign: 'left',
-                                                }}>
-                                                    {detail.label}
-                                                </span>
-                                                <span style={{
-                                                    fontSize: '10px',
-                                                    fontWeight: 600,
-                                                    color: '#111',
-                                                    textAlign: 'right',
-                                                    lineHeight: 1.3,
-                                                }}>
-                                                    {detail.value}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
                             </div>
 
                         )}

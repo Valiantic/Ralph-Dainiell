@@ -25,18 +25,20 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const isHoveredRef = useRef(false);
 
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+    const [isSmartphone, setIsSmartphone] = useState(false);
     const [isMobile,   setIsMobile]   = useState(false);
     const [hasMouse,   setHasMouse]   = useState(false);
     const [isHovered,  setIsHovered]  = useState(false);
     const [visible,    setVisible]    = useState(false);
 
-   
     const xVal = useMotionValue(0);
     const x    = useSpring(xVal, { stiffness: 80, damping: 20, mass: 0.5 });
 
-  
     useEffect(() => {
-        const check = () => setIsMobile(window.innerWidth <= 768);
+        const check = () => {
+            setIsSmartphone(window.innerWidth <= 480);
+            setIsMobile(window.innerWidth <= 768);
+        };
         check();
         window.addEventListener('resize', check);
         return () => window.removeEventListener('resize', check);
@@ -49,7 +51,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         mq.addEventListener('change', handler);
         return () => mq.removeEventListener('change', handler);
     }, []);
-
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -65,22 +66,20 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => observer.disconnect();
     }, []);
 
-    
     useEffect(() => {
         if (!hasMouse) return;
-        const el = sectionRef.current;   
+        const el = sectionRef.current;
         if (!el) return;
 
         const onWheel = (e: WheelEvent) => {
-            if (!isHoveredRef.current) return;         
-            e.preventDefault();                          
+            if (!isHoveredRef.current) return;
+            e.preventDefault();
 
             const track = trackRef.current;
             const outer = outerRef.current;
             if (!track || !outer) return;
 
             const maxX  = -(track.scrollWidth - outer.clientWidth);
-            // prefer vertical delta (trackpad / scroll wheel); fall back to horizontal
             const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
             const next  = Math.max(maxX, Math.min(0, xVal.get() - delta));
             xVal.set(next);
@@ -90,7 +89,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => el.removeEventListener('wheel', onWheel);
     }, [hasMouse, xVal]);
 
-    // ── Clamp x when window resizes (prevents cards getting lost off-screen) ──
     useEffect(() => {
         if (!hasMouse) return;
         const onResize = () => {
@@ -104,7 +102,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => window.removeEventListener('resize', onResize);
     }, [hasMouse, xVal]);
 
-   
     useEffect(() => {
         const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelectedCert(null); };
         window.addEventListener('keydown', handler);
@@ -116,11 +113,9 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
-   
     const handleMouseEnter = () => { isHoveredRef.current = true;  setIsHovered(true);  };
     const handleMouseLeave = () => { isHoveredRef.current = false; setIsHovered(false); };
 
-    
     const renderCard = (cert: Certificate) => (
         <div
             key={cert.id}
@@ -181,7 +176,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
-                {/* ── HEADER ── */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '24px' }}>
                     <div style={{ width: '39px', height: '40px', position: 'relative' }}>
                         <Image src="/Images/Icons/certificate icon.png" alt="Certificates" fill style={{ objectFit: 'contain' }} />
@@ -189,8 +183,79 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     <h2 style={{ fontSize: '22px', fontWeight: 700, paddingTop: '2px'}}>Certificates</h2>
                 </div>
 
-                {/* ── MOBILE LIST VIEW — completely unchanged ── */}
-                {isMobile ? (
+                {isSmartphone ? (
+
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                    }}>
+                        {certificates.map((cert) => (
+                            <div
+                                key={cert.id}
+                                onClick={() => setSelectedCert(cert)}
+                                style={{
+                                    width: '100%',
+                                    borderRadius: '20px',
+                                    border: '1.5px solid #000',
+                                    background: '#fff',
+                                    cursor: 'pointer',
+                                    overflow: 'hidden',
+                                    boxSizing: 'border-box',
+                                }}
+                            >
+                                <div style={{
+                                    position: 'relative',
+                                    width: '100%',
+                                    height: '180px',
+                                    background: '#f2f2f7',
+                                    flexShrink: 0,
+                                }}>
+                                    <Image
+                                        src={cert.imageUrl}
+                                        alt={cert.title}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        unoptimized
+                                    />
+                                </div>
+
+                                <div style={{
+                                    padding: '12px 14px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    borderTop: '1px solid rgba(0,0,0,0.06)',
+                                    boxSizing: 'border-box',
+                                }}>
+                                    <div style={{
+                                        width: '8px', height: '8px', borderRadius: '50%',
+                                        background: getIssuerColor(cert.issuer), flexShrink: 0,
+                                    }} />
+                                    <span style={{
+                                        fontSize: '13px', fontWeight: 700,
+                                        flex: 1, lineHeight: 1.3,
+                                        color: '#000',
+                                        minWidth: 0,
+                                    }}>
+                                        {cert.title}
+                                    </span>
+                                    <span style={{
+                                        fontSize: '10px', fontWeight: 600,
+                                        border: '1.5px solid #000',
+                                        padding: '3px 9px', borderRadius: '20px',
+                                        whiteSpace: 'nowrap', flexShrink: 0,
+                                        color: '#000',
+                                    }}>
+                                        {cert.issuer}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                ) : isMobile ? (
+
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                         {certificates.map((cert, index) => (
                             <div
@@ -226,7 +291,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     </div>
 
                 ) : hasMouse ? (
-                    
+
                     <div
                         ref={outerRef}
                         style={{
@@ -304,7 +369,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     </div>
                 )}
 
-                {/* ── PORTAL MODAL — unchanged ── */}
                 {selectedCert && typeof window !== 'undefined' &&
                     createPortal(
                         <div onClick={() => setSelectedCert(null)} className="modal-overlay">
@@ -337,7 +401,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 }
 
                 <style jsx>{`
-                    /* ── Section entrance animation ── */
                     .cert-section {
                         opacity: 0;
                         transform: translateY(32px);
@@ -354,7 +417,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         transition: transform 0.25s ease, box-shadow 0.25s ease;
                     }
 
-                    /* ── Per-card hover lift ── */
                     .cert-card {
                         transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
                     }
@@ -362,11 +424,9 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         transform: scale(1.035) translateY(-6px);
                     }
 
-                    /* ── Hide scrollbar (touch tablet path) ── */
                     .no-scrollbar::-webkit-scrollbar { display: none; }
                     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-                    /* ── Modal overlay ── */
                     .modal-overlay {
                         position: fixed;
                         top: 0; left: 0;
@@ -445,5 +505,5 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 `}</style>
             </section>
         </>
-    );  
+    );
 };
