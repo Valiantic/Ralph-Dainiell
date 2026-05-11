@@ -205,7 +205,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 style={{
                                     width: '100%',
                                     borderRadius: '20px',
-                                    border: '1.5px solid #000',
+                                    border: '0.5px solid rgba(0,0,0,0.1)',
                                     background: '#fff',
                                     cursor: 'pointer',
                                     overflow: 'hidden',
