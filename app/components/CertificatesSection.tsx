@@ -185,11 +185,19 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
                 {isSmartphone ? (
 
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                    }}>
+                    <div
+                        className="no-scrollbar"
+                        style={{
+                            height: '520px',
+                            overflowY: 'auto',
+                            overflowX: 'hidden',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '12px',
+                            paddingRight: '2px',
+                            boxSizing: 'border-box',
+                        }}
+                    >
                         {certificates.map((cert) => (
                             <div
                                 key={cert.id}
@@ -202,6 +210,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     cursor: 'pointer',
                                     overflow: 'hidden',
                                     boxSizing: 'border-box',
+                                    flexShrink: 0,
                                 }}
                             >
                                 <div style={{
@@ -209,7 +218,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     width: '100%',
                                     height: '180px',
                                     background: '#f2f2f7',
-                                    flexShrink: 0,
                                 }}>
                                     <Image
                                         src={cert.imageUrl}
