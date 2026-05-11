@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
 import { PortfolioData } from '../types/portfolio';
 import { GoFileZip } from 'react-icons/go';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -21,122 +21,331 @@ const SLIDES: Slide[] = [
     { type: 'content', main: 'Design Motion', secondary: 'Purposeful Flow', duration: 4000 },
     { type: 'content', main: 'Swift Journey', secondary: 'Building Daily', duration: 4000 },
     { type: 'content', main: 'Student Developer', secondary: 'Learning Forward', duration: 4000 },
-    { type: 'content', main: 'Open To OJT', secondary: 'Hybrid \u2022 Remote \u2022 On-Site', duration: 4000 },
-    { type: 'content', main: 'Ready Setup', secondary: 'Acer Helios 16 \u2022 MacBook Neo', duration: 4000 },
+    { type: 'content', main: 'Open To OJT', secondary: 'Hybrid • Remote • On-Site', duration: 4000 },
+    { type: 'content', main: 'Ready Setup', secondary: 'Acer Helios 16 • MacBook Neo', duration: 4000 },
 ];
 
-const GREETING_WORDS = ['GLAD', 'YOU\u2019RE', 'HERE!'];
+const GREETING_WORDS = ['GLAD', 'YOU’RE', 'HERE!'];
 
 const styleBlock = `
     @keyframes blurWordReveal {
-        0%   { opacity: 0; filter: blur(14px); transform: translateY(-7px); }
-        60%  { opacity: 1; filter: blur(1px);  transform: translateY(1px);  }
-        100% { opacity: 1; filter: blur(0px);  transform: translateY(0px);  }
+        0% { opacity: 0; filter: blur(14px); transform: translateY(-8px); }
+        60% { opacity: 1; filter: blur(1px); transform: translateY(1px); }
+        100% { opacity: 1; filter: blur(0px); transform: translateY(0); }
     }
 
-    @media (max-width: 1024px) {
+    @keyframes ambientFloat {
+        0% { transform: translate3d(-8px, -6px, 0) scale(1); opacity: 0.28; }
+        50% { transform: translate3d(10px, 8px, 0) scale(1.04); opacity: 0.42; }
+        100% { transform: translate3d(-8px, -6px, 0) scale(1); opacity: 0.28; }
+    }
+
+    @keyframes softSheen {
+        0% { transform: translateX(-140%) rotate(8deg); opacity: 0; }
+        35% { opacity: 0.35; }
+        100% { transform: translateX(140%) rotate(8deg); opacity: 0; }
+    }
+
+    .profile-hero {
+        --pair-card-height: 224px;
+    }
+
+    .contact-card,
+    .opportunities-card {
+        height: var(--pair-card-height) !important;
+    }
+
+    .opportunities-card:hover .ambient-orb {
+        animation-play-state: running;
+    }
+
+    .ambient-orb {
+        animation: ambientFloat 7s ease-in-out infinite;
+        animation-play-state: paused;
+    }
+
+    .opportunities-card:hover .card-sheen {
+        animation: softSheen 1.5s ease forwards;
+    }
+
+    @media (max-width: 767px) {
         .profile-hero {
-            display: grid !important;
-            grid-template-columns: 90px 1fr !important;
-            column-gap: 14px !important;
-            row-gap: 20px !important;
-            align-items: start !important;
+            --pair-card-height: 220px;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 18px !important;
+            width: 100% !important;
         }
+
         .hero-img-container {
-            grid-column: 1 !important;
-            grid-row: 1 !important;
-            width: 90px !important;
-            height: 90px !important;
-            border-radius: 20px !important;
-            flex-shrink: 0 !important;
-            align-self: flex-start !important;
+            width: 108px !important;
+            height: 108px !important;
+            border-radius: 24px !important;
+            align-self: center !important;
         }
+
         .hero-info {
-            grid-column: 2 !important;
-            grid-row: 1 !important;
             width: 100% !important;
             min-width: 0 !important;
             flex: none !important;
-        }
-        .hero-info h1 {
-            font-size: 26px !important;
-            letter-spacing: -0.5px !important;
-            line-height: 1.1 !important;
-        }
-        .hero-buttons {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 10px !important;
-            width: calc(100% + 104px) !important;
-            margin-left: -104px !important;
-        }
-        .cv-button {
-            width: 100% !important;
-            justify-content: center !important;
-            display: flex !important;
             align-items: center !important;
             text-align: center !important;
+            gap: 8px !important;
         }
+
+        .hero-info h1 {
+            font-size: 30px !important;
+            line-height: 1.04 !important;
+            letter-spacing: -1.2px !important;
+            max-width: 100% !important;
+            text-align: center !important;
+        }
+
+        .hero-location {
+            justify-content: center !important;
+            font-size: 14px !important;
+        }
+
+        .hero-role {
+            font-size: 20px !important;
+            margin-bottom: 6px !important;
+            text-align: center !important;
+        }
+
+        .hero-buttons {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
+            width: 100% !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .cv-button,
         .github-btn {
             width: 100% !important;
+            height: 52px !important;
             justify-content: center !important;
         }
+
         .hero-cards-wrapper {
-            grid-column: 1 / -1 !important;
-            grid-row: 3 !important;
             width: 100% !important;
             flex: none !important;
             display: grid !important;
             grid-template-columns: 1fr !important;
             gap: 14px !important;
-            margin-top: 0 !important;
             align-items: start !important;
         }
+
         .contact-card {
             width: 100% !important;
-            height: auto !important;
-            min-height: unset !important;
-            padding: 16px !important;
+            min-height: 0 !important;
+            padding: 12px !important;
+            gap: 10px !important;
             align-self: start !important;
         }
+
         .opportunities-card {
             width: 100% !important;
-            height: 200px !important;
-            min-height: unset !important;
+            min-height: 0 !important;
             align-self: start !important;
         }
+
+        .email-row {
+            height: 46px !important;
+            padding: 10px 12px !important;
+            gap: 8px !important;
+        }
+
+        .email-icon-wrap {
+            width: 22px !important;
+            height: 22px !important;
+        }
+
+        .email-text {
+            font-size: 12px !important;
+        }
+
+        .touch-email-pill {
+            font-size: 10px !important;
+            padding: 3px 8px !important;
+            letter-spacing: 0.4px !important;
+        }
+
+        .social-grid {
+            padding: 10px !important;
+            gap: 8px !important;
+        }
+
+        .social-link {
+            padding: 8px 9px !important;
+            gap: 8px !important;
+            min-height: 48px !important;
+        }
+
+        .social-icon-box {
+            width: 24px !important;
+            height: 24px !important;
+        }
+
+        .social-icon-box svg {
+            width: 20px !important;
+            height: 20px !important;
+        }
+
+        .social-label {
+            font-size: 12px !important;
+            line-height: 1.1 !important;
+        }
+
         .slide-inner {
-            padding: 22px !important;
+            padding: 20px !important;
+        }
+
+        .slide-main {
+            font-size: 30px !important;
+            line-height: 1.04 !important;
+            letter-spacing: -0.9px !important;
+        }
+
+        .slide-secondary {
+            font-size: 14px !important;
+            line-height: 1.25 !important;
+            color: #8c8c8c !important;
+        }
+
+        .greeting-word {
+            font-size: 28px !important;
+            line-height: 1.05 !important;
+        }
+
+        .ambient-orb {
+            width: 160px !important;
+            height: 160px !important;
         }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 430px) {
         .profile-hero {
-            row-gap: 16px !important;
+            --pair-card-height: 214px;
+            gap: 16px !important;
         }
-        .hero-cards-wrapper {
-            gap: 12px !important;
+
+        .hero-img-container {
+            width: 100px !important;
+            height: 100px !important;
         }
-        .opportunities-card {
-            height: 188px !important;
+
+        .hero-info h1 {
+            font-size: 28px !important;
         }
+
+        .hero-role {
+            font-size: 19px !important;
+        }
+
         .contact-card {
-            padding: 14px !important;
+            padding: 11px !important;
         }
+
+        .email-row {
+            height: 44px !important;
+        }
+
+        .social-grid {
+            padding: 9px !important;
+        }
+
+        .social-link {
+            padding: 8px !important;
+            gap: 7px !important;
+        }
+
         .slide-inner {
             padding: 18px !important;
+        }
+
+        .slide-main {
+            font-size: 28px !important;
+        }
+
+        .slide-secondary {
+            font-size: 13px !important;
+        }
+
+        .greeting-word {
+            font-size: 26px !important;
         }
     }
 
     @media (max-width: 375px) {
-        .opportunities-card {
-            height: 178px !important;
+        .profile-hero {
+            --pair-card-height: 206px;
+            gap: 14px !important;
         }
+
+        .hero-img-container {
+            width: 92px !important;
+            height: 92px !important;
+            border-radius: 22px !important;
+        }
+
+        .hero-info h1 {
+            font-size: 26px !important;
+            letter-spacing: -0.8px !important;
+        }
+
+        .hero-role {
+            font-size: 18px !important;
+        }
+
         .contact-card {
-            padding: 12px !important;
+            padding: 10px !important;
+            gap: 8px !important;
         }
+
+        .email-row {
+            height: 42px !important;
+            padding: 9px 10px !important;
+        }
+
+        .email-text {
+            font-size: 11px !important;
+        }
+
+        .touch-email-pill {
+            font-size: 9px !important;
+            padding: 3px 7px !important;
+        }
+
+        .social-grid {
+            padding: 8px !important;
+            gap: 7px !important;
+        }
+
+        .social-link {
+            min-height: 44px !important;
+            padding: 7px !important;
+        }
+
+        .social-label {
+            font-size: 11px !important;
+        }
+
         .slide-inner {
             padding: 16px !important;
+        }
+
+        .slide-main {
+            font-size: 25px !important;
+        }
+
+        .slide-secondary {
+            font-size: 12px !important;
+        }
+
+        .greeting-word {
+            font-size: 24px !important;
         }
     }
 `;
@@ -147,10 +356,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [hoveredCvButton, setHoveredCvButton] = useState(false);
     const [hoveredContactCard, setHoveredContactCard] = useState(false);
     const [hoveredOpportunities, setHoveredOpportunities] = useState(false);
-
     const [hasCursor, setHasCursor] = useState(false);
     const [emailHovered, setEmailHovered] = useState(false);
-
     const [slideIndex, setSlideIndex] = useState(0);
     const [visible, setVisible] = useState(true);
     const [displayedSlide, setDisplayedSlide] = useState<Slide>(SLIDES[0]);
@@ -167,10 +374,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
         setHasCursor(mq.matches);
+
         const handler = (e: MediaQueryListEvent) => {
             setHasCursor(e.matches);
             if (!e.matches) setEmailHovered(false);
         };
+
         mq.addEventListener('change', handler);
         return () => mq.removeEventListener('change', handler);
     }, []);
@@ -193,11 +402,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 elapsedRef.current = 0;
                 setSlideIndex(next);
                 setDisplayedSlide(SLIDES[next]);
-                if (next === 0) {
-                    setGreetingAnimKey((k) => k + 1);
-                }
+                if (next === 0) setGreetingAnimKey((k) => k + 1);
                 setVisible(true);
-            }, 440);
+            }, 420);
         }, remaining > 0 ? remaining : 0);
 
         return () => {
@@ -205,7 +412,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         };
     }, [slideIndex, isPaused]);
 
-    const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleCardMouseMove = (e: MouseEvent<HTMLDivElement>) => {
         if (!cardRef.current) return;
         const rect = cardRef.current.getBoundingClientRect();
         setCursorPos({
@@ -228,7 +435,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         setContentLifted(false);
     };
 
-    const touchPillStyle: React.CSSProperties = {
+    const touchPillStyle: CSSProperties = {
         display: 'inline-flex',
         alignItems: 'center',
         flexShrink: 0,
@@ -297,14 +504,23 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     minWidth: '300px',
                 }}
             >
-                <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000' }}>
+                <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000', margin: 0 }}>
                     {data.name}
                 </h1>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1px', color: '#000', fontSize: '15px' }}>
+                <div
+                    className="hero-location"
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1px',
+                        color: '#000',
+                        fontSize: '15px',
+                    }}
+                >
                     <IoLocationOutline size={18} color="#000" />
                     <span style={{ paddingTop: '2px' }}>{data.location}</span>
                 </div>
-                <div style={{ fontSize: '22px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
+                <div className="hero-role" style={{ fontSize: '22px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
                     {data.roles.join(' \\ ')}
                 </div>
                 <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
@@ -316,18 +532,22 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         onMouseEnter={() => setHoveredCvButton(true)}
                         onMouseLeave={() => setHoveredCvButton(false)}
                         style={{
-                            background: '#2b6ef2',
+                            background: hoveredCvButton ? '#1956d4' : '#2b6ef2',
                             color: '#fff',
                             padding: '12px 24px',
                             borderRadius: '16px',
                             fontWeight: 700,
                             display: 'flex',
                             alignItems: 'center',
+                            justifyContent: 'center',
                             gap: '10px',
                             textDecoration: 'none',
                             fontSize: '15px',
                             height: '52px',
                             boxSizing: 'border-box',
+                            transform: hasCursor && hoveredCvButton ? 'translateY(-2px)' : 'translateY(0)',
+                            boxShadow: hasCursor && hoveredCvButton ? '0 10px 24px rgba(43,110,242,0.28)' : 'none',
+                            transition: 'transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease',
                         }}
                     >
                         <GoFileZip size={18} color="#fff" />
@@ -345,6 +565,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             borderRadius: '16px',
                             display: 'flex',
                             alignItems: 'center',
+                            justifyContent: 'center',
                             gap: '10px',
                             fontWeight: 700,
                             fontSize: '16px',
@@ -371,14 +592,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 </div>
             </div>
 
-            {/*
-                DESKTOP FIX:
-                - alignItems changed from 'start' to 'stretch' so the CSS grid makes
-                  both column cells the exact same height (the max of the two).
-                - No alignSelf on either card child so stretch is respected.
-                - Rotating card uses minHeight so it anchors the row height on desktop.
-                - Mobile media queries restore align-items: start and explicit heights.
-            */}
             <div
                 className="hero-cards-wrapper"
                 style={{
@@ -386,17 +599,17 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     gridTemplateColumns: '1fr 1fr',
                     gap: '16px',
                     flex: '1 1 600px',
-                    alignItems: 'stretch',
+                    alignItems: 'start',
                 }}
             >
-                {/* ── CONTACT CARD ──────────────────────────────────────────────
-                    No alignSelf here — let the grid stretch both cells equally.
-                    overflow: visible is intentional for the email slide animation. */}
                 <div
                     className="no-lift contact-card"
-                    onMouseEnter={() => { if (hasCursor) setHoveredContactCard(true); }}
+                    onMouseEnter={() => {
+                        if (hasCursor) setHoveredContactCard(true);
+                    }}
                     onMouseLeave={() => setHoveredContactCard(false)}
                     style={{
+                        height: 'var(--pair-card-height)',
                         padding: '16px',
                         display: 'flex',
                         flexDirection: 'column',
@@ -405,24 +618,32 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         border: '1.5px solid #000',
                         background: '#fff',
                         boxSizing: 'border-box',
-                        overflow: 'visible',
+                        overflow: 'hidden',
                         transform: hasCursor && hoveredContactCard ? 'translateY(-2px)' : 'translateY(0)',
-                        boxShadow: hasCursor && hoveredContactCard ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
+                        boxShadow: hasCursor && hoveredContactCard ? '0 12px 32px rgba(0,0,0,0.14)' : 'none',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         cursor: 'default',
                     }}
                 >
                     <div
-                        onMouseEnter={(e) => { e.stopPropagation(); if (hasCursor) setEmailHovered(true); }}
-                        onMouseLeave={(e) => { e.stopPropagation(); setEmailHovered(false); }}
+                        onMouseEnter={(e) => {
+                            e.stopPropagation();
+                            if (hasCursor) setEmailHovered(true);
+                        }}
+                        onMouseLeave={(e) => {
+                            e.stopPropagation();
+                            setEmailHovered(false);
+                        }}
                         style={{
                             borderRadius: '14px',
-                            transform: hasCursor && emailHovered ? 'translateY(-4px)' : 'translateY(0)',
+                            transform: hasCursor && emailHovered ? 'translateY(-3px)' : 'translateY(0)',
                             boxShadow: hasCursor && emailHovered ? '0 8px 20px rgba(0,0,0,0.12)' : 'none',
                             transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                            flexShrink: 0,
                         }}
                     >
                         <div
+                            className="email-row"
                             style={{
                                 border: '1.5px solid #000',
                                 borderRadius: '14px',
@@ -436,10 +657,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 width: '100%',
                             }}
                         >
-                            <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
+                            <div className="email-icon-wrap" style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
                                 <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
                             </div>
                             <span
+                                className="email-text"
                                 style={{
                                     fontSize: '13px',
                                     fontWeight: 700,
@@ -453,7 +675,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 {data.contact.email}
                             </span>
                             {!hasCursor && (
-                                <a href={`mailto:${data.contact.email}`} style={touchPillStyle}>
+                                <a className="touch-email-pill" href={`mailto:${data.contact.email}`} style={touchPillStyle}>
                                     SEND EMAIL
                                 </a>
                             )}
@@ -488,6 +710,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     </div>
 
                     <div
+                        className="social-grid"
                         style={{
                             border: '1.5px solid #000',
                             borderRadius: '14px',
@@ -496,9 +719,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             gridTemplateColumns: 'repeat(2, 1fr)',
                             gap: '8px',
                             boxSizing: 'border-box',
+                            flex: 1,
+                            minHeight: 0,
                         }}
                     >
                         <Link
+                            className="social-link"
                             href={data.socials.facebook || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -518,17 +744,18 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 transition: 'all 0.3s ease',
                             }}
                         >
-                            <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <div className="social-icon-box" style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'facebook' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
                                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                                 </svg>
                             </div>
-                            <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'facebook' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
+                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'facebook' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
                                 Facebook
                             </span>
                         </Link>
 
                         <Link
+                            className="social-link"
                             href={data.socials.instagram || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -549,19 +776,20 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 transition: 'transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease',
                             }}
                         >
-                            <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <div className="social-icon-box" style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ transition: 'all 0.3s ease' }}>
                                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none" />
                                     <circle cx="12" cy="12" r="4" stroke={hoveredSocial === 'instagram' ? '#fff' : '#555'} strokeWidth="2" fill="none" />
                                     <circle cx="17.5" cy="6.5" r="1.5" fill={hoveredSocial === 'instagram' ? '#fff' : '#555'} />
                                 </svg>
                             </div>
-                            <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
+                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'instagram' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
                                 Instagram
                             </span>
                         </Link>
 
                         <Link
+                            className="social-link"
                             href={data.socials.youtube || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -581,17 +809,18 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 transition: 'all 0.3s ease',
                             }}
                         >
-                            <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <div className="social-icon-box" style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'youtube' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
                                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                                 </svg>
                             </div>
-                            <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'youtube' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
+                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'youtube' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
                                 YouTube
                             </span>
                         </Link>
 
                         <Link
+                            className="social-link"
                             href={data.socials.linkedin || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -611,22 +840,18 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 transition: 'all 0.3s ease',
                             }}
                         >
-                            <div style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <div className="social-icon-box" style={{ width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill={hoveredSocial === 'linkedin' ? '#fff' : '#555'} style={{ transition: 'all 0.3s ease' }}>
                                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                 </svg>
                             </div>
-                            <span style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'linkedin' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
+                            <span className="social-label" style={{ fontSize: '13px', fontWeight: 600, color: hoveredSocial === 'linkedin' ? '#fff' : '#333', transition: 'all 0.3s ease' }}>
                                 LinkedIn
                             </span>
                         </Link>
                     </div>
                 </div>
 
-                {/* ── ROTATING CARD ─────────────────────────────────────────────
-                    No alignSelf here — let the grid stretch both cells equally.
-                    minHeight anchors the row so it never collapses below 240px.
-                    height is NOT set; the grid cell height drives both cards. */}
                 <div
                     ref={cardRef}
                     className="card opportunities-card"
@@ -634,13 +859,13 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     onMouseLeave={handleOpportunitiesLeave}
                     onMouseMove={handleCardMouseMove}
                     style={{
+                        height: 'var(--pair-card-height)',
                         borderRadius: '24px',
                         border: '1.5px solid #000',
                         background: '#fff',
                         boxSizing: 'border-box',
                         overflow: 'hidden',
                         position: 'relative',
-                        minHeight: '240px',
                         transform: hasCursor && hoveredOpportunities ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredOpportunities
                             ? '0 12px 32px rgba(0,0,0,0.13), inset 0 0 0 0.5px rgba(0,0,0,0.05)'
@@ -649,6 +874,36 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         cursor: 'default',
                     }}
                 >
+                    <div
+                        className="ambient-orb"
+                        style={{
+                            position: 'absolute',
+                            width: '190px',
+                            height: '190px',
+                            borderRadius: '999px',
+                            right: '-58px',
+                            top: '-70px',
+                            background: 'radial-gradient(circle, rgba(0,0,0,0.055) 0%, rgba(0,0,0,0.02) 42%, transparent 70%)',
+                            pointerEvents: 'none',
+                            zIndex: 0,
+                        }}
+                    />
+
+                    <div
+                        className="card-sheen"
+                        style={{
+                            position: 'absolute',
+                            top: '-35%',
+                            left: 0,
+                            width: '42%',
+                            height: '170%',
+                            background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.045), transparent)',
+                            pointerEvents: 'none',
+                            zIndex: 1,
+                            opacity: 0,
+                        }}
+                    />
+
                     <svg
                         aria-hidden="true"
                         style={{
@@ -658,16 +913,16 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             height: '100%',
                             pointerEvents: 'none',
                             zIndex: 0,
-                            opacity: hoveredOpportunities ? 0.04 : 0,
+                            opacity: hoveredOpportunities ? 0.05 : 0.025,
                             transition: 'opacity 0.5s ease',
                         }}
                     >
                         <defs>
-                            <pattern id="dotgrid" x="0" y="0" width="18" height="18" patternUnits="userSpaceOnUse">
-                                <circle cx="1.5" cy="1.5" r="1.5" fill="#000" />
+                            <pattern id="minimalgrid" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
+                                <path d="M 22 0 L 0 0 0 22" fill="none" stroke="#000" strokeWidth="0.45" opacity="0.22" />
                             </pattern>
                         </defs>
-                        <rect width="100%" height="100%" fill="url(#dotgrid)" />
+                        <rect width="100%" height="100%" fill="url(#minimalgrid)" />
                     </svg>
 
                     <div
@@ -678,21 +933,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             zIndex: 1,
                             borderRadius: '22px',
                             opacity: hasCursor && hoveredOpportunities ? 1 : 0,
-                            background: `radial-gradient(ellipse 180px 140px at ${cursorPos.x}% ${cursorPos.y}%, rgba(0,0,0,0.05) 0%, transparent 70%)`,
+                            background: `radial-gradient(ellipse 190px 150px at ${cursorPos.x}% ${cursorPos.y}%, rgba(0,0,0,0.055) 0%, transparent 72%)`,
                             transition: 'opacity 0.4s ease',
-                        }}
-                    />
-
-                    <div
-                        style={{
-                            position: 'absolute',
-                            inset: 0,
-                            pointerEvents: 'none',
-                            zIndex: 2,
-                            borderRadius: '22px',
-                            opacity: hasCursor && hoveredOpportunities ? 1 : 0,
-                            background: `radial-gradient(ellipse 90px 70px at ${cursorPos.x}% ${cursorPos.y}%, rgba(255,255,255,0.5) 0%, transparent 65%)`,
-                            transition: 'opacity 0.35s ease',
                         }}
                     />
 
@@ -701,7 +943,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         style={{
                             position: 'absolute',
                             inset: 0,
-                            padding: '28px',
+                            padding: '26px',
                             boxSizing: 'border-box',
                             display: 'flex',
                             flexDirection: 'column',
@@ -711,11 +953,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             opacity: visible ? 1 : 0,
                             transform: visible
                                 ? contentLifted
-                                    ? 'translateY(-5px) scale(1.014)'
+                                    ? 'translateY(-4px) scale(1.012)'
                                     : 'translateY(0px) scale(1)'
                                 : 'translateY(10px) scale(0.97)',
                             filter: visible ? 'blur(0px)' : 'blur(2px)',
-                            transition: 'opacity 0.44s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1)',
+                            transition: 'opacity 0.42s cubic-bezier(0.4,0,0.2,1), transform 0.42s cubic-bezier(0.4,0,0.2,1), filter 0.42s cubic-bezier(0.4,0,0.2,1)',
                             willChange: 'opacity, transform, filter',
                         }}
                     >
@@ -728,18 +970,20 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     justifyContent: 'center',
                                     gap: '10px',
                                     flexWrap: 'wrap',
+                                    textAlign: 'center',
                                 }}
                             >
                                 {GREETING_WORDS.map((word, i) => (
                                     <span
+                                        className="greeting-word"
                                         key={`${greetingAnimKey}-${i}`}
                                         style={{
                                             display: 'inline-block',
-                                            fontSize: 'clamp(20px, 2.6vw, 27px)',
+                                            fontSize: 'clamp(25px, 2.7vw, 34px)',
                                             fontWeight: 800,
                                             color: '#000',
-                                            letterSpacing: '-0.6px',
-                                            lineHeight: 1.2,
+                                            letterSpacing: '-0.8px',
+                                            lineHeight: 1.08,
                                             opacity: 0,
                                             animation: 'blurWordReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                                             animationDelay: `${i * 130}ms`,
@@ -756,40 +1000,43 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    gap: '12px',
+                                    gap: '13px',
                                     textAlign: 'center',
                                     width: '100%',
+                                    maxWidth: '360px',
                                 }}
                             >
                                 <p
+                                    className="slide-main"
                                     style={{
-                                        fontSize: 'clamp(22px, 2.6vw, 30px)',
+                                        fontSize: 'clamp(27px, 3vw, 40px)',
                                         fontWeight: 800,
                                         color: '#000',
                                         margin: 0,
-                                        letterSpacing: '-0.8px',
-                                        lineHeight: 1.1,
+                                        letterSpacing: '-1.1px',
+                                        lineHeight: 1.02,
                                     }}
                                 >
                                     {contentSlide.main}
                                 </p>
                                 <div
                                     style={{
-                                        width: '28px',
-                                        height: '1.5px',
-                                        background: '#e0e0e0',
-                                        borderRadius: '2px',
+                                        width: '34px',
+                                        height: '2px',
+                                        background: '#e3e3e3',
+                                        borderRadius: '99px',
                                         flexShrink: 0,
                                     }}
                                 />
                                 <p
+                                    className="slide-secondary"
                                     style={{
-                                        fontSize: 'clamp(11px, 1vw, 13px)',
-                                        fontWeight: 500,
-                                        color: '#a0a0a0',
+                                        fontSize: 'clamp(13px, 1.2vw, 16px)',
+                                        fontWeight: 650,
+                                        color: '#9a9a9a',
                                         margin: 0,
-                                        letterSpacing: '0.3px',
-                                        lineHeight: 1.4,
+                                        letterSpacing: '0.2px',
+                                        lineHeight: 1.25,
                                     }}
                                 >
                                     {contentSlide.secondary}
