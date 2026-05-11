@@ -47,10 +47,11 @@ const SLIDES: Slide[] = [
         type: 'content',
         label: 'WORK SETUP',
         title: 'Flexible for Hybrid, Remote, or On-Site Setup',
-        description: 'Ready for hybrid, remote, or on-site opportunities with a stable setup, strong Wi-Fi, and personal devices for learning and development tasks.',
+        description: 'Ready for hybrid, remote, or on-site opportunities with personal devices prepared for learning and development tasks.',
         details: [
             { label: 'Device', value: 'Acer Helios 16 / MacBook Neo' },
             { label: 'Setup', value: 'Hybrid / Remote / On-Site' },
+            { label: 'Availability', value: 'Voluntary OJT / Internship / Learning Opportunities' },
         ],
         duration: 4000,
     },
@@ -78,6 +79,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [displayedSlide, setDisplayedSlide] = useState<Slide>(SLIDES[0]);
     const [isPaused, setIsPaused] = useState(false);
     const [cursorPos, setCursorPos] = useState({ x: 50, y: 50 });
+    const [contentLifted, setContentLifted] = useState(false);
 
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const elapsedRef = useRef(0);
@@ -129,6 +131,20 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
             x: ((e.clientX - rect.left) / rect.width) * 100,
             y: ((e.clientY - rect.top) / rect.height) * 100,
         });
+    };
+
+    const handleOpportunitiesEnter = () => {
+        if (hasCursor) {
+            setHoveredOpportunities(true);
+            setIsPaused(true);
+            setContentLifted(true);
+        }
+    };
+
+    const handleOpportunitiesLeave = () => {
+        setHoveredOpportunities(false);
+        setIsPaused(false);
+        setContentLifted(false);
     };
 
     const touchPillStyle: React.CSSProperties = {
@@ -427,16 +443,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 <div
                     ref={cardRef}
                     className="card opportunities-card"
-                    onMouseEnter={() => {
-                        if (hasCursor) {
-                            setHoveredOpportunities(true);
-                            setIsPaused(true);
-                        }
-                    }}
-                    onMouseLeave={() => {
-                        setHoveredOpportunities(false);
-                        setIsPaused(false);
-                    }}
+                    onMouseEnter={handleOpportunitiesEnter}
+                    onMouseLeave={handleOpportunitiesLeave}
                     onMouseMove={handleCardMouseMove}
                     style={{
                         borderRadius: '24px',
@@ -446,11 +454,47 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         overflow: 'hidden',
                         position: 'relative',
                         transform: hasCursor && hoveredOpportunities ? 'translateY(-2px)' : 'translateY(0)',
-                        boxShadow: hasCursor && hoveredOpportunities ? '0 12px 32px rgba(0,0,0,0.18)' : 'none',
-                        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                        boxShadow: hasCursor && hoveredOpportunities
+                            ? '0 12px 32px rgba(0,0,0,0.14), inset 0 0 0 0.5px rgba(0,0,0,0.06)'
+                            : 'none',
+                        transition: 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s cubic-bezier(0.34,1.56,0.64,1)',
                         cursor: 'default',
                     }}
                 >
+                    <svg
+                        aria-hidden="true"
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            pointerEvents: 'none',
+                            zIndex: 0,
+                            opacity: hoveredOpportunities ? 0.045 : 0,
+                            transition: 'opacity 0.5s ease',
+                        }}
+                    >
+                        <defs>
+                            <pattern id="dotgrid" x="0" y="0" width="18" height="18" patternUnits="userSpaceOnUse">
+                                <circle cx="1.5" cy="1.5" r="1.5" fill="#000" />
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#dotgrid)" />
+                    </svg>
+
+                    <div
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            pointerEvents: 'none',
+                            zIndex: 1,
+                            borderRadius: '22px',
+                            opacity: hasCursor && hoveredOpportunities ? 1 : 0,
+                            background: `radial-gradient(ellipse 180px 140px at ${cursorPos.x}% ${cursorPos.y}%, rgba(0,0,0,0.055) 0%, transparent 70%)`,
+                            transition: 'opacity 0.4s ease',
+                        }}
+                    />
+
                     <div
                         style={{
                             position: 'absolute',
@@ -459,8 +503,8 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             zIndex: 2,
                             borderRadius: '22px',
                             opacity: hasCursor && hoveredOpportunities ? 1 : 0,
-                            background: `radial-gradient(ellipse 160px 120px at ${cursorPos.x}% ${cursorPos.y}%, rgba(0,0,0,0.04) 0%, transparent 75%)`,
-                            transition: 'opacity 0.55s ease',
+                            background: `radial-gradient(ellipse 90px 70px at ${cursorPos.x}% ${cursorPos.y}%, rgba(255,255,255,0.55) 0%, transparent 65%)`,
+                            transition: 'opacity 0.35s ease',
                         }}
                     />
 
@@ -469,19 +513,21 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         style={{
                             position: 'absolute',
                             inset: 0,
-                            padding: '26px',
+                            padding: '28px',
                             boxSizing: 'border-box',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            zIndex: 1,
+                            zIndex: 3,
                             opacity: visible ? 1 : 0,
                             transform: visible
-                                ? 'translateY(0px) scale(1)'
+                                ? contentLifted
+                                    ? 'translateY(-4px) scale(1.012)'
+                                    : 'translateY(0px) scale(1)'
                                 : 'translateY(11px) scale(0.965)',
-                            filter: visible ? 'blur(0px)' : 'blur(2.5px)',
-                            transition: 'opacity 0.44s cubic-bezier(0.4, 0, 0.2, 1), transform 0.44s cubic-bezier(0.4, 0, 0.2, 1), filter 0.44s cubic-bezier(0.4, 0, 0.2, 1)',
+                            filter: visible ? 'blur(0px)' : 'blur(2px)',
+                            transition: 'opacity 0.44s cubic-bezier(0.4,0,0.2,1), transform 0.44s cubic-bezier(0.4,0,0.2,1), filter 0.44s cubic-bezier(0.4,0,0.2,1)',
                             willChange: 'opacity, transform, filter',
                         }}
                     >
@@ -504,8 +550,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <div style={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap: '11px',
+                                alignItems: 'center',
+                                gap: '10px',
                                 width: '100%',
+                                maxWidth: '260px',
+                                textAlign: 'center',
                             }}>
                                 <span style={{
                                     fontSize: '9px',
@@ -514,23 +563,25 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     color: '#b0b0b0',
                                     textTransform: 'uppercase',
                                     lineHeight: 1,
+                                    textAlign: 'center',
                                 }}>
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).label}
                                 </span>
 
                                 <p style={{
-                                    fontSize: 'clamp(14px, 1.55vw, 17px)',
+                                    fontSize: 'clamp(13px, 1.45vw, 16px)',
                                     fontWeight: 800,
                                     color: '#000',
                                     margin: 0,
                                     lineHeight: 1.3,
-                                    letterSpacing: '-0.45px',
+                                    letterSpacing: '-0.4px',
+                                    textAlign: 'center',
                                 }}>
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).title}
                                 </p>
 
                                 <div style={{
-                                    width: '30px',
+                                    width: '28px',
                                     height: '1.5px',
                                     background: '#e2e2e2',
                                     borderRadius: '2px',
@@ -538,11 +589,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 }} />
 
                                 <p style={{
-                                    fontSize: 'clamp(11px, 1.05vw, 12.5px)',
+                                    fontSize: 'clamp(10.5px, 0.95vw, 12px)',
                                     color: '#787878',
                                     margin: 0,
-                                    lineHeight: 1.68,
+                                    lineHeight: 1.65,
                                     fontWeight: 400,
+                                    textAlign: 'center',
                                 }}>
                                     {(displayedSlide as Extract<Slide, { type: 'content' }>).description}
                                 </p>
@@ -574,11 +626,12 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                                     textTransform: 'uppercase',
                                                     flexShrink: 0,
                                                     lineHeight: 1,
+                                                    textAlign: 'left',
                                                 }}>
                                                     {detail.label}
                                                 </span>
                                                 <span style={{
-                                                    fontSize: '11px',
+                                                    fontSize: '10px',
                                                     fontWeight: 600,
                                                     color: '#111',
                                                     textAlign: 'right',
