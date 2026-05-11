@@ -16,16 +16,19 @@ type Slide =
     | { type: 'content'; main: string; secondary: string; duration: number };
 
 const SLIDES: Slide[] = [
-    { type: 'greeting', duration: 2000 },
-    { type: 'content', main: 'iOS Focus', secondary: 'Clean Interfaces', duration: 4000 },
-    { type: 'content', main: 'Design Motion', secondary: 'Purposeful Flow', duration: 4000 },
-    { type: 'content', main: 'Swift Journey', secondary: 'Building Daily', duration: 4000 },
-    { type: 'content', main: 'Student Developer', secondary: 'Learning Forward', duration: 4000 },
-    { type: 'content', main: 'Open To OJT', secondary: 'Hybrid • Remote • On-Site', duration: 4000 },
-    { type: 'content', main: 'Ready Setup', secondary: 'Acer Helios 16 • MacBook Neo', duration: 4000 },
+    { type: 'greeting', duration: 4000 },
+    { type: 'content', main: 'iOS Focus', secondary: 'Clean Interfaces', duration: 5000 },
+    { type: 'content', main: 'Design Motion', secondary: 'Purposeful Flow', duration: 5000 },
+    { type: 'content', main: 'Swift Journey', secondary: 'Building Daily', duration: 5000 },
+    { type: 'content', main: 'Student Developer', secondary: 'Learning Forward', duration: 5000 },
+    { type: 'content', main: 'Open To OJT', secondary: 'Hybrid • Remote • On-Site', duration: 5000 },
+    { type: 'content', main: 'Ready Setup', secondary: 'Acer Helios 16 • MacBook Neo', duration: 5000 },
 ];
 
 const GREETING_WORDS = ['GLAD', 'YOU’RE', 'HERE!'];
+const MAGNET_ROWS = 7;
+const MAGNET_COLUMNS = 10;
+const MAGNET_LINES = Array.from({ length: MAGNET_ROWS * MAGNET_COLUMNS }, (_, index) => index);
 
 const styleBlock = `
     @keyframes blurWordReveal {
@@ -66,6 +69,44 @@ const styleBlock = `
 
     .opportunities-card:hover .card-sheen {
         animation: softSheen 1.5s ease forwards;
+    }
+
+    .magnet-lines-layer {
+        position: absolute;
+        inset: 18px;
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(7, 1fr);
+        justify-items: center;
+        align-items: center;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.2;
+        transition: opacity 0.45s ease, transform 0.45s ease;
+        transform: scale(0.98);
+    }
+
+    .opportunities-card:hover .magnet-lines-layer {
+        opacity: 0.42;
+        transform: scale(1);
+    }
+
+    .magnet-lines-layer span {
+        display: block;
+        width: 1.5px;
+        height: 16px;
+        border-radius: 99px;
+        background: #d9d9d9;
+        transform-origin: center;
+        transform: rotate(-10deg);
+        will-change: transform;
+        transition: transform 0.12s linear, background 0.3s ease, opacity 0.3s ease;
+        opacity: 0.9;
+    }
+
+    .opportunities-card:hover .magnet-lines-layer span {
+        background: #bdbdbd;
+        opacity: 1;
     }
 
     @media (max-width: 767px) {
@@ -223,6 +264,19 @@ const styleBlock = `
             width: 160px !important;
             height: 160px !important;
         }
+
+        .magnet-lines-layer {
+            inset: 16px;
+            opacity: 0.16;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+        }
+
+        .magnet-lines-layer span {
+            width: 1.25px;
+            height: 13px;
+            background: #dddddd;
+        }
     }
 
     @media (max-width: 430px) {
@@ -275,6 +329,15 @@ const styleBlock = `
 
         .greeting-word {
             font-size: 26px !important;
+        }
+
+        .magnet-lines-layer {
+            inset: 15px;
+            opacity: 0.14;
+        }
+
+        .magnet-lines-layer span {
+            height: 12px;
         }
     }
 
@@ -347,6 +410,16 @@ const styleBlock = `
         .greeting-word {
             font-size: 24px !important;
         }
+
+        .magnet-lines-layer {
+            inset: 14px;
+            opacity: 0.12;
+        }
+
+        .magnet-lines-layer span {
+            width: 1px;
+            height: 11px;
+        }
     }
 `;
 
@@ -370,6 +443,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const elapsedRef = useRef(0);
     const startTimeRef = useRef<number>(0);
     const cardRef = useRef<HTMLDivElement>(null);
+    const magnetLinesRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -412,13 +486,45 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         };
     }, [slideIndex, isPaused]);
 
+    const updateMagnetLines = (clientX: number, clientY: number) => {
+        const container = magnetLinesRef.current;
+        if (!container) return;
+
+        const items = container.querySelectorAll<HTMLSpanElement>('span');
+
+        items.forEach((item) => {
+            const rect = item.getBoundingClientRect();
+            const centerX = rect.x + rect.width / 2;
+            const centerY = rect.y + rect.height / 2;
+            const b = clientX - centerX;
+            const a = clientY - centerY;
+            const c = Math.sqrt(a * a + b * b) || 1;
+            const r = ((Math.acos(b / c) * 180) / Math.PI) * (clientY > centerY ? 1 : -1);
+
+            item.style.transform = `rotate(${r}deg)`;
+        });
+    };
+
+    const resetMagnetLines = () => {
+        const container = magnetLinesRef.current;
+        if (!container) return;
+
+        const items = container.querySelectorAll<HTMLSpanElement>('span');
+        items.forEach((item) => {
+            item.style.transform = 'rotate(-10deg)';
+        });
+    };
+
     const handleCardMouseMove = (e: MouseEvent<HTMLDivElement>) => {
         if (!cardRef.current) return;
         const rect = cardRef.current.getBoundingClientRect();
+
         setCursorPos({
             x: ((e.clientX - rect.left) / rect.width) * 100,
             y: ((e.clientY - rect.top) / rect.height) * 100,
         });
+
+        if (hasCursor) updateMagnetLines(e.clientX, e.clientY);
     };
 
     const handleOpportunitiesEnter = () => {
@@ -433,6 +539,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
         setHoveredOpportunities(false);
         setIsPaused(false);
         setContentLifted(false);
+        resetMagnetLines();
     };
 
     const touchPillStyle: CSSProperties = {
@@ -875,6 +982,16 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     }}
                 >
                     <div
+                        ref={magnetLinesRef}
+                        className="magnet-lines-layer"
+                        aria-hidden="true"
+                    >
+                        {MAGNET_LINES.map((line) => (
+                            <span key={line} />
+                        ))}
+                    </div>
+
+                    <div
                         className="ambient-orb"
                         style={{
                             position: 'absolute',
@@ -913,13 +1030,13 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             height: '100%',
                             pointerEvents: 'none',
                             zIndex: 0,
-                            opacity: hoveredOpportunities ? 0.05 : 0.025,
+                            opacity: hoveredOpportunities ? 0.035 : 0.015,
                             transition: 'opacity 0.5s ease',
                         }}
                     >
                         <defs>
                             <pattern id="minimalgrid" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
-                                <path d="M 22 0 L 0 0 0 22" fill="none" stroke="#000" strokeWidth="0.45" opacity="0.22" />
+                                <path d="M 22 0 L 0 0 0 22" fill="none" stroke="#000" strokeWidth="0.45" opacity="0.18" />
                             </pattern>
                         </defs>
                         <rect width="100%" height="100%" fill="url(#minimalgrid)" />
@@ -933,7 +1050,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             zIndex: 1,
                             borderRadius: '22px',
                             opacity: hasCursor && hoveredOpportunities ? 1 : 0,
-                            background: `radial-gradient(ellipse 190px 150px at ${cursorPos.x}% ${cursorPos.y}%, rgba(0,0,0,0.055) 0%, transparent 72%)`,
+                            background: `radial-gradient(ellipse 190px 150px at ${cursorPos.x}% ${cursorPos.y}%, rgba(0,0,0,0.045) 0%, transparent 72%)`,
                             transition: 'opacity 0.4s ease',
                         }}
                     />
