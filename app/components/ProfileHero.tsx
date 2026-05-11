@@ -31,23 +31,37 @@ const SLIDES: Slide[] = [
     { type: 'greeting', duration: 2000 },
     {
         type: 'content',
-        label: 'STUDENT DEVELOPER',
-        title: 'Building My Skills in Native iOS Development',
-        description: 'Learning Swift, SwiftUI, app structure, and clean UI design through consistent practice and portfolio projects.',
+        label: 'IOS FOCUS',
+        title: 'Learning to Build Clean iOS Experiences',
+        description: 'Focused on Swift, SwiftUI, and thoughtful mobile interfaces.',
+        duration: 4000,
+    },
+    {
+        type: 'content',
+        label: 'DESIGN + LOGIC',
+        title: 'Where UI Detail Meets App Thinking',
+        description: 'Practicing layouts, interactions, and clean user flows for better mobile experiences.',
+        duration: 4000,
+    },
+    {
+        type: 'content',
+        label: 'BUILDING PHASE',
+        title: 'Improving Through Real Portfolio Work',
+        description: 'Turning practice, feedback, and small projects into stronger development habits.',
         duration: 4000,
     },
     {
         type: 'content',
         label: 'CAREER DIRECTION',
         title: 'Open to Voluntary OJT and Learning Opportunities',
-        description: 'Available for voluntary OJT, internships, and beginner-friendly opportunities where I can learn, contribute, and grow.',
+        description: 'Ready to learn, contribute, and grow through beginner-friendly experience.',
         duration: 4000,
     },
     {
         type: 'content',
         label: 'WORK SETUP',
         title: 'Flexible for Hybrid, Remote, or On-Site Setup',
-        description: 'Ready for hybrid, remote, or on-site opportunities with personal devices prepared for learning and development tasks.',
+        description: 'Prepared with personal devices for learning, development tasks, and portfolio work.',
         details: [
             { label: 'Device', value: 'Acer Helios 16 / MacBook Neo' },
             { label: 'Setup', value: 'Hybrid / Remote / On-Site' },
@@ -55,16 +69,29 @@ const SLIDES: Slide[] = [
         ],
         duration: 4000,
     },
-    {
-        type: 'content',
-        label: 'LEARNING JOURNEY',
-        title: 'Learning With Consistency and Purpose',
-        description: 'Continuously improving through hands-on practice, portfolio development, and focused learning in iOS development.',
-        duration: 4000,
-    },
 ];
 
+const GREETING_WORDS = ['GLAD', "YOU\u2019RE", 'HERE!'];
+
 const mobileStyles = `
+    @keyframes blurWordReveal {
+        0% {
+            opacity: 0;
+            filter: blur(14px);
+            transform: translateY(-7px);
+        }
+        60% {
+            opacity: 1;
+            filter: blur(1px);
+            transform: translateY(1px);
+        }
+        100% {
+            opacity: 1;
+            filter: blur(0px);
+            transform: translateY(0px);
+        }
+    }
+
     @media (max-width: 1024px) {
         .profile-hero {
             display: grid !important;
@@ -129,10 +156,13 @@ const mobileStyles = `
         }
         .opportunities-card {
             width: 100% !important;
-            height: 260px !important;
+            height: auto !important;
+            min-height: 220px !important;
         }
         .slide-inner {
             padding: 22px !important;
+            position: relative !important;
+            inset: unset !important;
         }
     }
 
@@ -144,7 +174,7 @@ const mobileStyles = `
             gap: 14px !important;
         }
         .opportunities-card {
-            height: 250px !important;
+            min-height: 210px !important;
         }
         .contact-card {
             padding: 14px !important;
@@ -156,7 +186,7 @@ const mobileStyles = `
 
     @media (max-width: 375px) {
         .opportunities-card {
-            height: 240px !important;
+            min-height: 200px !important;
         }
         .contact-card {
             padding: 12px !important;
@@ -183,6 +213,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
     const [isPaused, setIsPaused] = useState(false);
     const [cursorPos, setCursorPos] = useState({ x: 50, y: 50 });
     const [contentLifted, setContentLifted] = useState(false);
+    const [greetingAnimKey, setGreetingAnimKey] = useState(0);
 
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const elapsedRef = useRef(0);
@@ -218,6 +249,9 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 elapsedRef.current = 0;
                 setSlideIndex(next);
                 setDisplayedSlide(SLIDES[next]);
+                if (next === 0) {
+                    setGreetingAnimKey((k) => k + 1);
+                }
                 setVisible(true);
             }, 440);
         }, remaining > 0 ? remaining : 0);
@@ -644,6 +678,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         boxSizing: 'border-box',
                         overflow: 'hidden',
                         position: 'relative',
+                        height: '260px',
                         transform: hasCursor && hoveredOpportunities ? 'translateY(-2px)' : 'translateY(0)',
                         boxShadow: hasCursor && hoveredOpportunities
                             ? '0 12px 32px rgba(0,0,0,0.14), inset 0 0 0 0.5px rgba(0,0,0,0.06)'
@@ -732,19 +767,35 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     >
                         {displayedSlide.type === 'greeting' ? (
 
-                            <p
+                            <div
+                                key={greetingAnimKey}
                                 style={{
-                                    fontSize: 'clamp(20px, 2.6vw, 27px)',
-                                    fontWeight: 800,
-                                    color: '#000',
-                                    margin: 0,
-                                    letterSpacing: '-0.6px',
-                                    textAlign: 'center',
-                                    lineHeight: 1.2,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '10px',
+                                    flexWrap: 'wrap',
                                 }}
                             >
-                                {"GLAD YOU'RE HERE!"}
-                            </p>
+                                {GREETING_WORDS.map((word, i) => (
+                                    <span
+                                        key={`${greetingAnimKey}-${i}`}
+                                        style={{
+                                            display: 'inline-block',
+                                            fontSize: 'clamp(20px, 2.6vw, 27px)',
+                                            fontWeight: 800,
+                                            color: '#000',
+                                            letterSpacing: '-0.6px',
+                                            lineHeight: 1.2,
+                                            opacity: 0,
+                                            animation: 'blurWordReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                                            animationDelay: `${i * 130}ms`,
+                                        }}
+                                    >
+                                        {word}
+                                    </span>
+                                ))}
+                            </div>
 
                         ) : (displayedSlide as Extract<Slide, { type: 'content' }>).details ? (
 
