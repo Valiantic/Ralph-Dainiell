@@ -1,20 +1,38 @@
 import { Skill } from '../types/portfolio';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface SkillsSectionProps {
     skills: Skill[];
 }
 
 export const SkillsSection = ({ skills }: SkillsSectionProps) => {
-    const categories: Skill['category'][] = ['Programming Languages', 'UI Development','App Architecture', 'Networking','Dev Tools','Database','Design Tools'];
+    const categories: Skill['category'][] = ['Programming Languages', 'UI Development', 'App Architecture', 'Networking', 'Dev Tools', 'Database', 'Design Tools'];
     const scrollRef = useRef<HTMLDivElement>(null);
     const [thumbTop, setThumbTop] = useState(56);
     const [showThumb, setShowThumb] = useState(false);
+    const [hasMouse, setHasMouse] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
     const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
     const THUMB_HEIGHT = 40;
     const TRACK_TOP = 56;
     const TRACK_BOTTOM = 24;
+
+    useEffect(() => {
+        const mq = window.matchMedia('(any-hover: hover) and (any-pointer: fine)');
+        setHasMouse(mq.matches);
+
+        const handler = (e: MediaQueryListEvent) => {
+            setHasMouse(e.matches);
+            if (!e.matches) {
+                setIsHovered(false);
+                setShowThumb(false);
+            }
+        };
+
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
 
     const handleScroll = () => {
         const el = scrollRef.current;
@@ -29,19 +47,32 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
     };
 
     return (
-        <div className="skills-card-outer card" 
-        onMouseEnter={() => setShowThumb(true)}
-        onMouseLeave={() => setShowThumb(false)}
-        style={{
-            height: 'var(--bento-height, 650px)',
-            background: '#fff',
-            position: 'relative',
-            borderRadius: '30px',
-            overflow: 'hidden',
-            padding: 0,
-            width: '100%',
-        }}>
-           <div
+        <div
+            className="skills-card-outer card"
+            onMouseEnter={() => {
+                if (hasMouse) {
+                    setShowThumb(true);
+                    setIsHovered(true);
+                }
+            }}
+            onMouseLeave={() => {
+                setShowThumb(false);
+                setIsHovered(false);
+            }}
+            style={{
+                height: 'var(--bento-height, 650px)',
+                background: '#fff',
+                position: 'relative',
+                borderRadius: '30px',
+                overflow: 'hidden',
+                padding: 0,
+                width: '100%',
+                transform: hasMouse && isHovered ? 'translateY(-2px)' : 'translateY(0)',
+                boxShadow: hasMouse && isHovered ? '0 12px 32px rgba(0, 0, 0, 0.13)' : 'none',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            }}
+        >
+            <div
                 ref={scrollRef}
                 onScroll={handleScroll}
                 className="skills-card"
@@ -111,20 +142,24 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                     scrollbar-width: none;
                     -ms-overflow-style: none;
                 }
+
                 .skills-card::-webkit-scrollbar {
                     display: none;
                 }
+
                 @media (max-width: 1024px) {
                     .skills-card-outer {
                         height: auto !important;
                         width: 100% !important;
                         align-self: flex-start !important;
                     }
+
                     .skills-card {
                         overflow-y: visible !important;
                         height: auto !important;
                         align-items: flex-start !important;
                     }
+
                     .scroll-thumb {
                         display: none !important;
                     }
