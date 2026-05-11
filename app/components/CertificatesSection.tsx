@@ -45,9 +45,17 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     }, []);
 
     useEffect(() => {
-        const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+        const mq = window.matchMedia('(any-hover: hover) and (any-pointer: fine)');
         setHasMouse(mq.matches);
-        const handler = (e: MediaQueryListEvent) => setHasMouse(e.matches);
+
+        const handler = (e: MediaQueryListEvent) => {
+            setHasMouse(e.matches);
+            if (!e.matches) {
+                isHoveredRef.current = false;
+                setIsHovered(false);
+            }
+        };
+
         mq.addEventListener('change', handler);
         return () => mq.removeEventListener('change', handler);
     }, []);
@@ -113,8 +121,17 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         return () => { document.body.style.overflow = ''; };
     }, [selectedCert]);
 
-    const handleMouseEnter = () => { isHoveredRef.current = true;  setIsHovered(true);  };
-    const handleMouseLeave = () => { isHoveredRef.current = false; setIsHovered(false); };
+    const handleMouseEnter = () => {
+        if (hasMouse) {
+            isHoveredRef.current = true;
+            setIsHovered(true);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        isHoveredRef.current = false;
+        setIsHovered(false);
+    };
 
     const renderCard = (cert: Certificate) => (
         <div
@@ -171,8 +188,21 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         <>
             <section
                 ref={sectionRef}
-                className={`card cert-section${visible ? ' cert-visible' : ''}`}
-                style={{ width: '100%', background: '#fff' }}
+                className="card cert-section"
+                style={{
+                    width: '100%',
+                    background: '#fff',
+                    opacity: visible ? 1 : 0,
+                    transform: visible
+                        ? hasMouse && isHovered
+                            ? 'translateY(-2px)'
+                            : 'translateY(0px)'
+                        : 'translateY(32px)',
+                    boxShadow: hasMouse && isHovered ? '0 12px 32px rgba(0, 0, 0, 0.13)' : 'none',
+                    transition: visible
+                        ? 'transform 0.3s ease, box-shadow 0.3s ease'
+                        : 'opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
+                }}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
@@ -409,27 +439,14 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 }
 
                 <style jsx>{`
-                    .cert-section {
-                        opacity: 0;
-                        transform: translateY(32px);
-                        transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-                                    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-                    }
-                    .cert-section.cert-visible {
-                        opacity: 1;
-                        transform: translateY(0px);
-                    }
-                    .cert-section.cert-visible:hover {
-                        transform: translateY(-2px);
-                        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-                        transition: transform 0.25s ease, box-shadow 0.25s ease;
-                    }
-
                     .cert-card {
                         transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
                     }
-                    .cert-card:hover {
-                        transform: scale(1.035) translateY(-6px);
+
+                    @media (hover: hover) and (pointer: fine) {
+                        .cert-card:hover {
+                            transform: scale(1.035) translateY(-6px);
+                        }
                     }
 
                     .no-scrollbar::-webkit-scrollbar { display: none; }
