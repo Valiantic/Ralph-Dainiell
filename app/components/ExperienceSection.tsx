@@ -1,56 +1,91 @@
 import { Experience } from '../types/portfolio';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 interface ExperienceSectionProps {
     experiences: Experience[];
 }
 
 export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
+    const [hasMouse, setHasMouse] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia('(any-hover: hover) and (any-pointer: fine)');
+        setHasMouse(mq.matches);
+
+        const handler = (e: MediaQueryListEvent) => {
+            setHasMouse(e.matches);
+            if (!e.matches) setIsHovered(false);
+        };
+
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
+
     return (
-        <div className="card experience-card" style={{
-            height: 'var(--bento-height, 650px)',
-            display: 'flex',
-            flexDirection: 'column',
-            background: '#fff',
-            overflow: 'hidden',
-            padding: 'clamp(16px, 4vw, 24px)',
-            boxSizing: 'border-box'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '16px', flexShrink: 0 }}>
-            <div style={{ width: 'clamp(26px, 3vw, 32px)', height: 'clamp(26px, 3vw, 32px)', position: 'relative' }}>
-                <Image src="/Images/Icons/experience icon.png" alt="Experience" fill style={{ objectFit: 'contain' }} />
-            </div>
+        <div
+            className="card experience-card"
+            onMouseEnter={() => {
+                if (hasMouse) setIsHovered(true);
+            }}
+            onMouseLeave={() => setIsHovered(false)}
+            style={{
+                height: 'var(--bento-height, 650px)',
+                display: 'flex',
+                flexDirection: 'column',
+                background: '#fff',
+                overflow: 'hidden',
+                padding: 'clamp(16px, 4vw, 24px)',
+                boxSizing: 'border-box',
+                transform: hasMouse && isHovered ? 'translateY(-2px)' : 'translateY(0)',
+                boxShadow: hasMouse && isHovered ? '0 12px 32px rgba(0, 0, 0, 0.13)' : 'none',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            }}
+        >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '16px', flexShrink: 0 }}>
+                <div style={{ width: 'clamp(26px, 3vw, 32px)', height: 'clamp(26px, 3vw, 32px)', position: 'relative' }}>
+                    <Image src="/Images/Icons/experience icon.png" alt="Experience" fill style={{ objectFit: 'contain' }} />
+                </div>
                 <h2 style={{ fontSize: '19.5px', fontWeight: 800, paddingTop: '2px' }}>Experience</h2>
             </div>
 
-            <div style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-                overflowY: 'auto',
-                paddingRight: '8px',
-                paddingLeft: '4px',
-            }} className="custom-scrollbar">
+            <div
+                style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px',
+                    overflowY: 'auto',
+                    paddingRight: '8px',
+                    paddingLeft: '4px',
+                }}
+                className="custom-scrollbar"
+            >
                 {experiences.map((exp) => (
-                    <div key={exp.id} style={{
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flexShrink: 0
-                    }}>
+                    <div
+                        key={exp.id}
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            flexShrink: 0,
+                        }}
+                    >
                         <div style={{ display: 'flex', gap: '12px', marginBottom: '8px', flexShrink: 0 }}>
                             {exp.logo && (
-                                <div style={{
-                                    width: '40px',
-                                    height: '40px',
-                                    borderRadius: '8px',
-                                    border: '1px solid #eee',
-                                    position: 'relative',
-                                    flexShrink: 0,
-                                    overflow: 'hidden',
-                                    background: '#fff'
-                                }}>
+                                <div
+                                    style={{
+                                        width: '40px',
+                                        height: '40px',
+                                        borderRadius: '8px',
+                                        border: '1px solid #eee',
+                                        position: 'relative',
+                                        flexShrink: 0,
+                                        overflow: 'hidden',
+                                        background: '#fff',
+                                    }}
+                                >
                                     <Image
                                         src={exp.logo}
                                         alt={exp.company}
@@ -59,10 +94,12 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
                                     />
                                 </div>
                             )}
+
                             <div style={{ flex: 1 }}>
                                 <h3 style={{ fontSize: '14px', fontWeight: 800, lineHeight: 1.2, marginBottom: '1px' }}>
                                     {exp.role}
                                 </h3>
+
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                     <p style={{ fontSize: '11px', fontWeight: 600, color: '#000' }}>{exp.company}</p>
                                     <p style={{ fontSize: '10px', fontWeight: 600, color: '#888' }}>{exp.duration}</p>
@@ -70,21 +107,25 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
                             </div>
                         </div>
 
-                        <div style={{
-                            border: '1.5px solid #000',
-                            borderRadius: '12px',
-                            padding: '10px 14px',
-                            boxSizing: 'border-box',
-                            background: '#fcfcfc'
-                        }}>
-                            <ul style={{
-                                paddingLeft: '14px',
-                                fontSize: '12px',
-                                color: '#333',
-                                lineHeight: 1.4,
-                                margin: 0,
-                                listStyleType: 'disc'
-                            }}>
+                        <div
+                            style={{
+                                border: '1.5px solid #000',
+                                borderRadius: '12px',
+                                padding: '10px 14px',
+                                boxSizing: 'border-box',
+                                background: '#fcfcfc',
+                            }}
+                        >
+                            <ul
+                                style={{
+                                    paddingLeft: '14px',
+                                    fontSize: '12px',
+                                    color: '#333',
+                                    lineHeight: 1.4,
+                                    margin: 0,
+                                    listStyleType: 'disc',
+                                }}
+                            >
                                 {exp.description.map((item, i) => (
                                     <li key={i} style={{ wordBreak: 'break-word' }}>
                                         {item}
@@ -101,17 +142,21 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
                     scrollbar-width: none;
                     -ms-overflow-style: none;
                 }
+
                 .custom-scrollbar::-webkit-scrollbar {
                     width: 4px;
                 }
+
                 .custom-scrollbar::-webkit-scrollbar-track {
                     background: transparent;
                 }
+
                 .custom-scrollbar::-webkit-scrollbar-thumb {
                     background: transparent;
                     border-radius: 10px;
                     transition: background 0.3s ease;
                 }
+
                 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
                     background: #ccc;
                 }
@@ -129,6 +174,7 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
                         padding: 20px !important;
                     }
                 }
+
                 @media (max-width: 480px) {
                     .experience-card {
                         height: 400px !important;
