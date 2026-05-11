@@ -46,8 +46,8 @@ interface DotFieldProps {
 const SLIDES: Slide[] = [
     { type: 'greeting', duration: 3000 },
     { type: 'content', main: 'Junior Developer', secondary: 'Native iOS', duration: 4000 },
-    { type: 'content', main: 'Available', secondary: 'Hybrid • Remote • On-Site', duration: 4000 },
-    { type: 'content', main: 'Build Together', secondary: 'Voluntary OJT', duration: 4000 },
+    { type: 'content', main: 'Available!', secondary: 'Hybrid • Remote • On-Site', duration: 4000 },
+    { type: 'content', main: 'Build Together', secondary: 'Open Voluntary OJT', duration: 4000 },
     { type: 'content', main: 'Devices', secondary: 'Acer Helios 16 • MacBook Neo', duration: 4000 },
 ];
 
