@@ -51,7 +51,6 @@ const SLIDES: Slide[] = [
         details: [
             { label: 'Device', value: 'Acer Helios 16 / MacBook Neo' },
             { label: 'Setup', value: 'Hybrid / Remote / On-Site' },
-            { label: 'Connection', value: 'Strong Wi-Fi Signal' },
         ],
         duration: 4000,
     },
