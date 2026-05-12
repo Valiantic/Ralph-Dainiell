@@ -26,6 +26,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const lockedScrollYRef = useRef(0);
 
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+    const [hoveredCertId, setHoveredCertId] = useState<Certificate['id'] | null>(null);
     const [isSmartphone, setIsSmartphone] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [hasMouse, setHasMouse] = useState(false);
@@ -39,7 +40,23 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const canNavigate = certificates.length > 1 && selectedIndex !== -1;
     const isModalOpen = selectedCert !== null;
 
+    const canUseHoverLift = hasMouse && !isSmartphone;
+
+    const getCertHoverStyle = (cert: Certificate) => {
+        const isCertHovered = canUseHoverLift && hoveredCertId === cert.id;
+
+        return {
+            position: 'relative' as const,
+            zIndex: isCertHovered ? 5 : 1,
+            transform: isCertHovered ? 'translateY(-7px)' : 'translateY(0)',
+            boxShadow: isCertHovered ? '0 14px 30px rgba(0, 0, 0, 0.13)' : 'none',
+            transition: 'transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1)',
+            willChange: 'transform',
+        };
+    };
+
     const openCertificate = (cert: Certificate) => {
+        setHoveredCertId(null);
         setSelectedCert(cert);
     };
 
@@ -75,6 +92,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             if (!e.matches) {
                 isHoveredRef.current = false;
                 setIsHovered(false);
+                setHoveredCertId(null);
             }
         };
 
@@ -205,12 +223,17 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const handleMouseLeave = () => {
         isHoveredRef.current = false;
         setIsHovered(false);
+        setHoveredCertId(null);
     };
 
     const renderCard = (cert: Certificate) => (
         <div
             key={cert.id}
             className="cert-card"
+            onMouseEnter={() => {
+                if (canUseHoverLift) setHoveredCertId(cert.id);
+            }}
+            onMouseLeave={() => setHoveredCertId(null)}
             onClick={() => openCertificate(cert)}
             style={{
                 minWidth: 'clamp(260px, 75vw, 340px)',
@@ -220,6 +243,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 cursor: 'pointer',
                 overflow: 'hidden',
                 flexShrink: 0,
+                ...getCertHoverStyle(cert),
             }}
         >
             <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
@@ -327,6 +351,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             <div
                                 key={cert.id}
                                 className="cert-card"
+                                onMouseEnter={() => {
+                                    if (canUseHoverLift) setHoveredCertId(cert.id);
+                                }}
+                                onMouseLeave={() => setHoveredCertId(null)}
                                 onClick={() => openCertificate(cert)}
                                 style={{
                                     width: '100%',
@@ -337,6 +365,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     overflow: 'hidden',
                                     boxSizing: 'border-box',
                                     flexShrink: 0,
+                                    ...getCertHoverStyle(cert),
                                 }}
                             >
                                 <div
@@ -413,6 +442,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             <div
                                 key={cert.id}
                                 className="cert-card"
+                                onMouseEnter={() => {
+                                    if (canUseHoverLift) setHoveredCertId(cert.id);
+                                }}
+                                onMouseLeave={() => setHoveredCertId(null)}
                                 onClick={() => openCertificate(cert)}
                                 style={{
                                     display: 'flex',
@@ -422,6 +455,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     borderBottom: index < certificates.length - 1 ? '0.5px solid rgba(0,0,0,0.08)' : 'none',
                                     cursor: 'pointer',
                                     background: '#fff',
+                                    ...getCertHoverStyle(cert),
                                 }}
                             >
                                 <div
@@ -612,22 +646,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 }
 
                 <style jsx>{`
-                    .cert-card {
-                        position: relative;
-                        z-index: 1;
-                        transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
-                                    box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1);
-                        will-change: transform;
-                    }
-
-                    @media (any-hover: hover) and (any-pointer: fine) and (min-width: 481px) {
-                        .cert-card:hover {
-                            z-index: 5;
-                            transform: translateY(-7px);
-                            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.13);
-                        }
-                    }
-
                     .no-scrollbar::-webkit-scrollbar {
                         display: none;
                     }
