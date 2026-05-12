@@ -442,47 +442,53 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 <FiX size={22} />
                             </button>
 
-                            {canNavigate && (
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        showPreviousCertificate();
-                                    }}
-                                    className="nav-btn nav-prev modal-control-btn"
-                                    aria-label="Previous certificate"
-                                >
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M15 18L9 12L15 6" />
-                                    </svg>
-                                </button>
-                            )}
-
-                            <div onClick={e => e.stopPropagation()} className="modal-content">
-                                <div className="modal-image">
-                                    <Image
-                                        src={selectedCert.imageUrl}
-                                        alt={selectedCert.title}
-                                        fill
-                                        style={{ objectFit: 'contain' }}
-                                        unoptimized
-                                    />
+                            <div onClick={e => e.stopPropagation()} className="modal-stage">
+                                <div className="modal-content">
+                                    <div className="modal-image">
+                                        <Image
+                                            src={selectedCert.imageUrl}
+                                            alt={selectedCert.title}
+                                            fill
+                                            style={{ objectFit: 'contain' }}
+                                            unoptimized
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            {canNavigate && (
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        showNextCertificate();
-                                    }}
-                                    className="nav-btn nav-next modal-control-btn"
-                                    aria-label="Next certificate"
-                                >
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M9 18L15 12L9 6" />
-                                    </svg>
-                                </button>
-                            )}
+                                {canNavigate && (
+                                    <div className="modal-actions">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                showPreviousCertificate();
+                                            }}
+                                            className="modal-action-btn"
+                                            aria-label="Previous certificate"
+                                        >
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M15 18L9 12L15 6" />
+                                            </svg>
+                                            <span>Previous</span>
+                                        </button>
+
+                                        <div className="modal-action-divider" />
+
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                showNextCertificate();
+                                            }}
+                                            className="modal-action-btn"
+                                            aria-label="Next certificate"
+                                        >
+                                            <span>Next</span>
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M9 18L15 12L9 6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>,
                         document.getElementById('modal-root')!
                     )
@@ -507,26 +513,35 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         inset: 0;
                         width: 100vw;
                         height: 100vh;
-                        background: rgba(0, 0, 0, 0.82);
-                        backdrop-filter: blur(12px);
-                        -webkit-backdrop-filter: blur(12px);
+                        background: rgba(0, 0, 0, 0.78);
+                        backdrop-filter: blur(14px);
+                        -webkit-backdrop-filter: blur(14px);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         z-index: 9999;
-                        padding: 48px 84px;
+                        padding: 54px 32px;
                         box-sizing: border-box;
                         animation: fadeIn 0.25s ease;
                     }
 
+                    .modal-stage {
+                        width: min(960px, 100%);
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 18px;
+                        animation: zoomIn 0.25s ease forwards;
+                    }
+
                     .modal-content {
-                        width: min(920px, 100%);
-                        height: min(82vh, 760px);
+                        width: 100%;
+                        height: min(72vh, 680px);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         position: relative;
-                        animation: zoomIn 0.25s ease forwards;
                     }
 
                     .modal-image {
@@ -538,22 +553,17 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
                     .modal-control-btn {
                         border: 1px solid rgba(255, 255, 255, 0.12);
-                        background: rgba(28, 28, 30, 0.78);
+                        background: rgba(24, 24, 24, 0.72);
                         color: #fff;
                         backdrop-filter: blur(16px);
                         -webkit-backdrop-filter: blur(16px);
-                        box-shadow:
-                            0 12px 30px rgba(0, 0, 0, 0.30),
-                            inset 0 1px 0 rgba(255, 255, 255, 0.10);
+                        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         cursor: pointer;
                         z-index: 10002;
-                        transition:
-                            transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-                            background 0.22s ease,
-                            border-color 0.22s ease;
+                        transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease;
                     }
 
                     .close-btn {
@@ -562,119 +572,130 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         right: 24px;
                         width: 44px;
                         height: 44px;
-                        border-radius: 16px;
+                        border-radius: 14px;
                     }
 
-                    .nav-btn {
-                        position: fixed;
-                        top: 50%;
-                        width: 46px;
-                        height: 46px;
+                    .modal-actions {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 0;
+                        border: 1px solid rgba(255, 255, 255, 0.12);
+                        background: rgba(24, 24, 24, 0.72);
+                        color: #fff;
+                        backdrop-filter: blur(16px);
+                        -webkit-backdrop-filter: blur(16px);
                         border-radius: 999px;
-                        transform: translateY(-50%);
+                        padding: 6px;
+                        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
                     }
 
-                    .nav-prev {
-                        left: 26px;
+                    .modal-action-btn {
+                        height: 42px;
+                        min-width: 128px;
+                        border: none;
+                        background: transparent;
+                        color: #fff;
+                        border-radius: 999px;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                        font-size: 13px;
+                        font-weight: 700;
+                        letter-spacing: -0.1px;
+                        cursor: pointer;
+                        transition: background 0.22s ease, transform 0.22s ease;
                     }
 
-                    .nav-next {
-                        right: 26px;
+                    .modal-action-divider {
+                        width: 1px;
+                        height: 24px;
+                        background: rgba(255, 255, 255, 0.14);
+                        margin: 0 2px;
                     }
 
                     @media (hover: hover) and (pointer: fine) {
-                        .modal-control-btn:hover {
-                            background: rgba(44, 44, 46, 0.88);
-                            border-color: rgba(255, 255, 255, 0.20);
+                        .modal-control-btn:hover,
+                        .modal-action-btn:hover {
+                            background: rgba(255, 255, 255, 0.10);
                         }
 
                         .close-btn:hover {
                             transform: scale(1.04);
                         }
 
-                        .nav-btn:hover {
-                            transform: translateY(-50%) scale(1.06);
+                        .modal-action-btn:hover {
+                            transform: translateY(-1px);
                         }
                     }
 
-                    .close-btn:active {
+                    .modal-control-btn:active,
+                    .modal-action-btn:active {
                         transform: scale(0.96);
-                    }
-
-                    .nav-btn:active {
-                        transform: translateY(-50%) scale(0.96);
                     }
 
                     @media (max-width: 768px) {
                         .modal-overlay {
+                            padding: 92px 18px 44px;
                             align-items: center;
-                            padding: 88px 18px 112px;
                             overflow: hidden;
                         }
 
+                        .modal-stage {
+                            gap: 16px;
+                        }
+
                         .modal-content {
-                            width: 100%;
                             height: min(58vh, 520px);
                         }
 
                         .close-btn {
                             top: 22px;
                             right: 22px;
-                            width: 48px;
-                            height: 48px;
-                            border-radius: 16px;
+                            width: 46px;
+                            height: 46px;
+                            border-radius: 14px;
                         }
 
-                        .nav-btn {
-                            top: auto;
-                            bottom: 32px;
-                            width: 50px;
-                            height: 50px;
-                            transform: none;
+                        .modal-actions {
+                            width: min(320px, 100%);
+                            padding: 5px;
                         }
 
-                        .nav-prev {
-                            left: calc(50% - 62px);
-                        }
-
-                        .nav-next {
-                            right: calc(50% - 62px);
-                        }
-
-                        .nav-btn:active {
-                            transform: scale(0.96);
+                        .modal-action-btn {
+                            min-width: 0;
+                            flex: 1;
+                            height: 42px;
+                            font-size: 13px;
                         }
                     }
 
                     @media (max-width: 480px) {
                         .modal-overlay {
-                            padding: 86px 18px 108px;
+                            padding: 88px 18px 40px;
                         }
 
                         .modal-content {
-                            height: min(54vh, 460px);
+                            height: min(50vh, 420px);
                         }
 
                         .close-btn {
                             top: 20px;
                             right: 20px;
-                            width: 46px;
-                            height: 46px;
-                            border-radius: 15px;
+                            width: 44px;
+                            height: 44px;
+                            border-radius: 14px;
                         }
 
-                        .nav-btn {
-                            bottom: 30px;
-                            width: 48px;
-                            height: 48px;
+                        .modal-actions {
+                            width: 100%;
+                            max-width: 292px;
                         }
 
-                        .nav-prev {
-                            left: calc(50% - 60px);
-                        }
-
-                        .nav-next {
-                            right: calc(50% - 60px);
+                        .modal-action-btn {
+                            height: 40px;
+                            font-size: 12px;
                         }
                     }
 
