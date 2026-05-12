@@ -11,14 +11,13 @@ import ProjectsSection from './components/ProjectsSection';
 
 export default function Home() {
   return (
-    <main style={{
+   <main style={{
       padding: 'clamp(16px, 4vw, 40px)',
       maxWidth: '1600px',
       margin: '0 auto',
       display: 'flex',
       flexDirection: 'column',
       gap: 'clamp(20px, 5vw, 32px)',
-      overflowX: 'hidden'
     }}>
       <ProfileHero data={PORTFOLIO_DATA} />
 

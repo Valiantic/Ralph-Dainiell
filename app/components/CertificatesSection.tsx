@@ -19,23 +19,25 @@ const getIssuerColor = (issuer: string) => {
 };
 
 export const CertificatesSection = ({ certificates }: CertificatesSectionProps) => {
-    const sectionRef  = useRef<HTMLElement>(null);
-    const outerRef    = useRef<HTMLDivElement>(null);
-    const trackRef    = useRef<HTMLDivElement>(null);
+    const sectionRef = useRef<HTMLElement>(null);
+    const outerRef = useRef<HTMLDivElement>(null);
+    const trackRef = useRef<HTMLDivElement>(null);
     const isHoveredRef = useRef(false);
+    const lockedScrollYRef = useRef(0);
 
     const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
     const [isSmartphone, setIsSmartphone] = useState(false);
-    const [isMobile,   setIsMobile]   = useState(false);
-    const [hasMouse,   setHasMouse]   = useState(false);
-    const [isHovered,  setIsHovered]  = useState(false);
-    const [visible,    setVisible]    = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const [hasMouse, setHasMouse] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [visible, setVisible] = useState(false);
 
     const xVal = useMotionValue(0);
-    const x    = useSpring(xVal, { stiffness: 80, damping: 20, mass: 0.5 });
+    const x = useSpring(xVal, { stiffness: 80, damping: 20, mass: 0.5 });
 
     const selectedIndex = selectedCert ? certificates.findIndex((cert) => cert.id === selectedCert.id) : -1;
     const canNavigate = certificates.length > 1 && selectedIndex !== -1;
+    const isModalOpen = selectedCert !== null;
 
     const openCertificate = (cert: Certificate) => {
         setSelectedCert(cert);
@@ -58,6 +60,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             setIsSmartphone(window.innerWidth <= 480);
             setIsMobile(window.innerWidth <= 768);
         };
+
         check();
         window.addEventListener('resize', check);
         return () => window.removeEventListener('resize', check);
@@ -89,43 +92,53 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             },
             { threshold: 0.1 }
         );
+
         if (sectionRef.current) observer.observe(sectionRef.current);
+
         return () => observer.disconnect();
     }, []);
 
     useEffect(() => {
         if (!hasMouse) return;
+
         const el = sectionRef.current;
         if (!el) return;
 
         const onWheel = (e: WheelEvent) => {
             if (!isHoveredRef.current) return;
+
             e.preventDefault();
 
             const track = trackRef.current;
             const outer = outerRef.current;
             if (!track || !outer) return;
 
-            const maxX  = -(track.scrollWidth - outer.clientWidth);
+            const maxX = -(track.scrollWidth - outer.clientWidth);
             const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-            const next  = Math.max(maxX, Math.min(0, xVal.get() - delta));
+            const next = Math.max(maxX, Math.min(0, xVal.get() - delta));
+
             xVal.set(next);
         };
 
         el.addEventListener('wheel', onWheel, { passive: false });
+
         return () => el.removeEventListener('wheel', onWheel);
     }, [hasMouse, xVal]);
 
     useEffect(() => {
         if (!hasMouse) return;
+
         const onResize = () => {
             const track = trackRef.current;
             const outer = outerRef.current;
             if (!track || !outer) return;
+
             const maxX = -(track.scrollWidth - outer.clientWidth);
             if (xVal.get() < maxX) xVal.set(maxX);
         };
+
         window.addEventListener('resize', onResize);
+
         return () => window.removeEventListener('resize', onResize);
     }, [hasMouse, xVal]);
 
@@ -133,14 +146,54 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         const handler = (e: KeyboardEvent) => {
             if (e.key === 'Escape') setSelectedCert(null);
         };
+
         window.addEventListener('keydown', handler);
+
         return () => window.removeEventListener('keydown', handler);
     }, []);
 
     useEffect(() => {
-        document.body.style.overflow = selectedCert ? 'hidden' : '';
-        return () => { document.body.style.overflow = ''; };
-    }, [selectedCert]);
+        if (!isModalOpen) return;
+
+        const html = document.documentElement;
+        const body = document.body;
+
+        const previousHtmlOverflow = html.style.overflow;
+        const previousHtmlOverscrollBehavior = html.style.overscrollBehavior;
+        const previousBodyOverflow = body.style.overflow;
+        const previousBodyOverscrollBehavior = body.style.overscrollBehavior;
+        const previousBodyPosition = body.style.position;
+        const previousBodyTop = body.style.top;
+        const previousBodyLeft = body.style.left;
+        const previousBodyRight = body.style.right;
+        const previousBodyWidth = body.style.width;
+
+        lockedScrollYRef.current = window.scrollY;
+
+        html.style.overflow = 'hidden';
+        html.style.overscrollBehavior = 'none';
+        body.style.overflow = 'hidden';
+        body.style.overscrollBehavior = 'none';
+        body.style.position = 'fixed';
+        body.style.top = `-${lockedScrollYRef.current}px`;
+        body.style.left = '0';
+        body.style.right = '0';
+        body.style.width = '100%';
+
+        return () => {
+            html.style.overflow = previousHtmlOverflow;
+            html.style.overscrollBehavior = previousHtmlOverscrollBehavior;
+            body.style.overflow = previousBodyOverflow;
+            body.style.overscrollBehavior = previousBodyOverscrollBehavior;
+            body.style.position = previousBodyPosition;
+            body.style.top = previousBodyTop;
+            body.style.left = previousBodyLeft;
+            body.style.right = previousBodyRight;
+            body.style.width = previousBodyWidth;
+
+            window.scrollTo(0, lockedScrollYRef.current);
+        };
+    }, [isModalOpen]);
 
     const handleMouseEnter = () => {
         if (hasMouse) {
@@ -179,26 +232,40 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 />
             </div>
 
-            <div style={{
-                padding: '12px 14px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                borderTop: '0.5px solid rgba(0,0,0,0.06)',
-            }}>
-                <div style={{
-                    width: '8px', height: '8px', borderRadius: '50%',
-                    background: getIssuerColor(cert.issuer), flexShrink: 0,
-                }} />
+            <div
+                style={{
+                    padding: '12px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    borderTop: '0.5px solid rgba(0,0,0,0.06)',
+                }}
+            >
+                <div
+                    style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        background: getIssuerColor(cert.issuer),
+                        flexShrink: 0,
+                    }}
+                />
+
                 <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
                     {cert.title}
                 </span>
-                <span style={{
-                    fontSize: '11px', fontWeight: 600,
-                    border: '1.5px solid #000',
-                    padding: '4px 10px', borderRadius: '20px',
-                    whiteSpace: 'nowrap', flexShrink: 0,
-                }}>
+
+                <span
+                    style={{
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        border: '1.5px solid #000',
+                        padding: '4px 10px',
+                        borderRadius: '20px',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                    }}
+                >
                     {cert.issuer}
                 </span>
             </div>
@@ -229,13 +296,20 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
             >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '24px' }}>
                     <div style={{ width: '39px', height: '40px', position: 'relative' }}>
-                        <Image src="/Images/Icons/certificate icon.png" alt="Certificates" fill style={{ objectFit: 'contain' }} />
+                        <Image
+                            src="/Images/Icons/certificate icon.png"
+                            alt="Certificates"
+                            fill
+                            style={{ objectFit: 'contain' }}
+                        />
                     </div>
-                    <h2 style={{ fontSize: '22px', fontWeight: 700, paddingTop: '2px'}}>Certificates</h2>
+
+                    <h2 style={{ fontSize: '22px', fontWeight: 700, paddingTop: '2px' }}>
+                        Certificates
+                    </h2>
                 </div>
 
                 {isSmartphone ? (
-
                     <div
                         className="no-scrollbar"
                         style={{
@@ -264,12 +338,14 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     flexShrink: 0,
                                 }}
                             >
-                                <div style={{
-                                    position: 'relative',
-                                    width: '100%',
-                                    height: '180px',
-                                    background: '#f2f2f7',
-                                }}>
+                                <div
+                                    style={{
+                                        position: 'relative',
+                                        width: '100%',
+                                        height: '180px',
+                                        background: '#f2f2f7',
+                                    }}
+                                >
                                     <Image
                                         src={cert.imageUrl}
                                         alt={cert.title}
@@ -279,42 +355,58 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     />
                                 </div>
 
-                                <div style={{
-                                    padding: '12px 14px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '10px',
-                                    borderTop: '1px solid rgba(0,0,0,0.06)',
-                                    boxSizing: 'border-box',
-                                }}>
-                                    <div style={{
-                                        width: '8px', height: '8px', borderRadius: '50%',
-                                        background: getIssuerColor(cert.issuer), flexShrink: 0,
-                                    }} />
-                                    <span style={{
-                                        fontSize: '13px', fontWeight: 700,
-                                        flex: 1, lineHeight: 1.3,
-                                        color: '#000',
-                                        minWidth: 0,
-                                    }}>
+                                <div
+                                    style={{
+                                        padding: '12px 14px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        borderTop: '1px solid rgba(0,0,0,0.06)',
+                                        boxSizing: 'border-box',
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            width: '8px',
+                                            height: '8px',
+                                            borderRadius: '50%',
+                                            background: getIssuerColor(cert.issuer),
+                                            flexShrink: 0,
+                                        }}
+                                    />
+
+                                    <span
+                                        style={{
+                                            fontSize: '13px',
+                                            fontWeight: 700,
+                                            flex: 1,
+                                            lineHeight: 1.3,
+                                            color: '#000',
+                                            minWidth: 0,
+                                        }}
+                                    >
                                         {cert.title}
                                     </span>
-                                    <span style={{
-                                        fontSize: '10px', fontWeight: 600,
-                                        border: '1.5px solid #000',
-                                        padding: '3px 9px', borderRadius: '20px',
-                                        whiteSpace: 'nowrap', flexShrink: 0,
-                                        color: '#000',
-                                    }}>
+
+                                    <span
+                                        style={{
+                                            fontSize: '10px',
+                                            fontWeight: 600,
+                                            border: '1.5px solid #000',
+                                            padding: '3px 9px',
+                                            borderRadius: '20px',
+                                            whiteSpace: 'nowrap',
+                                            flexShrink: 0,
+                                            color: '#000',
+                                        }}
+                                    >
                                         {cert.issuer}
                                     </span>
                                 </div>
                             </div>
                         ))}
                     </div>
-
                 ) : isMobile ? (
-
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                         {certificates.map((cert, index) => (
                             <div
@@ -330,27 +422,33 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     background: '#fff',
                                 }}
                             >
-                                <div style={{
-                                    width: '8px', height: '8px', borderRadius: '50%',
-                                    background: getIssuerColor(cert.issuer), flexShrink: 0,
-                                }} />
+                                <div
+                                    style={{
+                                        width: '8px',
+                                        height: '8px',
+                                        borderRadius: '50%',
+                                        background: getIssuerColor(cert.issuer),
+                                        flexShrink: 0,
+                                    }}
+                                />
+
                                 <div style={{ flex: 1, minWidth: 0 }}>
                                     <div style={{ fontSize: '15px', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>
                                         {cert.title}
                                     </div>
+
                                     <div style={{ fontSize: '13px', color: '#888', marginTop: '2px' }}>
                                         {cert.issuer}
                                     </div>
                                 </div>
+
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="2">
                                     <path d="M9 18l6-6-6-6" />
                                 </svg>
                             </div>
                         ))}
                     </div>
-
                 ) : hasMouse ? (
-
                     <div
                         ref={outerRef}
                         style={{
@@ -368,9 +466,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             {certificates.map(renderCard)}
                         </motion.div>
                     </div>
-
                 ) : (
-
                     <div
                         className="no-scrollbar"
                         style={{
@@ -398,28 +494,49 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 }}
                             >
                                 <div style={{ position: 'relative', height: '220px', background: '#f2f2f7' }}>
-                                    <Image src={cert.imageUrl} alt={cert.title} fill style={{ objectFit: 'cover' }} unoptimized />
+                                    <Image
+                                        src={cert.imageUrl}
+                                        alt={cert.title}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        unoptimized
+                                    />
                                 </div>
-                                <div style={{
-                                    padding: '12px 14px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    borderTop: '0.5px solid rgba(0,0,0,0.06)',
-                                }}>
-                                    <div style={{
-                                        width: '8px', height: '8px', borderRadius: '50%',
-                                        background: getIssuerColor(cert.issuer), flexShrink: 0,
-                                    }} />
+
+                                <div
+                                    style={{
+                                        padding: '12px 14px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        borderTop: '0.5px solid rgba(0,0,0,0.06)',
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            width: '8px',
+                                            height: '8px',
+                                            borderRadius: '50%',
+                                            background: getIssuerColor(cert.issuer),
+                                            flexShrink: 0,
+                                        }}
+                                    />
+
                                     <span style={{ fontSize: '13px', fontWeight: 600, flex: 1, lineHeight: 1.3 }}>
                                         {cert.title}
                                     </span>
-                                    <span style={{
-                                        fontSize: '11px', fontWeight: 600,
-                                        border: '1.5px solid #000',
-                                        padding: '4px 10px', borderRadius: '20px',
-                                        whiteSpace: 'nowrap', flexShrink: 0,
-                                    }}>
+
+                                    <span
+                                        style={{
+                                            fontSize: '11px',
+                                            fontWeight: 600,
+                                            border: '1.5px solid #000',
+                                            padding: '4px 10px',
+                                            borderRadius: '20px',
+                                            whiteSpace: 'nowrap',
+                                            flexShrink: 0,
+                                        }}
+                                    >
                                         {cert.issuer}
                                     </span>
                                 </div>
@@ -442,7 +559,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                 <FiX size={22} />
                             </button>
 
-                            <div onClick={e => e.stopPropagation()} className="modal-stage">
+                            <div onClick={(e) => e.stopPropagation()} className="modal-stage">
                                 <div className="modal-content">
                                     <div className="modal-image">
                                         <Image
@@ -465,10 +582,9 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                             className="modal-action-btn"
                                             aria-label="Previous certificate"
                                         >
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                 <path d="M15 18L9 12L15 6" />
                                             </svg>
-                                            <span>Previous</span>
                                         </button>
 
                                         <div className="modal-action-divider" />
@@ -481,8 +597,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                             className="modal-action-btn"
                                             aria-label="Next certificate"
                                         >
-                                            <span>Next</span>
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                 <path d="M9 18L15 12L9 6" />
                                             </svg>
                                         </button>
@@ -505,8 +620,14 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         }
                     }
 
-                    .no-scrollbar::-webkit-scrollbar { display: none; }
-                    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                    .no-scrollbar::-webkit-scrollbar {
+                        display: none;
+                    }
+
+                    .no-scrollbar {
+                        -ms-overflow-style: none;
+                        scrollbar-width: none;
+                    }
 
                     .modal-overlay {
                         position: fixed;
@@ -522,6 +643,9 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         z-index: 9999;
                         padding: 54px 32px;
                         box-sizing: border-box;
+                        overflow: hidden;
+                        overscroll-behavior: none;
+                        touch-action: none;
                         animation: fadeIn 0.25s ease;
                     }
 
@@ -533,6 +657,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         justify-content: center;
                         gap: 18px;
                         animation: zoomIn 0.25s ease forwards;
+                        touch-action: auto;
                     }
 
                     .modal-content {
@@ -588,11 +713,12 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         border-radius: 999px;
                         padding: 6px;
                         box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
+                        touch-action: auto;
                     }
 
                     .modal-action-btn {
-                        height: 42px;
-                        min-width: 128px;
+                        width: 46px;
+                        height: 40px;
                         border: none;
                         background: transparent;
                         color: #fff;
@@ -600,17 +726,13 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         display: inline-flex;
                         align-items: center;
                         justify-content: center;
-                        gap: 8px;
-                        font-size: 13px;
-                        font-weight: 700;
-                        letter-spacing: -0.1px;
                         cursor: pointer;
                         transition: background 0.22s ease, transform 0.22s ease;
                     }
 
                     .modal-action-divider {
                         width: 1px;
-                        height: 24px;
+                        height: 22px;
                         background: rgba(255, 255, 255, 0.14);
                         margin: 0 2px;
                     }
@@ -639,7 +761,6 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         .modal-overlay {
                             padding: 92px 18px 44px;
                             align-items: center;
-                            overflow: hidden;
                         }
 
                         .modal-stage {
@@ -659,15 +780,12 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         }
 
                         .modal-actions {
-                            width: min(320px, 100%);
                             padding: 5px;
                         }
 
                         .modal-action-btn {
-                            min-width: 0;
-                            flex: 1;
-                            height: 42px;
-                            font-size: 13px;
+                            width: 48px;
+                            height: 40px;
                         }
                     }
 
@@ -688,25 +806,32 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             border-radius: 14px;
                         }
 
-                        .modal-actions {
-                            width: 100%;
-                            max-width: 292px;
-                        }
-
                         .modal-action-btn {
-                            height: 40px;
-                            font-size: 12px;
+                            width: 46px;
+                            height: 38px;
                         }
                     }
 
                     @keyframes zoomIn {
-                        from { opacity: 0; transform: scale(0.96); }
-                        to   { opacity: 1; transform: scale(1); }
+                        from {
+                            opacity: 0;
+                            transform: scale(0.96);
+                        }
+
+                        to {
+                            opacity: 1;
+                            transform: scale(1);
+                        }
                     }
 
                     @keyframes fadeIn {
-                        from { opacity: 0; }
-                        to   { opacity: 1; }
+                        from {
+                            opacity: 0;
+                        }
+
+                        to {
+                            opacity: 1;
+                        }
                     }
                 `}</style>
             </section>

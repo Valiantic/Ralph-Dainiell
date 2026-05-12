@@ -23,7 +23,9 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
+  overflow-y: auto;
+  min-height: 100%;
 }
 
 body {
@@ -33,8 +35,11 @@ body {
   font-weight: 400;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-  min-height: 100vh;
+  overflow-x: clip;
+  overflow-y: visible;
+  min-height: 100svh;
+  width: 100%;
+  touch-action: pan-y;
 }
 
 main {
@@ -44,6 +49,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow: visible;
 }
 
 .bento-grid {
@@ -154,14 +160,23 @@ button {
 .bento-grid > *:nth-child(5) { animation-delay: 0.25s; }
 
 @media (max-width: 1024px) {
-  html, body {
-    overflow-x: hidden;
+  html {
+    overflow-x: clip;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  body {
+    overflow-x: clip;
+    overflow-y: visible;
     width: 100%;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
   }
 
   main {
     height: auto;
+    overflow: visible;
   }
 
   .mobile-span-12 {
