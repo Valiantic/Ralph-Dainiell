@@ -23,13 +23,13 @@ export const BioSection = ({ bio }: BioSectionProps) => {
 
     return (
         <div
-            className="card no-scrollbar"
+            className="card no-scrollbar bio-card"
             onMouseEnter={() => {
                 if (hasMouse) setIsHovered(true);
             }}
             onMouseLeave={() => setIsHovered(false)}
             style={{
-                height: 'var(--bento-height, 650px)',
+                height: '420px',
                 background: '#fff',
                 overflowY: 'auto',
                 display: 'flex',
@@ -78,7 +78,7 @@ export const BioSection = ({ bio }: BioSectionProps) => {
                 }
 
                 @media (max-width: 1024px) {
-                    .card {
+                    .bio-card {
                         height: auto !important;
                         min-height: 0 !important;
                         padding: 20px !important;
