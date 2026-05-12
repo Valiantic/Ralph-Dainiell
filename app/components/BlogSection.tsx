@@ -30,10 +30,10 @@ export default function BlogSection() {
             style={{
                 width: '100%',
                 background: '#fff',
-                minHeight: '160px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
+                gap: '14px',
                 transform: hasMouse && isHovered ? 'translateY(-2px)' : 'translateY(0)',
                 boxShadow: hasMouse && isHovered ? '0 12px 32px rgba(0, 0, 0, 0.13)' : 'none',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -44,7 +44,6 @@ export default function BlogSection() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    marginBottom: '18px',
                 }}
             >
                 <div
@@ -79,7 +78,7 @@ export default function BlogSection() {
                 style={{
                     color: '#000',
                     fontSize: 'clamp(14px, 2vw, 16px)',
-                    lineHeight: 1.55,
+                    lineHeight: 1.45,
                     fontWeight: 400,
                     maxWidth: '620px',
                     margin: 0,
@@ -92,14 +91,12 @@ export default function BlogSection() {
             <style jsx>{`
                 @media (max-width: 1024px) {
                     .blog-card {
-                        min-height: 150px !important;
                         padding: 20px !important;
                     }
                 }
 
                 @media (max-width: 480px) {
                     .blog-card {
-                        min-height: 145px !important;
                         padding: 18px !important;
                     }
                 }
