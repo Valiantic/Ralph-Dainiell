@@ -3,6 +3,7 @@
 import { PORTFOLIO_DATA } from './constants/portfolio';
 import { ProfileHero } from './components/ProfileHero';
 import { BioSection } from './components/BioSection';
+import BlogSection from './components/BlogSection';
 import { SkillsSection } from './components/SkillsSection';
 import { ExperienceSection } from './components/ExperienceSection';
 import { CertificatesSection } from './components/CertificatesSection';
@@ -34,10 +35,21 @@ export default function Home() {
         } as any}
       >
         <div
-          style={{ gridColumn: 'span 6' }}
-          className="mobile-span-12 portfolio-reveal reveal-bio"
+          style={{
+            gridColumn: 'span 6',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'clamp(16px, 3vw, 24px)',
+          }}
+          className="mobile-span-12"
         >
-          <BioSection bio={PORTFOLIO_DATA.bio} />
+          <div className="portfolio-reveal reveal-bio">
+            <BioSection bio={PORTFOLIO_DATA.bio} />
+          </div>
+
+          <div className="portfolio-reveal reveal-blog">
+            <BlogSection />
+          </div>
         </div>
 
         <div
@@ -83,20 +95,24 @@ export default function Home() {
           animation-delay: 0.18s;
         }
 
+        .reveal-blog {
+          animation-delay: 0.24s;
+        }
+
         .reveal-skills {
-          animation-delay: 0.28s;
+          animation-delay: 0.30s;
         }
 
         .reveal-experience {
-          animation-delay: 0.38s;
+          animation-delay: 0.40s;
         }
 
         .reveal-projects {
-          animation-delay: 0.48s;
+          animation-delay: 0.50s;
         }
 
         .reveal-certificates {
-          animation-delay: 0.58s;
+          animation-delay: 0.60s;
         }
 
         @keyframes portfolioRevealIn {
@@ -156,20 +172,24 @@ export default function Home() {
             animation-delay: 0.12s;
           }
 
+          .reveal-blog {
+            animation-delay: 0.16s;
+          }
+
           .reveal-skills {
-            animation-delay: 0.18s;
+            animation-delay: 0.20s;
           }
 
           .reveal-experience {
-            animation-delay: 0.24s;
+            animation-delay: 0.26s;
           }
 
           .reveal-projects {
-            animation-delay: 0.30s;
+            animation-delay: 0.32s;
           }
 
           .reveal-certificates {
-            animation-delay: 0.36s;
+            animation-delay: 0.38s;
           }
         }
 
