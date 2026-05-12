@@ -85,7 +85,7 @@ export default function BlogSection() {
                     margin: 0,
                 }}
             >
-                I build projects to remove friction from real workflows — turning repeated tasks,
+                I build projects to remove friction from real workflows turning repeated tasks,
                 unclear processes, and user needs into simple, efficient, and purposeful digital
                 solutions that make everyday work easier to complete.
             </p>
