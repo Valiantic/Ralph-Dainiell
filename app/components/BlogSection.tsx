@@ -85,7 +85,8 @@ export default function BlogSection() {
                 }}
             >
                 I build projects to remove friction from real workflows turning repeated tasks,
-                unclear processes, and user needs into simple, efficient, and purposeful digital solutions.
+                unclear processes, and user needs into simple, efficient, and purposeful digital
+                solutions that make everyday work easier to complete.
             </p>
 
             <style jsx>{`
