@@ -95,7 +95,9 @@ main {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-a, button, [role="button"] {
+a,
+button,
+[role="button"] {
   cursor: pointer;
 }
 
@@ -103,13 +105,17 @@ img {
   transition: opacity 0.3s ease;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: 'Roboto', var(--font-roboto), sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
-p, span, li {
+p,
+span,
+li {
   font-family: 'Roboto', var(--font-roboto), sans-serif;
   font-weight: 400;
 }
@@ -138,26 +144,105 @@ button {
   transform: translateY(-2px) !important;
 }
 
-@keyframes fadeInUp {
-  from {
+.portfolio-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(6px);
+  animation-name: portfolioRevealIn;
+  animation-duration: 0.78s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: forwards;
+  will-change: opacity, transform, filter;
+}
+
+.reveal-hero {
+  animation-delay: 0.06s;
+}
+
+.reveal-bio {
+  animation-delay: 0.18s;
+}
+
+.reveal-skills {
+  animation-delay: 0.28s;
+}
+
+.reveal-experience {
+  animation-delay: 0.38s;
+}
+
+.reveal-projects {
+  animation-delay: 0.48s;
+}
+
+.reveal-certificates {
+  animation-delay: 0.58s;
+}
+
+.profile-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(5px);
+  animation-name: profileRevealIn;
+  animation-duration: 0.72s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: forwards;
+  will-change: opacity, transform, filter;
+}
+
+.profile-reveal-image {
+  animation-delay: 0.04s;
+}
+
+.profile-reveal-info {
+  animation-delay: 0.12s;
+}
+
+.profile-reveal-contact {
+  animation-delay: 0.22s;
+}
+
+.profile-reveal-motion {
+  animation-delay: 0.32s;
+}
+
+@keyframes portfolioRevealIn {
+  0% {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(22px);
+    filter: blur(6px);
   }
-  to {
+
+  60% {
+    opacity: 1;
+    filter: blur(1px);
+  }
+
+  100% {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
 }
 
-.bento-grid > * {
-  animation: fadeInUp 0.5s ease forwards;
-}
+@keyframes profileRevealIn {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(5px);
+  }
 
-.bento-grid > *:nth-child(1) { animation-delay: 0.05s; }
-.bento-grid > *:nth-child(2) { animation-delay: 0.1s; }
-.bento-grid > *:nth-child(3) { animation-delay: 0.15s; }
-.bento-grid > *:nth-child(4) { animation-delay: 0.2s; }
-.bento-grid > *:nth-child(5) { animation-delay: 0.25s; }
+  60% {
+    opacity: 1;
+    filter: blur(1px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
 
 @media (max-width: 1024px) {
   html {
@@ -182,6 +267,14 @@ button {
   .mobile-span-12 {
     grid-column: span 1 !important;
   }
+
+  .portfolio-reveal {
+    transform: translateY(18px);
+  }
+
+  .profile-reveal {
+    transform: translateY(16px);
+  }
 }
 
 @media (min-width: 1025px) {
@@ -190,9 +283,60 @@ button {
   }
 }
 
-/* ✅ TOUCH DEVICE ONLY — phones & tablets without mouse */
-/* hover: none = walang hover capability */
-/* pointer: coarse = finger/touch ang ginagamit, hindi mouse */
+@media (max-width: 480px) {
+  .portfolio-reveal {
+    transform: translateY(14px);
+    filter: blur(4px);
+    animation-duration: 0.68s;
+  }
+
+  .reveal-hero {
+    animation-delay: 0.04s;
+  }
+
+  .reveal-bio {
+    animation-delay: 0.12s;
+  }
+
+  .reveal-skills {
+    animation-delay: 0.18s;
+  }
+
+  .reveal-experience {
+    animation-delay: 0.24s;
+  }
+
+  .reveal-projects {
+    animation-delay: 0.30s;
+  }
+
+  .reveal-certificates {
+    animation-delay: 0.36s;
+  }
+
+  .profile-reveal {
+    transform: translateY(14px);
+    filter: blur(4px);
+    animation-duration: 0.66s;
+  }
+
+  .profile-reveal-image {
+    animation-delay: 0.03s;
+  }
+
+  .profile-reveal-info {
+    animation-delay: 0.09s;
+  }
+
+  .profile-reveal-contact {
+    animation-delay: 0.15s;
+  }
+
+  .profile-reveal-motion {
+    animation-delay: 0.21s;
+  }
+}
+
 @media (hover: none) and (pointer: coarse) {
   .card:hover {
     transform: none !important;
@@ -219,5 +363,15 @@ button {
   .phone-card:hover {
     transform: none !important;
     background: #fff !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-reveal,
+  .profile-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
   }
 }
