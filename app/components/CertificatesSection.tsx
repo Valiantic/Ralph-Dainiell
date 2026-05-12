@@ -326,6 +326,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         {certificates.map((cert) => (
                             <div
                                 key={cert.id}
+                                className="cert-card"
                                 onClick={() => openCertificate(cert)}
                                 style={{
                                     width: '100%',
@@ -411,6 +412,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         {certificates.map((cert, index) => (
                             <div
                                 key={cert.id}
+                                className="cert-card"
                                 onClick={() => openCertificate(cert)}
                                 style={{
                                     display: 'flex',
@@ -611,12 +613,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
                 <style jsx>{`
                     .cert-card {
-                        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+                        transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                                    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+                        will-change: transform;
                     }
 
-                    @media (hover: hover) and (pointer: fine) {
+                    @media (any-hover: hover) and (any-pointer: fine) {
                         .cert-card:hover {
-                            transform: scale(1.035) translateY(-6px);
+                            transform: translateY(-10px);
+                            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.14);
                         }
                     }
 
