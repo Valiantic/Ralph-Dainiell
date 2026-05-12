@@ -34,6 +34,25 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     const xVal = useMotionValue(0);
     const x    = useSpring(xVal, { stiffness: 80, damping: 20, mass: 0.5 });
 
+    const selectedIndex = selectedCert ? certificates.findIndex((cert) => cert.id === selectedCert.id) : -1;
+    const canNavigate = certificates.length > 1 && selectedIndex !== -1;
+
+    const openCertificate = (cert: Certificate) => {
+        setSelectedCert(cert);
+    };
+
+    const showPreviousCertificate = () => {
+        if (!canNavigate) return;
+        const previousIndex = selectedIndex === 0 ? certificates.length - 1 : selectedIndex - 1;
+        setSelectedCert(certificates[previousIndex]);
+    };
+
+    const showNextCertificate = () => {
+        if (!canNavigate) return;
+        const nextIndex = selectedIndex === certificates.length - 1 ? 0 : selectedIndex + 1;
+        setSelectedCert(certificates[nextIndex]);
+    };
+
     useEffect(() => {
         const check = () => {
             setIsSmartphone(window.innerWidth <= 480);
@@ -111,7 +130,9 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
     }, [hasMouse, xVal]);
 
     useEffect(() => {
-        const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelectedCert(null); };
+        const handler = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setSelectedCert(null);
+        };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
     }, []);
@@ -137,7 +158,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
         <div
             key={cert.id}
             className="cert-card"
-            onClick={() => setSelectedCert(cert)}
+            onClick={() => openCertificate(cert)}
             style={{
                 minWidth: 'clamp(260px, 75vw, 340px)',
                 borderRadius: '20px',
@@ -231,7 +252,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         {certificates.map((cert) => (
                             <div
                                 key={cert.id}
-                                onClick={() => setSelectedCert(cert)}
+                                onClick={() => openCertificate(cert)}
                                 style={{
                                     width: '100%',
                                     borderRadius: '20px',
@@ -298,7 +319,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         {certificates.map((cert, index) => (
                             <div
                                 key={cert.id}
-                                onClick={() => setSelectedCert(cert)}
+                                onClick={() => openCertificate(cert)}
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
@@ -364,7 +385,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                             <div
                                 key={cert.id}
                                 className="cert-card"
-                                onClick={() => setSelectedCert(cert)}
+                                onClick={() => openCertificate(cert)}
                                 style={{
                                     minWidth: 'clamp(260px, 75vw, 340px)',
                                     borderRadius: '20px',
@@ -410,29 +431,58 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                 {selectedCert && typeof window !== 'undefined' &&
                     createPortal(
                         <div onClick={() => setSelectedCert(null)} className="modal-overlay">
-                            <div onClick={e => e.stopPropagation()} className="modal-content">
-                                <button onClick={() => setSelectedCert(null)} className="close-btn">
-                                    <FiX size={16} />
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedCert(null);
+                                }}
+                                className="close-btn"
+                                aria-label="Close certificate preview"
+                            >
+                                <FiX size={26} />
+                            </button>
+
+                            {canNavigate && (
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        showPreviousCertificate();
+                                    }}
+                                    className="nav-btn nav-prev"
+                                    aria-label="Previous certificate"
+                                >
+                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M15 18L9 12L15 6" />
+                                    </svg>
                                 </button>
+                            )}
 
-                                <div className="modal-header">
-                                    <div className="dot" style={{ background: getIssuerColor(selectedCert.issuer) }} />
-                                    <div>
-                                        <h3>{selectedCert.title}</h3>
-                                        <p>{selectedCert.issuer}</p>
-                                    </div>
-                                </div>
-
+                            <div onClick={e => e.stopPropagation()} className="modal-content">
                                 <div className="modal-image">
                                     <Image
                                         src={selectedCert.imageUrl}
                                         alt={selectedCert.title}
                                         fill
-                                        style={{ objectFit: 'contain', padding: '24px' }}
+                                        style={{ objectFit: 'contain' }}
                                         unoptimized
                                     />
                                 </div>
                             </div>
+
+                            {canNavigate && (
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        showNextCertificate();
+                                    }}
+                                    className="nav-btn nav-next"
+                                    aria-label="Next certificate"
+                                >
+                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M9 18L15 12L9 6" />
+                                    </svg>
+                                </button>
+                            )}
                         </div>,
                         document.getElementById('modal-root')!
                     )
@@ -454,75 +504,162 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
                     .modal-overlay {
                         position: fixed;
-                        top: 0; left: 0;
-                        width: 100vw; height: 100vh;
-                        background: rgba(0,0,0,0.55);
+                        top: 0;
+                        left: 0;
+                        width: 100vw;
+                        height: 100vh;
+                        background: rgba(0,0,0,0.82);
                         backdrop-filter: blur(12px);
+                        -webkit-backdrop-filter: blur(12px);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         z-index: 9999;
-                        padding: 16px;
+                        padding: 44px 76px;
                         box-sizing: border-box;
                         animation: fadeIn 0.25s ease;
                     }
 
                     .modal-content {
-                        background: #fff;
-                        border-radius: 28px;
-                        max-width: 780px;
-                        width: 100%;
-                        max-height: calc(100vh - 32px);
-                        display: flex;
-                        flex-direction: column;
-                        overflow: hidden;
-                        position: relative;
-                        animation: zoomIn 0.25s ease forwards;
-                        box-shadow: 0 30px 80px rgba(0,0,0,0.25);
-                    }
-
-                    .close-btn {
-                        position: absolute;
-                        top: 16px; right: 16px;
-                        width: 32px; height: 32px;
-                        border-radius: 50%;
-                        border: none;
-                        background: rgba(0,0,0,0.06);
+                        width: min(860px, 100%);
+                        height: min(82vh, 760px);
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        cursor: pointer;
-                        z-index: 10;
-                        flex-shrink: 0;
-                        transition: background 0.2s ease;
+                        position: relative;
+                        animation: zoomIn 0.25s ease forwards;
                     }
-                    .close-btn:hover { background: rgba(0,0,0,0.15); }
-
-                    .modal-header {
-                        padding: 20px 24px 16px;
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                        flex-shrink: 0;
-                    }
-                    .modal-header h3 { font-size: 16px; font-weight: 700; margin: 0; }
-                    .modal-header p  { font-size: 12px; color: #8e8e93; margin: 2px 0 0; }
-
-                    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
                     .modal-image {
                         position: relative;
                         width: 100%;
-                        flex: 1 1 auto;
-                        min-height: 480px;
-                        max-height: 70vh;
-                        background: #f2f2f7;
+                        height: 100%;
+                        background: transparent;
+                    }
+
+                    .close-btn {
+                        position: fixed;
+                        top: 18px;
+                        right: 22px;
+                        width: 48px;
+                        height: 48px;
+                        border: none;
+                        border-radius: 0;
+                        background: rgba(255,255,255,0.10);
+                        color: #fff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        z-index: 10002;
+                        transition: background 0.2s ease, transform 0.2s ease;
+                    }
+
+                    .close-btn:hover {
+                        background: rgba(255,255,255,0.18);
+                        transform: scale(1.04);
+                    }
+
+                    .nav-btn {
+                        position: fixed;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        width: 48px;
+                        height: 54px;
+                        border: none;
+                        border-radius: 0;
+                        background: rgba(255,255,255,0.10);
+                        color: #fff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        z-index: 10001;
+                        transition: background 0.2s ease, transform 0.2s ease;
+                    }
+
+                    .nav-btn:hover {
+                        background: rgba(255,255,255,0.18);
+                    }
+
+                    .nav-prev {
+                        left: 22px;
+                    }
+
+                    .nav-next {
+                        right: 22px;
+                    }
+
+                    @media (max-width: 768px) {
+                        .modal-overlay {
+                            align-items: flex-start;
+                            padding: 120px 20px 52px;
+                            overflow-y: auto;
+                        }
+
+                        .modal-content {
+                            width: 100%;
+                            height: min(72vh, 680px);
+                        }
+
+                        .close-btn {
+                            top: 26px;
+                            right: 26px;
+                            width: 58px;
+                            height: 58px;
+                        }
+
+                        .nav-btn {
+                            top: 50%;
+                            width: 56px;
+                            height: 64px;
+                        }
+
+                        .nav-prev {
+                            left: 20px;
+                        }
+
+                        .nav-next {
+                            right: 20px;
+                        }
+                    }
+
+                    @media (max-width: 480px) {
+                        .modal-overlay {
+                            padding: 118px 20px 44px;
+                        }
+
+                        .modal-content {
+                            height: min(70vh, 640px);
+                        }
+
+                        .close-btn {
+                            top: 26px;
+                            right: 26px;
+                            width: 56px;
+                            height: 56px;
+                        }
+
+                        .nav-btn {
+                            width: 52px;
+                            height: 58px;
+                            background: rgba(255,255,255,0.12);
+                        }
+
+                        .nav-prev {
+                            left: 20px;
+                        }
+
+                        .nav-next {
+                            right: 20px;
+                        }
                     }
 
                     @keyframes zoomIn {
-                        from { opacity: 0; transform: scale(0.92); }
+                        from { opacity: 0; transform: scale(0.96); }
                         to   { opacity: 1; transform: scale(1); }
                     }
+
                     @keyframes fadeIn {
                         from { opacity: 0; }
                         to   { opacity: 1; }
