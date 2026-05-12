@@ -17,15 +17,11 @@ export const PORTFOLIO_DATA: PortfolioData = {
         linkedin: "https://www.linkedin.com/in/ralph-dainiell",
     },
     bio: [
-    "I am a 20 years old IT student majoring in Web and Mobile Development, with a growing passion for building applications that are clean, practical, and useful to real users. My current focus is iOS app development, where I am continuously improving my skills in Swift, SwiftUI, and modern mobile development practices.",
+    "I am a 20-year-old IT student majoring in Web and Mobile Development, currently focused on building my path toward becoming an iOS Developer. My goal is to create clean, practical, and user-centered mobile applications while continuously strengthening my skills in Swift, SwiftUI, and modern iOS development.",
 
-    "Before focusing on iOS development, I also developed junior level experience in data analyst-related work, such as organizing information, checking data accuracy, identifying patterns, and understanding results. This experience helped me build stronger attention to detail, logical thinking, and a more structured way of solving problems.",
+    "Before focusing on iOS development, I gained junior-level experience in data analytics-related work, including SQL, data organization, accuracy checking, pattern recognition, and basic data interpretation. This background helped me develop stronger attention to detail, logical thinking, and a more structured approach to solving problems.",
 
-    "What started as simple curiosity about how apps and digital products work has slowly become a career path I genuinely want to pursue. I enjoy learning through hands-on projects, exploring better ways to improve my work, and documenting my growth through YouTube videos as part of my journey in tech.",
-
-    "As a student, I understand that I am still growing, but I am committed to improving every day and building a strong foundation as a future developer. I value discipline, consistency, and the ability to learn from every project, challenge, and experience.",
-
-    "My goal is to provide a real projects with creativity, and a strong willingness to learn and passion for building meaningful mobile applications that can provide real value."
+    "My interest in technology started with curiosity about how apps and digital products work, and it has grown into a career path I am serious about pursuing. I continue to learn through hands-on projects, improve through practice, and document my growth through YouTube videos as part of my journey in tech."
 ],
     skills: [
     { name: "Swift", category: "Programming Languages" },
