@@ -455,7 +455,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         ref={outerRef}
                         style={{
                             overflow: 'hidden',
-                            padding: '10px 4px 14px',
+                            padding: '18px 8px 30px',
                             cursor: isHovered ? 'grab' : 'default',
                             userSelect: 'none',
                             WebkitUserSelect: 'none',
@@ -613,15 +613,18 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
                 <style jsx>{`
                     .cert-card {
-                        transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-                                    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+                        position: relative;
+                        z-index: 1;
+                        transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+                                    box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1);
                         will-change: transform;
                     }
 
-                    @media (any-hover: hover) and (any-pointer: fine) {
+                    @media (any-hover: hover) and (any-pointer: fine) and (min-width: 481px) {
                         .cert-card:hover {
-                            transform: translateY(-10px);
-                            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.14);
+                            z-index: 5;
+                            transform: translateY(-7px);
+                            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.13);
                         }
                     }
 
