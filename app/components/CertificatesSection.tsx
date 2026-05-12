@@ -436,10 +436,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                     e.stopPropagation();
                                     setSelectedCert(null);
                                 }}
-                                className="close-btn modal-glass-btn"
+                                className="close-btn modal-control-btn"
                                 aria-label="Close certificate preview"
                             >
-                                <FiX size={23} />
+                                <FiX size={22} />
                             </button>
 
                             {canNavigate && (
@@ -448,10 +448,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                         e.stopPropagation();
                                         showPreviousCertificate();
                                     }}
-                                    className="nav-btn nav-prev modal-glass-btn"
+                                    className="nav-btn nav-prev modal-control-btn"
                                     aria-label="Previous certificate"
                                 >
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M15 18L9 12L15 6" />
                                     </svg>
                                 </button>
@@ -475,10 +475,10 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                                         e.stopPropagation();
                                         showNextCertificate();
                                     }}
-                                    className="nav-btn nav-next modal-glass-btn"
+                                    className="nav-btn nav-next modal-control-btn"
                                     aria-label="Next certificate"
                                 >
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M9 18L15 12L9 6" />
                                     </svg>
                                 </button>
@@ -504,24 +504,23 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
                     .modal-overlay {
                         position: fixed;
-                        top: 0;
-                        left: 0;
+                        inset: 0;
                         width: 100vw;
                         height: 100vh;
-                        background: rgba(0,0,0,0.82);
+                        background: rgba(0, 0, 0, 0.82);
                         backdrop-filter: blur(12px);
                         -webkit-backdrop-filter: blur(12px);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         z-index: 9999;
-                        padding: 44px 76px;
+                        padding: 48px 84px;
                         box-sizing: border-box;
                         animation: fadeIn 0.25s ease;
                     }
 
                     .modal-content {
-                        width: min(860px, 100%);
+                        width: min(920px, 100%);
                         height: min(82vh, 760px);
                         display: flex;
                         align-items: center;
@@ -537,20 +536,15 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         background: transparent;
                     }
 
-                    .modal-glass-btn {
-                        border: 1px solid rgba(255, 255, 255, 0.18);
-                        background: linear-gradient(
-                            180deg,
-                            rgba(255, 255, 255, 0.20),
-                            rgba(255, 255, 255, 0.08)
-                        );
+                    .modal-control-btn {
+                        border: 1px solid rgba(255, 255, 255, 0.12);
+                        background: rgba(28, 28, 30, 0.78);
                         color: #fff;
-                        backdrop-filter: blur(22px) saturate(180%);
-                        -webkit-backdrop-filter: blur(22px) saturate(180%);
+                        backdrop-filter: blur(16px);
+                        -webkit-backdrop-filter: blur(16px);
                         box-shadow:
-                            0 14px 34px rgba(0, 0, 0, 0.28),
-                            inset 0 1px 0 rgba(255, 255, 255, 0.22),
-                            inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+                            0 12px 30px rgba(0, 0, 0, 0.30),
+                            inset 0 1px 0 rgba(255, 255, 255, 0.10);
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -559,26 +553,25 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         transition:
                             transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
                             background 0.22s ease,
-                            border-color 0.22s ease,
-                            box-shadow 0.22s ease;
+                            border-color 0.22s ease;
                     }
 
                     .close-btn {
                         position: fixed;
                         top: 22px;
                         right: 24px;
-                        width: 48px;
-                        height: 48px;
-                        border-radius: 18px;
+                        width: 44px;
+                        height: 44px;
+                        border-radius: 16px;
                     }
 
                     .nav-btn {
                         position: fixed;
                         top: 50%;
-                        transform: translateY(-50%);
-                        width: 54px;
-                        height: 54px;
+                        width: 46px;
+                        height: 46px;
                         border-radius: 999px;
+                        transform: translateY(-50%);
                     }
 
                     .nav-prev {
@@ -590,21 +583,13 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                     }
 
                     @media (hover: hover) and (pointer: fine) {
-                        .modal-glass-btn:hover {
-                            background: linear-gradient(
-                                180deg,
-                                rgba(255, 255, 255, 0.30),
-                                rgba(255, 255, 255, 0.12)
-                            );
-                            border-color: rgba(255, 255, 255, 0.28);
-                            box-shadow:
-                                0 18px 44px rgba(0, 0, 0, 0.34),
-                                inset 0 1px 0 rgba(255, 255, 255, 0.30),
-                                inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+                        .modal-control-btn:hover {
+                            background: rgba(44, 44, 46, 0.88);
+                            border-color: rgba(255, 255, 255, 0.20);
                         }
 
                         .close-btn:hover {
-                            transform: scale(1.045);
+                            transform: scale(1.04);
                         }
 
                         .nav-btn:hover {
@@ -612,7 +597,7 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
                         }
                     }
 
-                    .modal-glass-btn:active {
+                    .close-btn:active {
                         transform: scale(0.96);
                     }
 
@@ -622,71 +607,74 @@ export const CertificatesSection = ({ certificates }: CertificatesSectionProps) 
 
                     @media (max-width: 768px) {
                         .modal-overlay {
-                            align-items: flex-start;
-                            padding: 116px 20px 52px;
-                            overflow-y: auto;
+                            align-items: center;
+                            padding: 88px 18px 112px;
+                            overflow: hidden;
                         }
 
                         .modal-content {
                             width: 100%;
-                            height: min(72vh, 680px);
+                            height: min(58vh, 520px);
                         }
 
                         .close-btn {
-                            top: 26px;
-                            right: 26px;
-                            width: 56px;
-                            height: 56px;
-                            border-radius: 20px;
+                            top: 22px;
+                            right: 22px;
+                            width: 48px;
+                            height: 48px;
+                            border-radius: 16px;
                         }
 
                         .nav-btn {
-                            width: 54px;
-                            height: 54px;
+                            top: auto;
+                            bottom: 32px;
+                            width: 50px;
+                            height: 50px;
+                            transform: none;
                         }
 
                         .nav-prev {
-                            left: 20px;
+                            left: calc(50% - 62px);
                         }
 
                         .nav-next {
-                            right: 20px;
+                            right: calc(50% - 62px);
+                        }
+
+                        .nav-btn:active {
+                            transform: scale(0.96);
                         }
                     }
 
                     @media (max-width: 480px) {
                         .modal-overlay {
-                            padding: 112px 20px 44px;
+                            padding: 86px 18px 108px;
                         }
 
                         .modal-content {
-                            height: min(70vh, 640px);
+                            height: min(54vh, 460px);
                         }
 
                         .close-btn {
-                            top: 24px;
-                            right: 22px;
-                            width: 54px;
-                            height: 54px;
-                            border-radius: 18px;
+                            top: 20px;
+                            right: 20px;
+                            width: 46px;
+                            height: 46px;
+                            border-radius: 15px;
                         }
 
                         .nav-btn {
-                            width: 50px;
-                            height: 50px;
-                            background: linear-gradient(
-                                180deg,
-                                rgba(255, 255, 255, 0.22),
-                                rgba(255, 255, 255, 0.10)
-                            );
+                            bottom: 30px;
+                            width: 48px;
+                            height: 48px;
                         }
 
                         .nav-prev {
-                            left: 20px;
+                            left: calc(50% - 60px);
                         }
 
                         .nav-next {
-                            right: 20px;
+                            right: calc(50% - 60px);
                         }
                     }
 
