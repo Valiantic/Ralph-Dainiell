@@ -40,14 +40,15 @@ export default function Home() {
             display: 'flex',
             flexDirection: 'column',
             gap: 'clamp(16px, 3vw, 24px)',
+            height: 'var(--bento-height, 650px)',
           }}
-          className="mobile-span-12"
+          className="mobile-span-12 blog-column"
         >
-          <div className="portfolio-reveal reveal-bio">
+          <div className="portfolio-reveal reveal-bio bio-wrapper">
             <BioSection bio={PORTFOLIO_DATA.bio} />
           </div>
 
-          <div className="portfolio-reveal reveal-blog">
+          <div className="portfolio-reveal reveal-blog blog-wrapper">
             <BlogSection />
           </div>
         </div>
@@ -85,6 +86,16 @@ export default function Home() {
           animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
           animation-fill-mode: forwards;
           will-change: opacity, transform, filter;
+        }
+
+        .bio-wrapper {
+          flex-shrink: 0;
+        }
+
+        .blog-wrapper {
+          flex: 1;
+          display: flex;
+          min-height: 0;
         }
 
         .reveal-hero {
@@ -150,6 +161,14 @@ export default function Home() {
           .mobile-span-12 > * {
             width: 100% !important;
             max-width: 100% !important;
+          }
+
+          .blog-column {
+            height: auto !important;
+          }
+
+          .blog-wrapper {
+            flex: none !important;
           }
 
           .portfolio-reveal {

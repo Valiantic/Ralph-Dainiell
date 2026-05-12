@@ -29,6 +29,7 @@ export default function BlogSection() {
             onMouseLeave={() => setIsHovered(false)}
             style={{
                 width: '100%',
+                height: '100%',
                 background: '#fff',
                 display: 'flex',
                 flexDirection: 'column',
@@ -92,12 +93,14 @@ export default function BlogSection() {
             <style jsx>{`
                 @media (max-width: 1024px) {
                     .blog-card {
+                        height: auto !important;
                         padding: 20px !important;
                     }
                 }
 
                 @media (max-width: 480px) {
                     .blog-card {
+                        height: auto !important;
                         padding: 18px !important;
                     }
                 }
