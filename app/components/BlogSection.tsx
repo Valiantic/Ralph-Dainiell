@@ -56,7 +56,7 @@ export default function BlogSection() {
                     }}
                 >
                     <Image
-                        src="/Images/Icons/blogicon.png"
+                        src="/Images/Icons/bookicon.png"
                         alt="Blog"
                         fill
                         style={{ objectFit: 'contain' }}
