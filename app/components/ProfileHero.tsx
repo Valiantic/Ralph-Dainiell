@@ -1044,8 +1044,10 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     whiteSpace: 'nowrap',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
-                                    flex: 1,
+                                    flex: '1 1 auto',
+                                    width: '100%',
                                     minWidth: 0,
+                                    display: 'block',
                                 }}
                             >
                                 {data.contact.email}
@@ -1053,35 +1055,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
                             {!hasCursor && (
                                 <a className="touch-email-pill" href={`mailto:${data.contact.email}`} style={touchPillStyle}>
-                                    SEND EMAIL
-                                </a>
-                            )}
-
-                            {hasCursor && (
-                                <a
-                                    className="desktop-email-pill"
-                                    href={`mailto:${data.contact.email}`}
-                                    style={{
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexShrink: 0,
-                                        height: '28px',
-                                        minWidth: '104px',
-                                        padding: '0 12px',
-                                        border: '1.5px solid #000',
-                                        borderRadius: '999px',
-                                        color: '#000',
-                                        background: '#fff',
-                                        fontSize: '10px',
-                                        fontWeight: 700,
-                                        letterSpacing: '0.7px',
-                                        whiteSpace: 'nowrap',
-                                        textDecoration: 'none',
-                                        userSelect: 'none',
-                                        cursor: 'pointer',
-                                    }}
-                                >
                                     SEND EMAIL
                                 </a>
                             )}
@@ -1400,6 +1373,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 >
                                     {contentSlide.main}
                                 </p>
+
                                 <div
                                     style={{
                                         width: '34px',
@@ -1409,6 +1383,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                         flexShrink: 0,
                                     }}
                                 />
+
                                 <p
                                     className="slide-secondary"
                                     style={{
