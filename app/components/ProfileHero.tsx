@@ -1043,11 +1043,15 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                     fontWeight: 700,
                                     whiteSpace: 'nowrap',
                                     overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
+                                    textOverflow: hasCursor ? 'clip' : 'ellipsis',
                                     flex: '1 1 auto',
                                     width: '100%',
                                     minWidth: 0,
-                                    display: 'block',
+                                    display: 'inline-block',
+                                    lineHeight: 1,
+                                    letterSpacing: hasCursor ? '1.15px' : 'normal',
+                                    transform: hasCursor ? 'scaleX(1.08)' : 'none',
+                                    transformOrigin: 'left center',
                                 }}
                             >
                                 {data.contact.email}
