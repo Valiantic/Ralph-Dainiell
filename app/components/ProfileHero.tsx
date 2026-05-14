@@ -878,6 +878,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                 <h1 style={{ fontSize: '38px', fontWeight: 800, letterSpacing: '-2px', lineHeight: 1, color: '#000', margin: 0 }}>
                     {data.name}
                 </h1>
+
                 <div
                     className="hero-location"
                     style={{
@@ -891,9 +892,11 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     <IoLocationOutline size={18} color="#000" />
                     <span style={{ paddingTop: '2px' }}>{data.location}</span>
                 </div>
+
                 <div className="hero-role" style={{ fontSize: '22px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
                     {data.roles.join(' \\ ')}
                 </div>
+
                 <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                     <a
                         href="/resume/GonzagaRalphDainiellCVresume-.pdf"
@@ -924,6 +927,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                         <GoFileZip size={18} color="#fff" />
                         Download CV
                     </a>
+
                     <a
                         href="https://github.com/Dainiell"
                         target="_blank"
@@ -1031,6 +1035,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             <div className="email-icon-wrap" style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
                                 <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
                             </div>
+
                             <span
                                 className="email-text"
                                 style={{
@@ -1045,11 +1050,42 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                             >
                                 {data.contact.email}
                             </span>
+
                             {!hasCursor && (
                                 <a className="touch-email-pill" href={`mailto:${data.contact.email}`} style={touchPillStyle}>
                                     SEND EMAIL
                                 </a>
                             )}
+
+                            {hasCursor && (
+                                <a
+                                    className="desktop-email-pill"
+                                    href={`mailto:${data.contact.email}`}
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexShrink: 0,
+                                        height: '28px',
+                                        minWidth: '104px',
+                                        padding: '0 12px',
+                                        border: '1.5px solid #000',
+                                        borderRadius: '999px',
+                                        color: '#000',
+                                        background: '#fff',
+                                        fontSize: '10px',
+                                        fontWeight: 700,
+                                        letterSpacing: '0.7px',
+                                        whiteSpace: 'nowrap',
+                                        textDecoration: 'none',
+                                        userSelect: 'none',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    SEND EMAIL
+                                </a>
+                            )}
+
                             {hasCursor && (
                                 <a
                                     href={`mailto:${data.contact.email}`}
