@@ -930,7 +930,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     >
                         <span style={{ width: '20px', height: '20px', position: 'relative', flexShrink: 0 }}>
                             <Image
-                                src="/Images/Icons/emailICON.png"
+                                src="/Images/Icons/email icon.png"
                                 alt="Send Email"
                                 fill
                                 style={{
