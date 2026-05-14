@@ -1011,22 +1011,20 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 width: '100%',
                             }}
                         >
-                            <div className="email-icon-wrap" style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
-                                <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
-                            </div>
-
                             <span
                                 className="email-text"
                                 style={{
-                                    fontSize: '13px',
-                                    fontWeight: 700,
+                                    fontSize: '12px',
+                                    fontWeight: 800,
+                                    color: '#000',
                                     whiteSpace: 'nowrap',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     minWidth: 0,
                                     display: 'block',
                                     lineHeight: 1.2,
-                                    letterSpacing: 'normal',
+                                    letterSpacing: '1.1px',
+                                    textTransform: 'uppercase',
                                     transform: 'none',
                                 }}
                             >
