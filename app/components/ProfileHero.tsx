@@ -1025,6 +1025,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 padding: '12px 16px',
                                 display: 'flex',
                                 alignItems: 'center',
+                                justifyContent: hasCursor ? 'center' : 'flex-start',
                                 boxSizing: 'border-box',
                                 gap: '10px',
                                 position: 'relative',
@@ -1032,35 +1033,68 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                                 width: '100%',
                             }}
                         >
-                            <div className="email-icon-wrap" style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
-                                <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
-                            </div>
+                            {hasCursor ? (
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '10px',
+                                        width: '100%',
+                                        minWidth: 0,
+                                    }}
+                                >
+                                    <div className="email-icon-wrap" style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
+                                        <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
+                                    </div>
 
-                            <span
-                                className="email-text"
-                                style={{
-                                    fontSize: '13px',
-                                    fontWeight: 700,
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: hasCursor ? 'clip' : 'ellipsis',
-                                    flex: '1 1 auto',
-                                    width: '100%',
-                                    minWidth: 0,
-                                    display: 'inline-block',
-                                    lineHeight: 1,
-                                    letterSpacing: hasCursor ? '1px' : 'normal',
-                                    transform: hasCursor ? 'scaleX(1.08)' : 'none',
-                                    transformOrigin: 'left center',
-                                }}
-                            >
-                                {data.contact.email}
-                            </span>
+                                    <span
+                                        className="email-text"
+                                        style={{
+                                            fontSize: '13px',
+                                            fontWeight: 700,
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            minWidth: 0,
+                                            display: 'block',
+                                            lineHeight: 1.2,
+                                            letterSpacing: 'normal',
+                                            transform: 'none',
+                                        }}
+                                    >
+                                        {data.contact.email}
+                                    </span>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="email-icon-wrap" style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
+                                        <Image src="/Images/Icons/email icon.png" alt="Email" fill style={{ objectFit: 'contain' }} />
+                                    </div>
 
-                            {!hasCursor && (
-                                <a className="touch-email-pill" href={`mailto:${data.contact.email}`} style={touchPillStyle}>
-                                    SEND EMAIL
-                                </a>
+                                    <span
+                                        className="email-text"
+                                        style={{
+                                            fontSize: '13px',
+                                            fontWeight: 700,
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            flex: '1 1 auto',
+                                            minWidth: 0,
+                                            display: 'block',
+                                            lineHeight: 1.2,
+                                            letterSpacing: 'normal',
+                                            transform: 'none',
+                                        }}
+                                    >
+                                        {data.contact.email}
+                                    </span>
+
+                                    <a className="touch-email-pill" href={`mailto:${data.contact.email}`} style={touchPillStyle}>
+                                        SEND EMAIL
+                                    </a>
+                                </>
                             )}
 
                             {hasCursor && (
