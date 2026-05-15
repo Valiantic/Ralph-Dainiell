@@ -43,13 +43,12 @@ export const PORTFOLIO_DATA: PortfolioData = {
     { name: "REST API", category: "Networking" },
     { name: "JSON Parsing", category: "Networking" },
 
-
+    { name: "MySQL", category: "Database" },
+    { name: "Supabase", category: "Database" },
+    
     { name: "Git & GitHub", category: "Dev Tools" },
     { name: "Xcode", category: "Dev Tools" },
     { name: "VS Code", category: "Dev Tools" },
-
-    { name: "MySQL", category: "Database" },
-    { name: "Supabase", category: "Database" },
    
     { name: "Figma", category: "Design Tools" },
     { name: "DetailsPro", category: "Design Tools" },
