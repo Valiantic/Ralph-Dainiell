@@ -45,7 +45,8 @@ export const PORTFOLIO_DATA: PortfolioData = {
     { name: "MySQL", category: "Database" },
     { name: "Supabase", category: "Database" },
 
-    { name: "Git & GitHub", category: "Dev Tools" },
+    { name: "Git", category: "Dev Tools" },
+    { name: "GitHub", category: "Dev Tools" },
     { name: "Xcode", category: "Dev Tools" },
     { name: "VS Code", category: "Dev Tools" },
    
