@@ -76,7 +76,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
     certificates: [
         {
             id: "cert0",
-            title: "Introduction to Git",
+            title: "Intermediate to Git",
             issuer: "DataCamp",
             issueDate: "May 5 2026",
             imageUrl: "/Images/certificates/intermediateGIT.png"
