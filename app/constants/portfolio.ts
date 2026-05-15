@@ -11,7 +11,6 @@ export const PORTFOLIO_DATA: PortfolioData = {
         university: "Lyceum of the Philippines University - Cavite",
     },
     socials: {
-        facebook: "https://www.facebook.com/ralphdainiell.gonzaga31",
         instagram: "https://www.instagram.com/gonzagaralphh/",
         youtube: "https://www.youtube.com/@gonzagaralphh18",
         linkedin: "https://www.linkedin.com/in/ralph-dainiell",
@@ -45,7 +44,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
 
     { name: "MySQL", category: "Database" },
     { name: "Supabase", category: "Database" },
-    
+
     { name: "Git & GitHub", category: "Dev Tools" },
     { name: "Xcode", category: "Dev Tools" },
     { name: "VS Code", category: "Dev Tools" },
@@ -111,7 +110,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
         },
         {
             id: "cert5",
-            title: "Data Science Essentials with Python",
+            title: "Data Science with Python",
             issuer: "Cisco Networking Academy",
             issueDate: "January 15 2026",
             imageUrl: "/Images/certificates/Data Science.jpg"
