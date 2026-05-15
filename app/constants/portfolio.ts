@@ -90,7 +90,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
         },
         {
             id: "cert2",
-            title: "Intermediate to Git",
+            title: "Introduction to Github",
             issuer: "DataCamp",
             issueDate: "May 5 2026",
             imageUrl: "/Images/certificates/introGithubConcepts.jpg"
