@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 :root {
   --background: #ffffff;
@@ -12,7 +12,6 @@
   --radius-md: 20px;
   --radius-sm: 12px;
   --shadow: none;
-  /* The image doesn't use shadows, it uses outlines */
   --transition: all 0.2s ease-in-out;
 }
 
@@ -22,12 +21,25 @@
   margin: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  overflow-y: auto;
+  min-height: 100%;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Roboto', var(--font-roboto), sans-serif;
+  font-weight: 400;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  overflow-y: visible;
+  min-height: 100svh;
+  width: 100%;
+  touch-action: pan-y;
 }
 
 main {
@@ -37,6 +49,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow: visible;
 }
 
 .bento-grid {
@@ -50,7 +63,17 @@ main {
   border: 1.5px solid var(--card-border);
   border-radius: var(--radius-lg);
   padding: 24px;
-  transition: var(--transition);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.card.no-lift:hover {
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .pill {
@@ -60,43 +83,295 @@ main {
   border: 1.5px solid var(--card-border);
   border-radius: 100px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--foreground);
-  transition: var(--transition);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  cursor: default;
 }
 
 .pill:hover {
-  border-color: var(--foreground);
-  background: var(--secondary);
+  background: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-@media (max-width: 1024px) {
-  .bento-grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .mobile-span-12 {
-    grid-column: span 1 !important;
-  }
+a,
+button,
+[role="button"] {
+  cursor: pointer;
 }
 
-@media (min-width: 1025px) {
-  .mobile-span-12 {
-    display: block;
-    /* placeholder for empty rule */
-  }
+img {
+  transition: opacity 0.3s ease;
 }
 
 h1,
 h2,
 h3 {
+  font-family: 'Roboto', var(--font-roboto), sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
+}
+
+p,
+span,
+li {
+  font-family: 'Roboto', var(--font-roboto), sans-serif;
+  font-weight: 400;
 }
 
 button {
   cursor: pointer;
   border: none;
   background: none;
-  font-family: inherit;
+  font-family: 'Roboto', var(--font-roboto), sans-serif;
+  color: #000000;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cv-button {
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.cv-button:hover {
+  background: #1a5ae0 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(43, 110, 242, 0.3) !important;
+}
+
+.phone-card:hover {
+  background: #f5f5f5 !important;
+  transform: translateY(-2px) !important;
+}
+
+.portfolio-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(6px);
+  animation-name: portfolioRevealIn;
+  animation-duration: 0.78s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: forwards;
+  will-change: opacity, transform, filter;
+}
+
+.reveal-hero {
+  animation-delay: 0.06s;
+}
+
+.reveal-bio {
+  animation-delay: 0.18s;
+}
+
+.reveal-skills {
+  animation-delay: 0.28s;
+}
+
+.reveal-experience {
+  animation-delay: 0.38s;
+}
+
+.reveal-projects {
+  animation-delay: 0.48s;
+}
+
+.reveal-certificates {
+  animation-delay: 0.58s;
+}
+
+.profile-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(5px);
+  animation-name: profileRevealIn;
+  animation-duration: 0.72s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: forwards;
+  will-change: opacity, transform, filter;
+}
+
+.profile-reveal-image {
+  animation-delay: 0.04s;
+}
+
+.profile-reveal-info {
+  animation-delay: 0.12s;
+}
+
+.profile-reveal-contact {
+  animation-delay: 0.22s;
+}
+
+.profile-reveal-motion {
+  animation-delay: 0.32s;
+}
+
+@keyframes portfolioRevealIn {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+    filter: blur(6px);
+  }
+
+  60% {
+    opacity: 1;
+    filter: blur(1px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes profileRevealIn {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(5px);
+  }
+
+  60% {
+    opacity: 1;
+    filter: blur(1px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  html {
+    overflow-x: clip;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  body {
+    overflow-x: clip;
+    overflow-y: visible;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  main {
+    height: auto;
+    overflow: visible;
+  }
+
+  .mobile-span-12 {
+    grid-column: span 1 !important;
+  }
+
+  .portfolio-reveal {
+    transform: translateY(18px);
+  }
+
+  .profile-reveal {
+    transform: translateY(16px);
+  }
+}
+
+@media (min-width: 1025px) {
+  .mobile-span-12 {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-reveal {
+    transform: translateY(14px);
+    filter: blur(4px);
+    animation-duration: 0.68s;
+  }
+
+  .reveal-hero {
+    animation-delay: 0.04s;
+  }
+
+  .reveal-bio {
+    animation-delay: 0.12s;
+  }
+
+  .reveal-skills {
+    animation-delay: 0.18s;
+  }
+
+  .reveal-experience {
+    animation-delay: 0.24s;
+  }
+
+  .reveal-projects {
+    animation-delay: 0.30s;
+  }
+
+  .reveal-certificates {
+    animation-delay: 0.36s;
+  }
+
+  .profile-reveal {
+    transform: translateY(14px);
+    filter: blur(4px);
+    animation-duration: 0.66s;
+  }
+
+  .profile-reveal-image {
+    animation-delay: 0.03s;
+  }
+
+  .profile-reveal-info {
+    animation-delay: 0.09s;
+  }
+
+  .profile-reveal-contact {
+    animation-delay: 0.15s;
+  }
+
+  .profile-reveal-motion {
+    animation-delay: 0.21s;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .card.no-lift:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .pill:hover {
+    transform: none !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  .cv-button:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    background: #2b6ef2 !important;
+  }
+
+  .phone-card:hover {
+    transform: none !important;
+    background: #fff !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-reveal,
+  .profile-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
 }

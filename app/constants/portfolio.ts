@@ -1,92 +1,155 @@
-
 import { PortfolioData } from '../types/portfolio';
 
 export const PORTFOLIO_DATA: PortfolioData = {
     name: "Ralph Dainiell Gonzaga",
     location: "Cavite, Philippines",
     profileImage: "/Images/profile.jpg",
-    roles: ["Data Analyst", "Vlogger"],
+    roles: ["iOS Developer"],
     contact: {
         email: "gonzagaralphdainiell@gmail.com",
         phone: "+63 945 289 3949",
         university: "Lyceum of the Philippines University - Cavite",
     },
     socials: {
-        facebook: "https://www.facebook.com/ralphdainiell.gonzaga31",
         instagram: "https://www.instagram.com/gonzagaralphh/",
         youtube: "https://www.youtube.com/@gonzagaralphh18",
         linkedin: "https://www.linkedin.com/in/ralph-dainiell",
     },
     bio: [
-        "I am a versatile IT professional with expertise in database management, data analysis, and programming, including SQL, Python, and R. Continuously refining my technical skills, I transform complex data into actionable insights and efficient solutions. I approach every project with precision, ensuring accuracy, reliability, and measurable impact.",
-        "In addition to my technical expertise, I bring creative skills in video editing using Adobe Premiere Pro and UI/UX design with Figma. By combining analytical thinking with creativity, I deliver visually engaging, user-centered digital experiences. Bridging technology and design allows me to provide innovative solutions that are both functional and aesthetically appealing.",
-        "I also document my career journey as a YouTube content creator, sharing knowledge and experiences while exploring new trends in technology and digital media. Committed to continuous growth, I strive to expand both my technical and creative abilities. I welcome opportunities to collaborate, learn, and make meaningful contributions through my diverse skill set."
-    ],
+    "I am a 20 year old IT student majoring in Web and Mobile Development, currently focused on building my path toward becoming an iOS Developer. My goal is to create clean, practical, and user-centered mobile applications while continuously strengthening my skills in Swift, SwiftUI, and modern iOS development.",
+
+    "Before focusing on iOS development, I gained junior level experience in data analytics related work, including SQL, data organization, accuracy checking, pattern recognition, and basic data interpretation. This background helped me develop stronger attention to detail, logical thinking, and a more structured approach to solving problems.",
+
+    "My interest in technology started with curiosity about how apps and digital products work, and it has grown into a career path I am serious about pursuing. I continue to learn through hands-on projects, improve through practice, and document my growth through YouTube videos as part of my journey in tech."
+],
     skills: [
-        { name: "MySQL", category: "Programming Language" },
-        { name: "R", category: "Programming Language" },
-        { name: "CSS", category: "Programming Language" },
-        { name: "Python", category: "Programming Language" },
-        { name: "HTML", category: "Programming Language" },
-        { name: "Excel", category: "Analytics Software" },
-        { name: "Power BI", category: "Analytics Software" },
-        { name: "Tableau", category: "Analytics Software" },
-        { name: "Adobe Premiere Pro", category: "Editing Software" },
-        { name: "Adobe Photoshop", category: "Editing Software" },
-        { name: "Figma", category: "Editing Software" },
-        { name: "Final Cut Pro", category: "Editing Software" },
-    ],
+    { name: "Swift", category: "Programming Languages" },
+    { name: "Python", category: "Programming Languages" },
+
+    { name: "SwiftUI", category: "UI Development" },
+    { name: "UIKit", category: "UI Development" },
+    { name: "Auto Layout", category: "UI Development" },
+    { name: "View Controllers", category: "UI Development" },
+    { name: "Navigation & Flow", category: "UI Development" },
+
+    { name: "MVVM", category: "App Architecture" },
+    { name: "MVC", category: "App Architecture" },
+    { name: "State Management", category: "App Architecture" },
+    { name: "Memory Management (ARC)", category: "App Architecture" },
+    { name: "App Lifecycle", category: "App Architecture" },
+
+
+    { name: "REST API", category: "Networking" },
+    { name: "JSON Parsing", category: "Networking" },
+
+    { name: "MySQL", category: "Database" },
+    { name: "Supabase", category: "Database" },
+
+    { name: "Git", category: "Dev Tools" },
+    { name: "GitHub", category: "Dev Tools" },
+    { name: "Xcode", category: "Dev Tools" },
+    { name: "VS Code", category: "Dev Tools" },
+   
+    { name: "Figma", category: "Design Tools" },
+    { name: "DetailsPro", category: "Design Tools" },
+],
     experiences: [
         {
             id: "1",
-            role: "Creative Director",
-            company: "The Creative Team",
-            duration: "Oct 2024 - Dec 2024",
-            description: [
-                "Planned and managed the creative and technical aspects of university events, from structuring event flow to operating cameras, lighting, and sound systems during live productions."
-            ],
-            logo: "/Images/experience/lpu.jpg"
-        },
-        {
-            id: "2",
             role: "Audit Assistant",
             company: "Tagaytay Highlands",
-            duration: "May 2024 - Aug 2024",
+            duration: "2024",
             description: [
                 "Provided support to the internal audit team by examining financial records, validating transactions, and ensuring adherence to established policies and procedures. Assisted in inventory and cash audits, prepared audit documentation and reports, and contributed to the strengthening of internal control processes."
             ],
             logo: "/Images/experience/tagaytay highlands.png"
         },
         {
-            id: "3",
+            id: "2",
             role: "Police Clerk",
-            company: "Silang Cavite",
-            duration: "Nov 2023 - Jan 2024",
+            company: "NPC Silang Cavite",
+            duration: "2023",
             description: ["Delivered frontline administrative support for police clearance services by assisting citizens with registration and application processing. Managed payment collection, verified applicant information, and conducted biometric data capture. Ensured accurate record keeping, proper documentation, and efficient processing of police clearance requests in accordance with standard procedures."],
             logo: "/Images/experience/police.png"
-        }
+        },
     ],
     certificates: [
         {
+            id: "cert0",
+            title: "Github Foundations",
+            issuer: "DataCamp",
+            issueDate: "May 5 2026",
+            imageUrl: "/Images/certificates/GithubFoundations.jpg"
+        },
+        {
             id: "cert1",
-            title: "Python Essentials 1",
-            issuer: "Cisco Networking Academy",
-            issueDate: "16 Dec 2024",
-            imageUrl: "/Images/certificates/python 1.jpg"
+            title: "Intermediate to Github",
+            issuer: "DataCamp",
+            issueDate: "May 5 2026",
+            imageUrl: "/Images/certificates/intermediateGithubConcepts.jpg"
         },
         {
             id: "cert2",
-            title: "Python Essentials 2",
-            issuer: "Cisco Networking Academy",
-            issueDate: "22 Feb 2025",
-            imageUrl: "/Images/certificates/python 2.jpg"
+            title: "Introduction to Github",
+            issuer: "DataCamp",
+            issueDate: "May 5 2026",
+            imageUrl: "/Images/certificates/introGithubConcepts.jpg"
         },
         {
             id: "cert3",
-            title: "Data Science Essentials with Python",
+            title: "Intermediate to Git",
+            issuer: "DataCamp",
+            issueDate: "May 5 2026",
+            imageUrl: "/Images/certificates/intermediateGIT.png"
+        },
+        {
+            id: "cert4",
+            title: "Introduction to Git",
+            issuer: "DataCamp",
+            issueDate: "May 5 2026",
+            imageUrl: "/Images/certificates/git.png"
+        },
+        {
+            id: "cert5",
+            title: "Associate Data Analyst",
+            issuer: "DataCamp",
+            issueDate: "April 11 2026",
+            imageUrl: "/Images/certificates/associate-data-analyst-datacamp.jpg"
+        },
+        {
+            id: "cert6",
+            title: "SQL (Intermediate)",
+            issuer: "HackerRank",
+            issueDate: "March 29 2026",
+            imageUrl: "/Images/certificates/sql-intermediate.jpg"
+        },
+        {
+            id: "cert7",
+            title: "Introduction to SQL",
+            issuer: "DataCamp",
+            issueDate: "March 25 2026",
+            imageUrl: "/Images/certificates/sql-intro-datacamp.png"
+        },
+        {
+            id: "cert8",
+            title: "Data Science with Python",
             issuer: "Cisco Networking Academy",
-            issueDate: "15 Jan 2026",
+            issueDate: "January 15 2026",
             imageUrl: "/Images/certificates/Data Science.jpg"
+        },
+        {
+            id: "cert9",
+            title: "Python Essentials 2",
+            issuer: "Cisco Networking Academy",
+            issueDate: "February 22 2025",
+            imageUrl: "/Images/certificates/python 2.jpg"
+        },
+        {
+            id: "cert10",
+            title: "Python Essentials 1",
+            issuer: "Cisco Networking Academy",
+            issueDate: "December 16 2024",
+            imageUrl: "/Images/certificates/python 1.jpg"
         }
     ]
 };
