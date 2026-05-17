@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
 import "@fontsource/open-runde/400.css";
 import "@fontsource/open-runde/500.css";
@@ -38,6 +39,7 @@ export default function RootLayout({
         >
           © {new Date().getFullYear()} Ralph Dainiell. All rights reserved.
         </footer>
+        <Analytics />
       </body>
     </html>
   );
