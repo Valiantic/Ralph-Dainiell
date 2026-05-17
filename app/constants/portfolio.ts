@@ -38,12 +38,14 @@ export const PORTFOLIO_DATA: PortfolioData = {
 
     { name: "REST API", category: "Networking" },
     { name: "JSON Parsing", category: "Networking" },
-
+    
+    { name: "Swift Data", category: "Database" },
     { name: "MySQL", category: "Database" },
     { name: "Supabase", category: "Database" },
 
     { name: "Git", category: "Tools & Version Control" },
     { name: "GitHub", category: "Tools & Version Control" },
+    { name: "Tableplus", category: "Tools & Version Control" },
     { name: "Xcode", category: "Tools & Version Control" },
     { name: "VS Code", category: "Tools & Version Control" },
     { name: "Figma", category: "Tools & Version Control" },
