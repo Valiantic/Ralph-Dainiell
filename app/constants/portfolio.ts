@@ -45,13 +45,12 @@ export const PORTFOLIO_DATA: PortfolioData = {
     { name: "MySQL", category: "Database" },
     { name: "Supabase", category: "Database" },
 
-    { name: "Git", category: "Dev Tools" },
-    { name: "GitHub", category: "Dev Tools" },
-    { name: "Xcode", category: "Dev Tools" },
-    { name: "VS Code", category: "Dev Tools" },
-   
-    { name: "Figma", category: "Design Tools" },
-    { name: "DetailsPro", category: "Design Tools" },
+    { name: "Git", category: "Tools & Version Control" },
+    { name: "GitHub", category: "Tools & Version Control" },
+    { name: "Xcode", category: "Tools & Version Control" },
+    { name: "VS Code", category: "Tools & Version Control" },
+    { name: "Figma", category: "Tools & Version Control" },
+    { name: "DetailsPro", category: "Tools & Version Control" },
 ],
     experiences: [
         {
