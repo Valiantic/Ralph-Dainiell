@@ -28,9 +28,6 @@ export const PORTFOLIO_DATA: PortfolioData = {
 
     { name: "SwiftUI", category: "UI Development" },
     { name: "UIKit", category: "UI Development" },
-    { name: "Auto Layout", category: "UI Development" },
-    { name: "View Controllers", category: "UI Development" },
-    { name: "Navigation & Flow", category: "UI Development" },
 
     { name: "MVVM", category: "App Architecture" },
     { name: "MVC", category: "App Architecture" },
