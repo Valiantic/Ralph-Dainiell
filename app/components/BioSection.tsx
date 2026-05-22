@@ -36,6 +36,7 @@ export const BioSection = ({ bio }: BioSectionProps) => {
                 overflow: 'visible',
                 display: 'flex',
                 flexDirection: 'column',
+                paddingBottom: '28px',
                 transform: hasMouse && isHovered ? 'translateY(-2px)' : 'translateY(0)',
                 boxShadow: hasMouse && isHovered ? '0 12px 32px rgba(0, 0, 0, 0.13)' : 'none',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -89,13 +90,13 @@ export const BioSection = ({ bio }: BioSectionProps) => {
                         min-height: 0 !important;
                         max-height: none !important;
                         overflow: visible !important;
-                        padding: 20px !important;
+                        padding: 20px 20px 28px 20px !important;
                     }
                 }
 
                 @media (max-width: 480px) {
                     .bio-card {
-                        padding: 20px !important;
+                        padding: 20px 20px 24px 20px !important;
                     }
                 }
             `}</style>
