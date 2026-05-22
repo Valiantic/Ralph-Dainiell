@@ -375,7 +375,3 @@ button {
     animation: none !important;
   }
 }
-.blog-card {
-    align-self: start !important;
-    height: auto !important;
-}

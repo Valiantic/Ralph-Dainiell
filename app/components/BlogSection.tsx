@@ -23,10 +23,13 @@ export default function BlogSection() {
     return (
         <section
             className="card blog-card"
-            onMouseEnter={() => { if (hasMouse) setIsHovered(true); }}
+            onMouseEnter={() => {
+                if (hasMouse) setIsHovered(true);
+            }}
             onMouseLeave={() => setIsHovered(false)}
             style={{
                 width: '100%',
+                height: '100%',
                 background: '#fff',
                 display: 'flex',
                 flexDirection: 'column',
@@ -37,8 +40,21 @@ export default function BlogSection() {
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
             }}
         >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '24px', height: '24px', position: 'relative', flexShrink: 0 }}>
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                }}
+            >
+                <div
+                    style={{
+                        width: 'clamp(22px, 2.5vw, 34px)',
+                        height: 'clamp(22px, 2.5vw, 34px)',
+                        position: 'relative',
+                        flexShrink: 0,
+                    }}
+                >
                     <Image
                         src="/Images/Icons/bookicon.png"
                         alt="Blog"
@@ -46,7 +62,15 @@ export default function BlogSection() {
                         style={{ objectFit: 'contain' }}
                     />
                 </div>
-                <h2 style={{ fontSize: '22px', fontWeight: 700, margin: 0, letterSpacing: '-0.02em' }}>
+
+                <h2
+                    style={{
+                        fontSize: 'clamp(17px, 1.8vw, 22px)',
+                        fontWeight: 700,
+                        margin: 0,
+                        letterSpacing: '-0.02em',
+                    }}
+                >
                     Blog
                 </h2>
             </div>
@@ -65,6 +89,22 @@ export default function BlogSection() {
                 unclear processes, and user needs into simple, efficient, and purposeful digital
                 solutions that make everyday work easier to complete.
             </p>
+
+            <style jsx>{`
+                @media (max-width: 1024px) {
+                    .blog-card {
+                        height: auto !important;
+                        padding: 20px !important;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .blog-card {
+                        height: auto !important;
+                        padding: 18px !important;
+                    }
+                }
+            `}</style>
         </section>
     );
 }
