@@ -49,8 +49,8 @@ export default function BlogSection() {
             >
                 <div
                     style={{
-                        width: 'clamp(22px, 2.5vw, 34px)',
-                        height: 'clamp(22px, 2.5vw, 34px)',
+                        width: 'clamp(18px, 2vw, 26px)',
+                        height: 'clamp(18px, 2vw, 26px)',
                         position: 'relative',
                         flexShrink: 0,
                     }}
