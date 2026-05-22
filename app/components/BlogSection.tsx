@@ -30,12 +30,12 @@ export default function BlogSection() {
             style={{
                 width: '100%',
                 height: 'auto',
+                minHeight: 'fit-content',
                 background: '#fff',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
-                gap: '14px',
-                overflow: 'hidden', 
+                gap: '14px', 
                 transform: hasMouse && isHovered ? 'translateY(-2px)' : 'translateY(0)',
                 boxShadow: hasMouse && isHovered ? '0 12px 32px rgba(0, 0, 0, 0.13)' : 'none',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -94,6 +94,8 @@ export default function BlogSection() {
             <style jsx>{`
                 .blog-card {
                     height: auto !important;
+                    min-height: fit-content !important;
+                    align-self: start !important;  /* ← ito ang key fix */
                 }
 
                 @media (max-width: 1024px) {
