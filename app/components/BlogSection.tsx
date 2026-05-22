@@ -29,12 +29,13 @@ export default function BlogSection() {
             onMouseLeave={() => setIsHovered(false)}
             style={{
                 width: '100%',
-                height: '100%',
+                height: 'auto',
                 background: '#fff',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
                 gap: '14px',
+                overflow: 'hidden', 
                 transform: hasMouse && isHovered ? 'translateY(-2px)' : 'translateY(0)',
                 boxShadow: hasMouse && isHovered ? '0 12px 32px rgba(0, 0, 0, 0.13)' : 'none',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -91,16 +92,18 @@ export default function BlogSection() {
             </p>
 
             <style jsx>{`
+                .blog-card {
+                    height: auto !important;
+                }
+
                 @media (max-width: 1024px) {
                     .blog-card {
-                        height: auto !important;
                         padding: 20px !important;
                     }
                 }
 
                 @media (max-width: 480px) {
                     .blog-card {
-                        height: auto !important;
                         padding: 18px !important;
                     }
                 }
