@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { memo, useState, useEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
 import { PortfolioData } from '../types/portfolio';
 import { GoFileZip } from 'react-icons/go';
-import { IoLocationOutline } from 'react-icons/io5';
+
 
 interface ProfileHeroProps {
     data: PortfolioData;
@@ -854,19 +854,6 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
                     {data.name}
                 </h1>
 
-                <div
-                    className="hero-location"
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '1px',
-                        color: '#000',
-                        fontSize: '15px',
-                    }}
-                >
-                    <IoLocationOutline size={18} color="#000" />
-                    <span style={{ paddingTop: '2px' }}>{data.location}</span>
-                </div>
 
                 <div className="hero-role" style={{ fontSize: '22px', fontWeight: 500, color: '#000', marginBottom: '8px' }}>
                     {data.roles.join(' \\ ')}
