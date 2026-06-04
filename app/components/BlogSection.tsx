@@ -125,6 +125,7 @@ export default function BlogSection() {
                 className="card blog-card"
                 onMouseEnter={() => { if (hasMouse) setIsHovered(true); }}
                 onMouseLeave={() => setIsHovered(false)}
+                onClick={() => setModalOpen(true)}
                 style={{
                     width: '100%',
                     height: '100%',
@@ -133,6 +134,7 @@ export default function BlogSection() {
                     flexDirection: 'column',
                     justifyContent: 'flex-start',
                     gap: '14px',
+                    cursor: 'pointer',
                     transform: hasMouse && isHovered ? 'translateY(-2px)' : 'translateY(0)',
                     boxShadow: hasMouse && isHovered ? '0 12px 32px rgba(0, 0, 0, 0.13)' : 'none',
                     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -159,11 +161,6 @@ export default function BlogSection() {
                 </p>
 
                 <style jsx>{`
-                    @media (min-width: 1025px) {
-                        .blog-card {
-                            display: none !important;
-                        }
-                    }
 
                     @media (max-width: 1024px) {
                         .blog-card {
