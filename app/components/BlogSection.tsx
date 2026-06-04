@@ -128,12 +128,16 @@ export default function BlogSection() {
                 onClick={() => setModalOpen(true)}
                 style={{
                     width: '100%',
-                    height: '100%',
+                    height: 'auto',           // ✅ FIX: was '100%' — collapsed to grid cell height, overflowing text
+                    minHeight: 0,             // ✅ FIX: prevents grid from stretching it beyond content
                     background: '#fff',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'flex-start',
+                    alignSelf: 'flex-start',  // ✅ FIX: stops grid/flex parent from force-stretching this card
                     gap: '14px',
+                    padding: '20px',          // ✅ FIX: padding was only applied via CSS at ≤1024px, missing on desktop
+                    overflow: 'hidden',       // ✅ FIX: prevents any content bleed outside card boundary
                     cursor: 'pointer',
                     transform: hasMouse && isHovered ? 'translateY(-2px)' : 'translateY(0)',
                     boxShadow: hasMouse && isHovered ? '0 12px 32px rgba(0, 0, 0, 0.13)' : 'none',
@@ -161,17 +165,8 @@ export default function BlogSection() {
                 </p>
 
                 <style jsx>{`
-
-                    @media (max-width: 1024px) {
-                        .blog-card {
-                            height: auto !important;
-                            padding: 20px !important;
-                        }
-                    }
-
                     @media (max-width: 480px) {
                         .blog-card {
-                            height: auto !important;
                             padding: 18px !important;
                         }
                     }
