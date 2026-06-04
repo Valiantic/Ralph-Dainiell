@@ -861,7 +861,7 @@ export const ProfileHero = ({ data }: ProfileHeroProps) => {
 
                 <div className="hero-buttons" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                     <a
-                        href="/resume/GonzagaRalphDainiellCVresume-.pdf"
+                        href="/resume/CVresumeGonzagaRalphDainiell.pdf"
                         target="_blank"
                         download
                         className="cv-button"
