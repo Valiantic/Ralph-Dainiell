@@ -419,6 +419,18 @@ const styleBlock = `
         opacity: 0.2;
     }
 
+    .social-link {
+        min-width: 0;
+    }
+
+    .social-label {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
+    }
+
     @media (max-width: 767px) {
         .profile-hero {
             --pair-card-height: 220px;
