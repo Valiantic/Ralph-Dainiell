@@ -41,6 +41,9 @@ export const PORTFOLIO_DATA: PortfolioData = {
     { name: "Tableplus", category: "Database" },
     { name: "MySQL", category: "Database" },
     { name: "Supabase", category: "Database" },
+    { name: "Firebase", category: "Database" },
+    { name: "Realm", category: "Database" },
+    { name: "SQLite", category: "Database" },
 
     { name: "Git", category: "Tools & Version Control" },
     { name: "GitHub", category: "Tools & Version Control" },
