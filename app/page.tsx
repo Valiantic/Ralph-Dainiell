@@ -165,6 +165,7 @@ export default function Home() {
 
           .blog-column {
             height: auto !important;
+            min-height: 0 !important;
           }
 
           .blog-wrapper {
