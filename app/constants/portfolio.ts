@@ -18,7 +18,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
     bio: [
     "I am a 20 year old IT student majoring in Web and Mobile Development, currently focused on building my path toward becoming an iOS Developer. My goal is to create clean, practical, and user-centered mobile applications while continuously strengthening my skills in Swift, SwiftUI, and modern iOS development.",
 
-    "My interest in technology has grown from curiosity about how apps and digital products work into a career path I am committed to, built through hands-on projects, consistent practice, and documenting my journey on YouTube. I also bring junior-level experience in data analytics — including SQL, data organization, and pattern recognition — which developed my attention to detail and a structured approach to problem-solving.",
+    "My interest in technology has grown from curiosity about how apps and digital products work into a career path I am committed to, built through hands-on projects, consistent practice, and documenting my journey on YouTube. I also bring junior-level experience in data analytics including SQL, data organization, and pattern recognition which developed my attention to detail and a structured approach to problem-solving.",
 ],
     skills: [
     { name: "Swift", category: "Programming Languages" },
