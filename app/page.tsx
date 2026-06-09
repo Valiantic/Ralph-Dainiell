@@ -40,7 +40,7 @@ export default function Home() {
             display: 'flex',
             flexDirection: 'column',
             gap: 'clamp(16px, 3vw, 24px)',
-            height: 'var(--bento-height, 650px)',
+            minHeight: 'var(--bento-height, 650px)', 
           }}
           className="mobile-span-12 blog-column"
         >
