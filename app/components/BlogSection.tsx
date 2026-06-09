@@ -134,6 +134,7 @@ export default function BlogSection() {
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'flex-start',
+                    alignSelf: 'flex-start',
                     gap: '14px',
                     padding: '20px',
                     cursor: 'pointer',

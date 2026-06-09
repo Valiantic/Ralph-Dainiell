@@ -94,7 +94,7 @@ export default function Home() {
         }
 
         .blog-wrapper {
-          flex: none;
+          flex: 1;
           display: flex;
           min-height: 0;
         }
@@ -167,7 +167,6 @@ export default function Home() {
           .blog-column {
             height: auto !important;
             min-height: 0 !important;
-            justify-content: flex-start !important;
           }
 
           .blog-wrapper {

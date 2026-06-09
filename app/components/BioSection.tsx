@@ -59,7 +59,7 @@ export const BioSection = ({ bio }: BioSectionProps) => {
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '22px',
+                    gap: '18px',
                 }}
             >
                 {bio.map((paragraph, index) => (
@@ -67,8 +67,8 @@ export const BioSection = ({ bio }: BioSectionProps) => {
                         key={index}
                         style={{
                             color: '#000',
-                            fontSize: 'clamp(14px, 1.5vw, 18px)', 
-                            lineHeight: 1.6,
+                            fontSize: 'clamp(14px, 1.35vw, 17px)',
+                            lineHeight: 1.48,
                             fontWeight: 400,
                             margin: 0,
                         }}
