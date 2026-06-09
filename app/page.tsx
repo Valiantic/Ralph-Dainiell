@@ -39,6 +39,7 @@ export default function Home() {
             gridColumn: 'span 6',
             display: 'flex',
             flexDirection: 'column',
+            justifyContent: 'space-between',
             gap: 'clamp(16px, 3vw, 24px)',
             minHeight: 'var(--bento-height, 650px)', 
           }}
@@ -93,7 +94,7 @@ export default function Home() {
         }
 
         .blog-wrapper {
-          flex: 1;
+          flex: none;
           display: flex;
           min-height: 0;
         }
@@ -166,6 +167,7 @@ export default function Home() {
           .blog-column {
             height: auto !important;
             min-height: 0 !important;
+            justify-content: flex-start !important;
           }
 
           .blog-wrapper {
