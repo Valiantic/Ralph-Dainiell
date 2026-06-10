@@ -3,7 +3,7 @@
 import { PORTFOLIO_DATA } from './constants/portfolio';
 import { ProfileHero } from './components/ProfileHero';
 import { BioSection } from './components/BioSection';
-import BlogSection from './components/BlogSection';
+import RecommendationSection from "./components/RecommendationSection";
 import { SkillsSection } from './components/SkillsSection';
 import { ExperienceSection } from './components/ExperienceSection';
 import { CertificatesSection } from './components/CertificatesSection';
@@ -49,7 +49,7 @@ export default function Home() {
           </div>
 
           <div className="portfolio-reveal reveal-blog blog-wrapper">
-            <BlogSection />
+            <RecommendationSection />
           </div>
         </div>
 

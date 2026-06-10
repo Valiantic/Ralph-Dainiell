@@ -375,3 +375,17 @@ button {
     animation: none !important;
   }
 }
+@keyframes modal-enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-enter {
+  animation: modal-enter-up 0.22s ease-out forwards;
+}
