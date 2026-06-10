@@ -241,15 +241,15 @@ export default function RecommendationSection() {
           (e.currentTarget.style.transform = "translateY(0)");
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <Image
             src="/Images/Icons/recommend.png"
             alt="Recommendation"
-            width={16}
-            height={16}
+            width={28}
+            height={28}
             style={{ objectFit: "contain" }}
           />
-          <h2 style={{ fontSize: "13px", fontWeight: 700, color: "#111827", margin: 0 }}>
+          <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#111827", margin: 0 }}>
             Recommendation
           </h2>
         </div>
