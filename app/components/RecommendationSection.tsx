@@ -219,26 +219,25 @@ export default function RecommendationSection() {
   return (
     <>
       <div
-        style={{ borderRadius: "16px", border: "1px solid #e5e7eb", backgroundColor: "#fff", padding: "16px 20px", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "12px", minHeight: "200px" }}
+        style={{ borderRadius: "16px", border: "1px solid #e5e7eb", backgroundColor: "#fff", padding: "16px 20px", display: "flex", flexDirection: "column", gap: "12px" }}
       >
-        <div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-            <Image
-              src="/Images/Icons/recommend.png"
-              alt="Recommendation"
-              width={18}
-              height={18}
-              style={{ objectFit: "contain" }}
-            />
-            <h2 style={{ fontSize: "14px", fontWeight: 700, color: "#111827", margin: 0 }}>
-              Recommendation
-            </h2>
-          </div>
-          <p style={{ fontSize: "12px", color: "#6b7280", lineHeight: 1.6, margin: 0 }}>
-            Have you ever experience things that really hard for you? Maybe i
-            can help you with that problem and we solved using my skills
-          </p>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <Image
+            src="/Images/Icons/recommend.png"
+            alt="Recommendation"
+            width={18}
+            height={18}
+            style={{ objectFit: "contain" }}
+          />
+          <h2 style={{ fontSize: "14px", fontWeight: 700, color: "#111827", margin: 0 }}>
+            Recommendation
+          </h2>
         </div>
+
+        <p style={{ fontSize: "12px", color: "#6b7280", lineHeight: 1.6, margin: 0 }}>
+          Have you ever experience things that really hard for you? Maybe i
+          can help you with that problem and we solved using my skills
+        </p>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
           <button
