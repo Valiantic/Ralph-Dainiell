@@ -218,15 +218,16 @@ export default function RecommendationSection() {
 
   return (
     <>
+   
       <div
         style={{
           borderRadius: "16px",
           border: "1px solid #e5e7eb",
           backgroundColor: "#fff",
-          padding: "16px",
+          padding: "16px 20px",
           display: "flex",
           flexDirection: "column",
-          gap: "10px",
+          gap: "12px",
           width: "100%",
           boxSizing: "border-box",
         }}
@@ -249,35 +250,34 @@ export default function RecommendationSection() {
           can help you with that problem and we solved using my skills
         </p>
 
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <button
-            onClick={openModal}
-            style={{
-              width: "100%",
-              padding: "8px 0",
-              borderRadius: "12px",
-              border: "1px solid #d1d5db",
-              fontSize: "12px",
-              fontWeight: 600,
-              color: "#1f2937",
-              backgroundColor: "transparent",
-              cursor: "pointer",
-              transition: "all 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget.style.backgroundColor = "#111827");
-              (e.currentTarget.style.color = "#fff");
-              (e.currentTarget.style.borderColor = "#111827");
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget.style.backgroundColor = "transparent");
-              (e.currentTarget.style.color = "#1f2937");
-              (e.currentTarget.style.borderColor = "#d1d5db");
-            }}
-          >
-            Recommend
-          </button>
-        </div>
+        
+        <button
+          onClick={openModal}
+          style={{
+            width: "100%",
+            padding: "8px 0",
+            borderRadius: "12px",
+            border: "1px solid #d1d5db",
+            fontSize: "12px",
+            fontWeight: 600,
+            color: "#1f2937",
+            backgroundColor: "transparent",
+            cursor: "pointer",
+            transition: "all 0.2s",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget.style.backgroundColor = "#111827");
+            (e.currentTarget.style.color = "#fff");
+            (e.currentTarget.style.borderColor = "#111827");
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget.style.backgroundColor = "transparent");
+            (e.currentTarget.style.color = "#1f2937");
+            (e.currentTarget.style.borderColor = "#d1d5db");
+          }}
+        >
+          Recommend
+        </button>
       </div>
 
       {mounted && isModalOpen && createPortal(modalContent, document.body)}
