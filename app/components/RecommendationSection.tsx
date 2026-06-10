@@ -221,7 +221,7 @@ export default function RecommendationSection() {
       <div
         style={{
           borderRadius: "16px",
-          border: "1px solid #e5e7eb",
+          border: "1.5px solid #111827",
           backgroundColor: "#fff",
           padding: "20px",
           display: "flex",
@@ -229,6 +229,16 @@ export default function RecommendationSection() {
           gap: "10px",
           width: "100%",
           boxSizing: "border-box",
+          transition: "box-shadow 0.2s ease, transform 0.2s ease",
+          cursor: "default",
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.12)");
+          (e.currentTarget.style.transform = "translateY(-2px)");
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget.style.boxShadow = "none");
+          (e.currentTarget.style.transform = "translateY(0)");
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
