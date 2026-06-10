@@ -220,7 +220,7 @@ export default function RecommendationSection() {
     <>
       <div
         style={{
-          borderRadius: "16px",
+          borderRadius: "24px",
           border: "1.5px solid #111827",
           backgroundColor: "#fff",
           padding: "20px",
@@ -254,7 +254,7 @@ export default function RecommendationSection() {
           </h2>
         </div>
 
-        <p style={{ fontSize: "12px", color: "#6b7280", lineHeight: 1.6, margin: 0 }}>
+        <p style={{ fontSize: "12px", color: "#111827", lineHeight: 1.6, margin: 0 }}>
           Have you ever experience things that really hard for you? maybe i
           can help you with that problem and we solved using my skills
         </p>
@@ -265,10 +265,10 @@ export default function RecommendationSection() {
             width: "100%",
             padding: "8px 0",
             borderRadius: "10px",
-            border: "1px solid #d1d5db",
+            border: "1.5px solid #111827",
             fontSize: "12px",
             fontWeight: 500,
-            color: "#374151",
+            color: "#111827",
             backgroundColor: "transparent",
             cursor: "pointer",
             transition: "all 0.2s",
@@ -281,8 +281,8 @@ export default function RecommendationSection() {
           }}
           onMouseLeave={(e) => {
             (e.currentTarget.style.backgroundColor = "transparent");
-            (e.currentTarget.style.color = "#374151");
-            (e.currentTarget.style.borderColor = "#d1d5db");
+            (e.currentTarget.style.color = "#111827");
+            (e.currentTarget.style.borderColor = "#111827");
           }}
         >
           Recommend
