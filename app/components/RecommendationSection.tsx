@@ -218,29 +218,28 @@ export default function RecommendationSection() {
 
   return (
     <>
-   
       <div
         style={{
           borderRadius: "16px",
           border: "1px solid #e5e7eb",
           backgroundColor: "#fff",
-          padding: "16px 20px",
+          padding: "20px",
           display: "flex",
           flexDirection: "column",
-          gap: "12px",
+          gap: "10px",
           width: "100%",
           boxSizing: "border-box",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <Image
             src="/Images/Icons/recommend.png"
             alt="Recommendation"
-            width={18}
-            height={18}
+            width={16}
+            height={16}
             style={{ objectFit: "contain" }}
           />
-          <h2 style={{ fontSize: "14px", fontWeight: 700, color: "#111827", margin: 0 }}>
+          <h2 style={{ fontSize: "13px", fontWeight: 700, color: "#111827", margin: 0 }}>
             Recommendation
           </h2>
         </div>
@@ -250,20 +249,20 @@ export default function RecommendationSection() {
           can help you with that problem and we solved using my skills
         </p>
 
-        
         <button
           onClick={openModal}
           style={{
             width: "100%",
             padding: "8px 0",
-            borderRadius: "12px",
+            borderRadius: "10px",
             border: "1px solid #d1d5db",
             fontSize: "12px",
-            fontWeight: 600,
-            color: "#1f2937",
+            fontWeight: 500,
+            color: "#374151",
             backgroundColor: "transparent",
             cursor: "pointer",
             transition: "all 0.2s",
+            marginTop: "2px",
           }}
           onMouseEnter={(e) => {
             (e.currentTarget.style.backgroundColor = "#111827");
@@ -272,7 +271,7 @@ export default function RecommendationSection() {
           }}
           onMouseLeave={(e) => {
             (e.currentTarget.style.backgroundColor = "transparent");
-            (e.currentTarget.style.color = "#1f2937");
+            (e.currentTarget.style.color = "#374151");
             (e.currentTarget.style.borderColor = "#d1d5db");
           }}
         >
