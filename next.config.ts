@@ -1,10 +1,7 @@
-const nextConfig = {
-  // ... your existing settings ...
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "10mb",
-    },
-  },
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
 };
 
 export default nextConfig;
