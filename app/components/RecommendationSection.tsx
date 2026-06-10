@@ -9,6 +9,13 @@ interface ImageItem {
   name: string;
 }
 
+const modalKeyframes = `
+  @keyframes modalEnter {
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+  }
+`;
+
 export default function RecommendationSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [text, setText] = useState("");
@@ -18,20 +25,13 @@ export default function RecommendationSection() {
   const [mounted, setMounted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    if (isModalOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isModalOpen]);
+    if (!mounted) return;
+    document.body.style.overflow = isModalOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isModalOpen, mounted]);
 
   const compressImage = (file: File): Promise<ImageItem> =>
     new Promise((resolve) => {
@@ -43,21 +43,13 @@ export default function RecommendationSection() {
           const MAX = 900;
           let { width, height } = img;
           if (width > MAX || height > MAX) {
-            if (width > height) {
-              height = (height / width) * MAX;
-              width = MAX;
-            } else {
-              width = (width / height) * MAX;
-              height = MAX;
-            }
+            if (width > height) { height = (height / width) * MAX; width = MAX; }
+            else { width = (width / height) * MAX; height = MAX; }
           }
           canvas.width = width;
           canvas.height = height;
           canvas.getContext("2d")!.drawImage(img, 0, 0, width, height);
-          resolve({
-            base64: canvas.toDataURL("image/jpeg", 0.8),
-            name: file.name,
-          });
+          resolve({ base64: canvas.toDataURL("image/jpeg", 0.8), name: file.name });
         };
         img.src = e.target?.result as string;
       };
@@ -68,9 +60,7 @@ export default function RecommendationSection() {
     const files = Array.from(e.target.files || []);
     const remaining = 3 - images.length;
     if (remaining <= 0) return;
-    const compressed = await Promise.all(
-      files.slice(0, remaining).map(compressImage)
-    );
+    const compressed = await Promise.all(files.slice(0, remaining).map(compressImage));
     setImages((prev) => [...prev, ...compressed]);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
@@ -91,10 +81,7 @@ export default function RecommendationSection() {
       setIsSuccess(true);
       setText("");
       setImages([]);
-      setTimeout(() => {
-        setIsSuccess(false);
-        setIsModalOpen(false);
-      }, 3000);
+      setTimeout(() => { setIsSuccess(false); setIsModalOpen(false); }, 3000);
     } catch {
       alert("Something went wrong. Please try again.");
     } finally {
@@ -109,168 +96,156 @@ export default function RecommendationSection() {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    if (!isSending) setIsModalOpen(false);
-  };
+  const closeModal = () => { if (!isSending) setIsModalOpen(false); };
 
   const canSend = !isSending && (text.trim().length > 0 || images.length > 0);
 
   const modalContent = (
-    <div
-      className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4"
-      onClick={(e) => e.target === e.currentTarget && closeModal()}
-    >
+    <>
+      <style dangerouslySetInnerHTML={{ __html: modalKeyframes }} />
       <div
-        className="w-full sm:w-auto sm:min-w-[400px] sm:max-w-[460px] bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl p-5 sm:p-6"
-        style={{
-          animation: "modalEnter 0.25s cubic-bezier(0.32, 0.72, 0, 1) forwards",
-        }}
+        style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", padding: "16px" }}
+        onClick={(e) => e.target === e.currentTarget && closeModal()}
       >
-        {isSuccess ? (
-          <div className="flex flex-col items-center justify-center py-6 text-center gap-2">
-            <h2 className="text-base font-bold text-gray-900">
-              Your Recommendation Has Been Sent!
-            </h2>
-            <p className="text-xs text-gray-400">
-              Great Impact Starts with a Single Suggestion
-            </p>
-            <Image
-              src="/Images/Icons/recommendSendIcon.png"
-              alt="Sent"
-              width={52}
-              height={52}
-              className="my-3 object-contain opacity-75"
-            />
-            <div className="w-12 h-px bg-gray-200" />
-            <p className="text-xs text-gray-400 mt-1">
-              Your recommendation will be received via my personal email address
-            </p>
-          </div>
-        ) : (
-          <>
-            <h2 className="text-sm font-bold text-gray-900 mb-3 leading-snug">
-              Every recommendation can lead to big impact!
-            </h2>
-
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value.slice(0, 1000))}
-              placeholder="Type here..."
-              rows={5}
-              className="w-full resize-none rounded-xl border border-gray-200 p-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all duration-200"
-            />
-
-            {images.length > 0 && (
-              <div className="flex gap-2 mt-2.5 flex-wrap">
-                {images.map((img, i) => (
-                  <div
-                    key={i}
-                    className="relative w-14 h-14 rounded-xl overflow-hidden border border-gray-200 group cursor-pointer shrink-0"
-                  >
-                    <img
-                      src={img.base64}
-                      alt={`preview-${i}`}
-                      className="w-full h-full object-cover"
-                    />
-                    <button
-                      onClick={() => removeImage(i)}
-                      className="absolute inset-0 bg-black/55 text-white text-xl font-bold opacity-0 group-hover:opacity-100 active:opacity-100 transition-opacity duration-150 flex items-center justify-center"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="flex items-center justify-between mt-3 gap-2">
-              <div className="flex items-center gap-2.5">
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={images.length >= 3}
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 hover:border-gray-300 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed active:scale-95 transition-all duration-150"
-                >
-                  <Image
-                    src="/Images/Icons/ImageAttach.png"
-                    alt="Attach image"
-                    width={15}
-                    height={15}
-                    className="object-contain"
-                  />
-                  <span className="text-xs font-medium tabular-nums">
-                    {images.length}/3
-                  </span>
-                </button>
-
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                  onChange={handleImageUpload}
-                />
-
-                <span className="text-xs text-gray-400 tabular-nums">
-                  {text.length}/1000
-                </span>
-              </div>
-
-              <button
-                onClick={handleSend}
-                disabled={!canSend}
-                className="px-5 py-1.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed active:scale-95 transition-all duration-150"
-              >
-                {isSending ? "SENDING..." : "SEND"}
-              </button>
+        <div
+          style={{ width: "100%", maxWidth: "460px", minWidth: "360px", backgroundColor: "#fff", borderRadius: "16px", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)", padding: "24px", animation: "modalEnter 0.25s cubic-bezier(0.32,0.72,0,1) forwards" }}
+        >
+          {isSuccess ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 0", textAlign: "center", gap: "8px" }}>
+              <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#111827", margin: 0 }}>
+                Your Recommendation Has Been Sent!
+              </h2>
+              <p style={{ fontSize: "12px", color: "#9ca3af", margin: 0 }}>
+                Great Impact Starts with a Single Suggestion
+              </p>
+              <Image
+                src="/Images/Icons/recommendSendIcon.png"
+                alt="Sent"
+                width={52}
+                height={52}
+                style={{ objectFit: "contain", opacity: 0.75, margin: "12px 0" }}
+              />
+              <div style={{ width: "48px", height: "1px", backgroundColor: "#e5e7eb" }} />
+              <p style={{ fontSize: "12px", color: "#9ca3af", margin: "4px 0 0" }}>
+                Your recommendation will be received via my personal email address
+              </p>
             </div>
+          ) : (
+            <>
+              <h2 style={{ fontSize: "14px", fontWeight: 700, color: "#111827", marginBottom: "12px", lineHeight: 1.4 }}>
+                Every recommendation can lead to big impact!
+              </h2>
 
-            <p className="text-xs text-gray-400 mt-3 text-center">
-              Your recommendation will be received via my personal email address
-            </p>
-          </>
-        )}
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value.slice(0, 1000))}
+                placeholder="Type here..."
+                rows={5}
+                style={{ width: "100%", resize: "none", borderRadius: "12px", border: "1px solid #e5e7eb", padding: "12px", fontSize: "14px", color: "#1f2937", outline: "none", fontFamily: "inherit", boxSizing: "border-box", transition: "box-shadow 0.2s" }}
+                onFocus={(e) => (e.target.style.boxShadow = "0 0 0 2px #d1d5db")}
+                onBlur={(e) => (e.target.style.boxShadow = "none")}
+              />
+
+              {images.length > 0 && (
+                <div style={{ display: "flex", gap: "8px", marginTop: "10px", flexWrap: "wrap" }}>
+                  {images.map((img, i) => (
+                    <div
+                      key={i}
+                      style={{ position: "relative", width: "56px", height: "56px", borderRadius: "12px", overflow: "hidden", border: "1px solid #e5e7eb", flexShrink: 0 }}
+                      className="group"
+                    >
+                      <img src={img.base64} alt={`preview-${i}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      <button
+                        onClick={() => removeImage(i)}
+                        style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.55)", color: "#fff", fontSize: "20px", fontWeight: 700, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, transition: "opacity 0.15s" }}
+                        onMouseEnter={(e) => ((e.target as HTMLButtonElement).style.opacity = "1")}
+                        onMouseLeave={(e) => ((e.target as HTMLButtonElement).style.opacity = "0")}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "12px", gap: "8px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={images.length >= 3}
+                    style={{ display: "flex", alignItems: "center", gap: "6px", padding: "6px 10px", borderRadius: "8px", border: "1px solid #e5e7eb", color: "#6b7280", backgroundColor: "transparent", cursor: images.length >= 3 ? "not-allowed" : "pointer", opacity: images.length >= 3 ? 0.3 : 1, transition: "all 0.15s", fontSize: "12px", fontWeight: 500 }}
+                    onMouseEnter={(e) => { if (images.length < 3) { (e.currentTarget.style.backgroundColor = "#f3f4f6"); (e.currentTarget.style.borderColor = "#d1d5db"); (e.currentTarget.style.color = "#111827"); } }}
+                    onMouseLeave={(e) => { (e.currentTarget.style.backgroundColor = "transparent"); (e.currentTarget.style.borderColor = "#e5e7eb"); (e.currentTarget.style.color = "#6b7280"); }}
+                  >
+                    <Image src="/Images/Icons/ImageAttach.png" alt="Attach image" width={15} height={15} style={{ objectFit: "contain" }} />
+                    <span style={{ fontVariantNumeric: "tabular-nums" }}>{images.length}/3</span>
+                  </button>
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    style={{ display: "none" }}
+                    onChange={handleImageUpload}
+                  />
+
+                  <span style={{ fontSize: "12px", color: "#9ca3af", fontVariantNumeric: "tabular-nums" }}>
+                    {text.length}/1000
+                  </span>
+                </div>
+
+                <button
+                  onClick={handleSend}
+                  disabled={!canSend}
+                  style={{ padding: "6px 20px", borderRadius: "12px", backgroundColor: "#111827", color: "#fff", fontSize: "14px", fontWeight: 600, border: "none", cursor: canSend ? "pointer" : "not-allowed", opacity: canSend ? 1 : 0.3, transition: "all 0.15s" }}
+                  onMouseEnter={(e) => { if (canSend) (e.currentTarget.style.backgroundColor = "#374151"); }}
+                  onMouseLeave={(e) => { (e.currentTarget.style.backgroundColor = "#111827"); }}
+                >
+                  {isSending ? "SENDING..." : "SEND"}
+                </button>
+              </div>
+
+              <p style={{ fontSize: "12px", color: "#9ca3af", marginTop: "12px", textAlign: "center" }}>
+                Your recommendation will be received via my personal email address
+              </p>
+            </>
+          )}
+        </div>
       </div>
-
-      <style jsx global>{`
-        @keyframes modalEnter {
-          from {
-            opacity: 0;
-            transform: translateY(16px) scale(0.98);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-      `}</style>
-    </div>
+    </>
   );
 
   return (
     <>
-      <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 flex flex-col justify-between gap-3 min-h-[200px]">
+      <div
+        style={{ borderRadius: "16px", border: "1px solid #e5e7eb", backgroundColor: "#fff", padding: "16px 20px", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "12px", minHeight: "200px" }}
+      >
         <div>
-          <div className="flex items-center gap-2 mb-2.5">
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
             <Image
               src="/Images/Icons/recommend.png"
               alt="Recommendation"
               width={18}
               height={18}
-              className="object-contain"
+              style={{ objectFit: "contain" }}
             />
-            <h2 className="text-sm font-bold text-gray-900">Recommendation</h2>
+            <h2 style={{ fontSize: "14px", fontWeight: 700, color: "#111827", margin: 0 }}>
+              Recommendation
+            </h2>
           </div>
-          <p className="text-xs text-gray-500 leading-relaxed">
+          <p style={{ fontSize: "12px", color: "#6b7280", lineHeight: 1.6, margin: 0 }}>
             Have you ever experience things that really hard for you? Maybe i
             can help you with that problem and we solved using my skills
           </p>
         </div>
 
-        <div className="flex justify-center">
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <button
             onClick={openModal}
-            className="w-full max-w-[160px] py-2 rounded-xl border border-gray-300 text-xs font-semibold text-gray-800 hover:bg-gray-900 hover:text-white hover:border-gray-900 active:scale-95 transition-all duration-200"
+            style={{ width: "100%", maxWidth: "160px", padding: "8px 0", borderRadius: "12px", border: "1px solid #d1d5db", fontSize: "12px", fontWeight: 600, color: "#1f2937", backgroundColor: "transparent", cursor: "pointer", transition: "all 0.2s" }}
+            onMouseEnter={(e) => { (e.currentTarget.style.backgroundColor = "#111827"); (e.currentTarget.style.color = "#fff"); (e.currentTarget.style.borderColor = "#111827"); }}
+            onMouseLeave={(e) => { (e.currentTarget.style.backgroundColor = "transparent"); (e.currentTarget.style.color = "#1f2937"); (e.currentTarget.style.borderColor = "#d1d5db"); }}
           >
             Recommend
           </button>
