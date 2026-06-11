@@ -232,7 +232,7 @@ export default function RecommendationSection() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `
-        .rec-card { border-radius: 24px; border: 1.5px solid #111827; background-color: #fff; padding: 20px; display: flex; flex-direction: column; gap: 10px; width: 50%; height: 70%; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; align-self: flex-start; }
+        .rec-card { border-radius: 24px; border: 1.5px solid #111827; background-color: #fff; padding: 20px; display: flex; flex-direction: column; gap: 10px; width: 50%; height: fit-content; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; align-self: flex-start; }
         .rec-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
         .rec-title { font-size: 15px; font-weight: 700; color: #111827; margin: 0; }
         .rec-desc { font-size: 12px; color: #111827; line-height: 1.6; margin: 0; }
