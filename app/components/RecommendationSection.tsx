@@ -232,7 +232,7 @@ export default function RecommendationSection() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `
-        .rec-card { border-radius: 24px; border: 1.5px solid #111827; background-color: #fff; padding: 20px; display: flex; flex-direction: column; gap: 10px; width: 100%; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; align-self: flex-start; }
+        .rec-card { border-radius: 24px; border: 1.5px solid #111827; background-color: #fff; padding: 20px; display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 340px; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; align-self: flex-start; }
         .rec-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
         .rec-title { font-size: 16px; font-weight: 700; color: #111827; margin: 0; }
         .rec-icon { width: 18px; height: 18px; object-fit: contain; }
@@ -258,7 +258,7 @@ export default function RecommendationSection() {
           </h2>
         </div>
 
-        <p style={{ fontSize: "14px", color: "#111827", lineHeight: 1.6, margin: 0 }}>
+        <p style={{ fontSize: "12px", color: "#111827", lineHeight: 1.6, margin: 0 }}>
           Have you ever experience things that really hard for you? maybe i
           can help you with that problem and we solved using my skills
         </p>
