@@ -243,7 +243,6 @@ export default function RecommendationSection() {
           .rec-btn { padding: 6px 20px; font-size: 12px; }
         }
         @media (min-width: 768px) {
-          .rec-card { max-width: 340px; align-self: flex-start; }
           .rec-title { font-size: 16px; }
           .rec-icon { width: 18px; height: 18px; }
         }
