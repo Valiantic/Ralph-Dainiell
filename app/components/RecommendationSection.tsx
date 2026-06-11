@@ -232,18 +232,19 @@ export default function RecommendationSection() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `
-        .rec-card { border-radius: 24px; border: 1.5px solid #111827; background-color: #fff; padding: 20px; display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 100%; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; align-self: flex-start; }
+        .rec-card { border-radius: 24px; border: 1.5px solid #111827; background-color: #fff; padding: 20px; display: flex; flex-direction: column; gap: 10px; width: 100%; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; align-self: flex-start; }
         .rec-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
         .rec-title { font-size: 15px; font-weight: 700; color: #111827; margin: 0; }
         .rec-desc { font-size: 12px; color: #111827; line-height: 1.6; margin: 0; }
         .rec-icon { width: 17px; height: 17px; object-fit: contain; }
         .rec-btn { width: auto; align-self: flex-end; padding: 6px 18px; border-radius: 10px; border: 1.5px solid #111827; font-size: 11px; font-weight: 500; color: #111827; background-color: transparent; cursor: pointer; transition: all 0.2s; margin-top: 2px; }
         .rec-btn:hover { background-color: #111827; color: #fff; }
+        @media (min-width: 480px) {
+          .rec-btn { padding: 6px 20px; font-size: 12px; }
+        }
         @media (min-width: 768px) {
-          .rec-card { max-width: 340px; align-self: stretch; height: 100%; }
-          .rec-btn { margin-top: auto; padding: 7px 20px; font-size: 12px; }
+          .rec-card { max-width: 340px; align-self: flex-start; }
           .rec-title { font-size: 16px; }
-          .rec-desc { font-size: 12px; }
           .rec-icon { width: 18px; height: 18px; }
         }
         @media (min-width: 1280px) {
