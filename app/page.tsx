@@ -31,7 +31,6 @@ export default function Home() {
           display: 'grid',
           gridTemplateColumns: 'repeat(12, 1fr)',
           gap: 'clamp(16px, 3vw, 24px)',
-          '--bento-height': '650px',
         } as any}
       >
         <div
@@ -40,7 +39,6 @@ export default function Home() {
             display: 'flex',
             flexDirection: 'column',
             gap: 'clamp(16px, 3vw, 24px)',
-            height: 'var(--bento-height, 650px)',
           }}
           className="mobile-span-12 blog-column"
         >
@@ -93,9 +91,8 @@ export default function Home() {
         }
 
         .blog-wrapper {
-          flex: 1;
+          flex: none;
           display: flex;
-          min-height: 0;
         }
 
         .reveal-hero {
