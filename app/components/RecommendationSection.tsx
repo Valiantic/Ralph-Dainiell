@@ -258,7 +258,7 @@ export default function RecommendationSection() {
           </h2>
         </div>
 
-        <p style={{ fontSize: "12px", color: "#111827", lineHeight: 1.6, margin: 0 }}>
+        <p style={{ fontSize: "14px", color: "#111827", lineHeight: 1.6, margin: 0 }}>
           Have you ever experience things that really hard for you? maybe i
           can help you with that problem and we solved using my skills
         </p>
