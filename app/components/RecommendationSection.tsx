@@ -244,6 +244,7 @@ export default function RecommendationSection() {
           boxSizing: "border-box",
           transition: "box-shadow 0.2s ease, transform 0.2s ease",
           cursor: "default",
+          alignSelf: "flex-start",
         }}
         onMouseEnter={(e) => {
           (e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.12)");
