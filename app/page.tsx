@@ -40,6 +40,7 @@ export default function Home() {
             display: 'flex',
             flexDirection: 'column',
             gap: 'clamp(16px, 3vw, 24px)',
+            height: '100%',
           }}
           className="mobile-span-12 blog-column"
         >
@@ -118,6 +119,7 @@ export default function Home() {
           gap: clamp(16px, 3vw, 24px);
           align-items: stretch;
           width: 100%;
+          flex: 1;
         }
 
         @media (max-width: 1024px) {
