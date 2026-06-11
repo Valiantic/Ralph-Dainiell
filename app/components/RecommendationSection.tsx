@@ -276,8 +276,9 @@ export default function RecommendationSection() {
         <button
           onClick={openModal}
           style={{
-            width: "100%",
-            padding: "8px 0",
+            width: "auto",
+            alignSelf: "center",
+            padding: "8px 24px",
             borderRadius: "10px",
             border: "1.5px solid #111827",
             fontSize: "12px",
