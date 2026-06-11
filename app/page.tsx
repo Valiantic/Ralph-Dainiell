@@ -123,6 +123,15 @@ export default function Home() {
         }
 
         @media (max-width: 1024px) {
+          .bento-grid > div {
+            align-self: stretch;
+          }
+
+          .blog-row {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+          }
           .bento-grid {
             grid-template-columns: 1fr !important;
             display: flex !important;
