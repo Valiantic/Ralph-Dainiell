@@ -145,7 +145,7 @@ export default function RecommendationSection() {
             </div>
           ) : (
             <>
-              <h2 style={{ fontSize: "14px", fontWeight: 700, color: "#111827", marginBottom: "12px", lineHeight: 1.4 }}>
+              <h2 style={{ fontSize: "14px", fontWeight: 700, color: "#111827", marginBottom: "12px", lineHeight: 1.4, paddingRight: "36px" }}>
                 Every recommendation can lead to big impact!
               </h2>
 
