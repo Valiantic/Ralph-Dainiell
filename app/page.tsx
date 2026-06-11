@@ -4,6 +4,7 @@ import { PORTFOLIO_DATA } from './constants/portfolio';
 import { ProfileHero } from './components/ProfileHero';
 import { BioSection } from './components/BioSection';
 import RecommendationSection from "./components/RecommendationSection";
+import BlogSection from './components/BlogSection';
 import { SkillsSection } from './components/SkillsSection';
 import { ExperienceSection } from './components/ExperienceSection';
 import { CertificatesSection } from './components/CertificatesSection';
@@ -46,8 +47,15 @@ export default function Home() {
             <BioSection bio={PORTFOLIO_DATA.bio} />
           </div>
 
-          <div className="portfolio-reveal reveal-blog blog-wrapper">
-            <RecommendationSection />
+          <div className="portfolio-reveal reveal-blog blog-row">
+            <div className="blog-row-inner">
+              <div style={{ flex: 1, display: 'flex' }}>
+                <RecommendationSection />
+              </div>
+              <div style={{ flex: 1, display: 'flex' }}>
+                <BlogSection posts={PORTFOLIO_DATA.blogs ?? []} />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -90,57 +98,26 @@ export default function Home() {
           flex-shrink: 0;
         }
 
-        .blog-wrapper {
-          flex: none;
-          display: block;
-          width: 100%;
-        }
-
-        .reveal-hero {
-          animation-delay: 0.06s;
-        }
-
-        .reveal-bio {
-          animation-delay: 0.18s;
-        }
-
-        .reveal-blog {
-          animation-delay: 0.24s;
-        }
-
-        .reveal-skills {
-          animation-delay: 0.30s;
-        }
-
-        .reveal-experience {
-          animation-delay: 0.40s;
-        }
-
-        .reveal-projects {
-          animation-delay: 0.50s;
-        }
-
-        .reveal-certificates {
-          animation-delay: 0.60s;
-        }
+        .reveal-hero  { animation-delay: 0.06s; }
+        .reveal-bio   { animation-delay: 0.18s; }
+        .reveal-blog  { animation-delay: 0.24s; }
+        .reveal-skills { animation-delay: 0.30s; }
+        .reveal-experience { animation-delay: 0.40s; }
+        .reveal-projects { animation-delay: 0.50s; }
+        .reveal-certificates { animation-delay: 0.60s; }
 
         @keyframes portfolioRevealIn {
-          0% {
-            opacity: 0;
-            transform: translateY(22px);
-            filter: blur(6px);
-          }
+          0%   { opacity: 0; transform: translateY(22px); filter: blur(6px); }
+          60%  { opacity: 1; filter: blur(1px); }
+          100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
 
-          60% {
-            opacity: 1;
-            filter: blur(1px);
-          }
-
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-            filter: blur(0);
-          }
+        .blog-row-inner {
+          display: flex;
+          flex-direction: row;
+          gap: clamp(16px, 3vw, 24px);
+          align-items: stretch;
+          width: 100%;
         }
 
         @media (max-width: 1024px) {
@@ -165,13 +142,14 @@ export default function Home() {
             height: auto !important;
           }
 
-          .blog-wrapper {
-            flex: none !important;
-            display: block !important;
-          }
-
           .portfolio-reveal {
             transform: translateY(18px);
+          }
+        }
+
+        @media (max-width: 600px) {
+          .blog-row-inner {
+            flex-direction: column !important;
           }
         }
 
@@ -182,33 +160,13 @@ export default function Home() {
             animation-duration: 0.68s;
           }
 
-          .reveal-hero {
-            animation-delay: 0.04s;
-          }
-
-          .reveal-bio {
-            animation-delay: 0.12s;
-          }
-
-          .reveal-blog {
-            animation-delay: 0.16s;
-          }
-
-          .reveal-skills {
-            animation-delay: 0.20s;
-          }
-
-          .reveal-experience {
-            animation-delay: 0.26s;
-          }
-
-          .reveal-projects {
-            animation-delay: 0.32s;
-          }
-
-          .reveal-certificates {
-            animation-delay: 0.38s;
-          }
+          .reveal-hero        { animation-delay: 0.04s; }
+          .reveal-bio         { animation-delay: 0.12s; }
+          .reveal-blog        { animation-delay: 0.16s; }
+          .reveal-skills      { animation-delay: 0.20s; }
+          .reveal-experience  { animation-delay: 0.26s; }
+          .reveal-projects    { animation-delay: 0.32s; }
+          .reveal-certificates { animation-delay: 0.38s; }
         }
 
         @media (prefers-reduced-motion: reduce) {

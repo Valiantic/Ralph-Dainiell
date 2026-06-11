@@ -41,4 +41,14 @@ export interface PortfolioData {
     skills: Skill[];
     experiences: Experience[];
     certificates: Certificate[];
+    blogs?: BlogPost[]; 
+}
+export interface BlogPost {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  readTime: string;
+  url: string;
+  blogs?: BlogPost[];
 }
