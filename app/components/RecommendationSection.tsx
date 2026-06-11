@@ -108,8 +108,21 @@ export default function RecommendationSection() {
         onClick={(e) => e.target === e.currentTarget && closeModal()}
       >
         <div
-          style={{ width: "100%", maxWidth: "460px", minWidth: "360px", backgroundColor: "#fff", borderRadius: "16px", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)", padding: "24px", animation: "modalEnter 0.25s cubic-bezier(0.32,0.72,0,1) forwards" }}
+          style={{ width: "100%", maxWidth: "460px", minWidth: "360px", backgroundColor: "#fff", borderRadius: "16px", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)", padding: "24px", animation: "modalEnter 0.25s cubic-bezier(0.32,0.72,0,1) forwards", position: "relative" }}
         >
+          <button
+            onClick={closeModal}
+            disabled={isSending}
+            style={{ position: "absolute", top: "16px", right: "16px", width: "28px", height: "28px", borderRadius: "50%", backgroundColor: "#e8e8ed", border: "none", cursor: isSending ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0, transition: "background-color 0.15s" }}
+            onMouseEnter={(e) => { if (!isSending) (e.currentTarget.style.backgroundColor = "#d1d1d6"); }}
+            onMouseLeave={(e) => { (e.currentTarget.style.backgroundColor = "#e8e8ed"); }}
+            aria-label="Close"
+          >
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L9 9M9 1L1 9" stroke="#6e6e73" strokeWidth="1.75" strokeLinecap="round"/>
+            </svg>
+          </button>
+
           {isSuccess ? (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 0", textAlign: "center", gap: "8px" }}>
               <h2 style={{ fontSize: "15px", fontWeight: 700, color: "#111827", margin: 0 }}>
