@@ -245,8 +245,8 @@ export default function RecommendationSection() {
           <Image
             src="/Images/Icons/recommend.png"
             alt="Recommendation"
-            width={24}
-            height={24}
+            width={21}
+            height={21}
             style={{ objectFit: "contain" }}
           />
           <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#111827", margin: 0 }}>
