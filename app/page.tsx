@@ -92,7 +92,8 @@ export default function Home() {
 
         .blog-wrapper {
           flex: none;
-          display: flex;
+          display: block;
+          width: 100%;
         }
 
         .reveal-hero {
@@ -166,6 +167,7 @@ export default function Home() {
 
           .blog-wrapper {
             flex: none !important;
+            display: block !important;
           }
 
           .portfolio-reveal {
