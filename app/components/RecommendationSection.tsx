@@ -231,39 +231,29 @@ export default function RecommendationSection() {
 
   return (
     <>
-      <div
-        style={{
-          borderRadius: "24px",
-          border: "1.5px solid #111827",
-          backgroundColor: "#fff",
-          padding: "20px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          width: "100%",
-          boxSizing: "border-box",
-          transition: "box-shadow 0.2s ease, transform 0.2s ease",
-          cursor: "default",
-          alignSelf: "flex-start",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.12)");
-          (e.currentTarget.style.transform = "translateY(-2px)");
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget.style.boxShadow = "none");
-          (e.currentTarget.style.transform = "translateY(0)");
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .rec-card { border-radius: 24px; border: 1.5px solid #111827; background-color: #fff; padding: 20px; display: flex; flex-direction: column; gap: 10px; width: 100%; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; align-self: flex-start; }
+        .rec-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+        .rec-title { font-size: 16px; font-weight: 700; color: #111827; margin: 0; }
+        .rec-icon { width: 18px; height: 18px; object-fit: contain; }
+        .rec-btn { width: auto; align-self: flex-end; padding: 7px 20px; border-radius: 10px; border: 1.5px solid #111827; font-size: 12px; font-weight: 500; color: #111827; background-color: transparent; cursor: pointer; transition: all 0.2s; margin-top: 2px; }
+        .rec-btn:hover { background-color: #111827; color: #fff; }
+        @media (min-width: 768px) {
+          .rec-title { font-size: 17px; }
+          .rec-icon { width: 20px; height: 20px; }
+        }
+      ` }} />
+      <div className="rec-card">
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <Image
             src="/Images/Icons/recommend.png"
             alt="Recommendation"
-            width={21}
-            height={21}
+            width={20}
+            height={20}
+            className="rec-icon"
             style={{ objectFit: "contain" }}
           />
-          <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#111827", margin: 0 }}>
+          <h2 className="rec-title">
             Recommendation
           </h2>
         </div>
@@ -275,30 +265,7 @@ export default function RecommendationSection() {
 
         <button
           onClick={openModal}
-          style={{
-            width: "auto",
-            alignSelf: "flex-end",
-            padding: "8px 24px",
-            borderRadius: "10px",
-            border: "1.5px solid #111827",
-            fontSize: "12px",
-            fontWeight: 500,
-            color: "#111827",
-            backgroundColor: "transparent",
-            cursor: "pointer",
-            transition: "all 0.2s",
-            marginTop: "2px",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget.style.backgroundColor = "#111827");
-            (e.currentTarget.style.color = "#fff");
-            (e.currentTarget.style.borderColor = "#111827");
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget.style.backgroundColor = "transparent");
-            (e.currentTarget.style.color = "#111827");
-            (e.currentTarget.style.borderColor = "#111827");
-          }}
+          className="rec-btn"
         >
           Recommend
         </button>
