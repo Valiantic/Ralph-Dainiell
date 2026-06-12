@@ -32,7 +32,7 @@ export default function Home() {
           display: 'grid',
           gridTemplateColumns: 'repeat(12, 1fr)',
           gap: 'clamp(16px, 3vw, 24px)',
-          alignItems: 'stretch',
+          alignItems: 'flex-start',
         } as any}
       >
         <div
