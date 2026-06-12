@@ -32,7 +32,7 @@ export default function Home() {
           display: 'grid',
           gridTemplateColumns: 'repeat(12, 1fr)',
           gap: 'clamp(16px, 3vw, 24px)',
-          alignItems: 'flex-start',
+          alignItems: 'stretch',
         } as any}
       >
         <div
@@ -44,14 +44,6 @@ export default function Home() {
             height: '100%',
           }}
           className="mobile-span-12 blog-column"
-          ref={(el) => {
-            if (el) {
-              const h = el.offsetHeight;
-              el.closest('.bento-grid')?.setAttribute('style',
-                `display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(16px,3vw,24px);align-items:stretch;--bento-height:${h}px`
-              );
-            }
-          }}
         >
           <div className="portfolio-reveal reveal-bio bio-wrapper">
             <BioSection bio={PORTFOLIO_DATA.bio} />

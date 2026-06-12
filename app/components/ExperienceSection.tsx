@@ -31,8 +31,7 @@ export const ExperienceSection = ({ experiences }: ExperienceSectionProps) => {
             }}
             onMouseLeave={() => setIsHovered(false)}
             style={{
-                height: 'fit-content',
-                maxHeight: '650px',
+                height: 'var(--bento-height, 650px)',
                 display: 'flex',
                 flexDirection: 'column',
                 background: '#fff',
