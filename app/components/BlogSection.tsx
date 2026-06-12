@@ -11,7 +11,7 @@ export default function BlogSection({ posts }: BlogSectionProps) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `
-        .blog-card { border-radius: 24px; border: 2px solid #111827; background-color: #fff; padding: clamp(20px, 3vw, 28px); display: flex; flex-direction: column; gap: 10px; width: 100%; height: 100%; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; }
+        .blog-card { border-radius: 26px; border: 2px solid #111827; background-color: #fff; padding: clamp(20px, 3vw, 28px); display: flex; flex-direction: column; gap: 10px; width: 100%; height: 100%; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; }
         .blog-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
         .blog-title { font-size: 15px; font-weight: 700; color: #111827; margin: 0; }
         .blog-icon { width: 17px; height: 17px; object-fit: contain; }
