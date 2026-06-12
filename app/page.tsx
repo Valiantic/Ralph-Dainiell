@@ -32,6 +32,7 @@ export default function Home() {
           display: 'grid',
           gridTemplateColumns: 'repeat(12, 1fr)',
           gap: 'clamp(16px, 3vw, 24px)',
+          alignItems: 'stretch',
         } as any}
       >
         <div
@@ -61,14 +62,14 @@ export default function Home() {
         </div>
 
         <div
-          style={{ gridColumn: 'span 3' }}
+          style={{ gridColumn: 'span 3', height: '100%' }}
           className="mobile-span-12 portfolio-reveal reveal-skills"
         >
           <SkillsSection skills={PORTFOLIO_DATA.skills} />
         </div>
 
         <div
-          style={{ gridColumn: 'span 3' }}
+          style={{ gridColumn: 'span 3', height: '100%' }}
           className="mobile-span-12 portfolio-reveal reveal-experience"
         >
           <ExperienceSection experiences={PORTFOLIO_DATA.experiences} />
@@ -113,6 +114,11 @@ export default function Home() {
           100% { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
+        .bento-grid > div {
+          align-self: stretch;
+          height: 100%;
+        }
+
         .blog-row-inner {
           display: flex;
           flex-direction: row;
@@ -122,21 +128,23 @@ export default function Home() {
           flex: 1;
         }
 
-        @media (max-width: 1024px) {
-          .bento-grid > div {
-            align-self: stretch;
-          }
+        .blog-row {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
 
-          .blog-row {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-          }
+        @media (max-width: 1024px) {
           .bento-grid {
             grid-template-columns: 1fr !important;
             display: flex !important;
             flex-direction: column !important;
             align-items: flex-start !important;
+          }
+
+          .bento-grid > div {
+            align-self: stretch;
+            height: auto !important;
           }
 
           .mobile-span-12 {
