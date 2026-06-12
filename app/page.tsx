@@ -62,14 +62,14 @@ export default function Home() {
         </div>
 
         <div
-          style={{ gridColumn: 'span 3', height: '100%' }}
+          style={{ gridColumn: 'span 3' }}
           className="mobile-span-12 portfolio-reveal reveal-skills"
         >
           <SkillsSection skills={PORTFOLIO_DATA.skills} />
         </div>
 
         <div
-          style={{ gridColumn: 'span 3', height: '100%' }}
+          style={{ gridColumn: 'span 3' }}
           className="mobile-span-12 portfolio-reveal reveal-experience"
         >
           <ExperienceSection experiences={PORTFOLIO_DATA.experiences} />
@@ -114,10 +114,7 @@ export default function Home() {
           100% { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
-        .bento-grid > div {
-          align-self: stretch;
-          height: 100%;
-        }
+        
 
         .blog-row-inner {
           display: flex;

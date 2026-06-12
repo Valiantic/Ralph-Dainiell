@@ -60,7 +60,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
                 setIsHovered(false);
             }}
             style={{
-                height: '100%',
+                height: 'var(--bento-height, 650px)',
                 background: '#fff',
                 position: 'relative',
                 borderRadius: '30px',
