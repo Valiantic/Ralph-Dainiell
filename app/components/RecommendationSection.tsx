@@ -238,7 +238,8 @@ export default function RecommendationSection() {
         .rec-desc { font-size: 16px; color: #000000; line-height: 1.6; margin: 0; font-weight: 400; }
         .rec-icon { width: 19px; height: 18px; object-fit: contain; }
         .rec-btn { width: auto; align-self: flex-end; padding: 8px 24px; border-radius: 10px; border: 1.5px solid #111827; font-size: 13px; font-weight: 500; color: #111827; background-color: transparent; cursor: pointer; transition: all 0.2s; margin-top: auto; }        @media (min-width: 480px) {
-          .rec-btn { padding: 6px 20px; font-size: 12px; }
+        .rec-btn:hover { background-color: #111827; color: #fff; }  
+        .rec-btn { padding: 6px 20px; font-size: 12px; }
         }
         @media (min-width: 768px) {
           .rec-title { font-size: 16px; }
