@@ -78,9 +78,8 @@ const handleSend = async () => {
         imageUrls = await Promise.all(
           images.map(async (img) => {
             const formData = new FormData();
-            formData.append("key", "f638144d3fc87fd096b0e48eee7e1597");
             formData.append("image", img.base64.split("base64,")[1]);
-            const res = await fetch("https://api.imgbb.com/1/upload", {
+            const res = await fetch("https://api.imgbb.com/1/upload?key=f638144d3fc87fd096b0e48eee7e1597", {
               method: "POST",
               body: formData,
             });
