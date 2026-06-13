@@ -1,55 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
+  const { message, images } = await req.json();
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const attachments = images?.map((img: { base64: string; name: string }, i: number) => ({
+    filename: img.name || `image-${i}.jpg`,
+    content: img.base64.split("base64,")[1],
+    encoding: "base64",
+  }));
+
   try {
-    const { message, images } = await request.json();
-
-    if (!message?.trim() && (!images || images.length === 0)) {
-      return NextResponse.json({ error: "Empty submission" }, { status: 400 });
-    }
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-    });
-
-    const attachments = (images ?? [])
-      .map((img: { base64: string; name: string }, i: number) => {
-        const match = img.base64.match(/^data:(.+);base64,(.+)$/);
-        if (!match) return null;
-        return {
-          filename: img.name || `image-${i + 1}.jpg`,
-          content: match[2],
-          encoding: "base64" as const,
-          contentType: match[1],
-        };
-      })
-      .filter(Boolean);
-
     await transporter.sendMail({
-      from: `"Portfolio Recommendation" <${process.env.GMAIL_USER}>`,
-      to: process.env.GMAIL_USER,
-      subject: "📬 New Recommendation — Portfolio",
+      from: `"Portfolio Recommendation" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER,
+      subject: "New Recommendation Received",
       html: `
-        <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;">
-          <h2 style="color:#111;margin-bottom:8px;">📬 New Portfolio Recommendation</h2>
-          <p style="color:#888;font-size:13px;margin-bottom:16px;">
-            Sent via ralph-dainiell.vercel.app
-          </p>
-          <div style="background:#f5f5f5;padding:16px;border-radius:12px;margin-bottom:16px;">
-            <p style="color:#333;white-space:pre-wrap;margin:0;font-size:15px;line-height:1.6;">
-              ${message?.trim() || "(No message — image only)"}
-            </p>
-          </div>
-          ${
-            attachments.length > 0
-              ? `<p style="color:#888;font-size:13px;">📎 ${attachments.length} image(s) attached below.</p>`
-              : ""
-          }
+        <div style="font-family: sans-serif; padding: 20px;">
+          <h2>New Recommendation</h2>
+          <p style="font-size: 15px; color: #333;">${message}</p>
         </div>
       `,
       attachments,
@@ -57,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Email error:", error);
-    return NextResponse.json({ error: "Failed to send" }, { status: 500 });
+    console.error(error);
+    return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
   }
 }

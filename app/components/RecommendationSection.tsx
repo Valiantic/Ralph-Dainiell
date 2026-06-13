@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import emailjs from "@emailjs/browser";
 
 interface ImageItem {
   base64: string;
@@ -68,16 +69,16 @@ export default function RecommendationSection() {
   const removeImage = (index: number) =>
     setImages((prev) => prev.filter((_, i) => i !== index));
 
-  const handleSend = async () => {
+ const handleSend = async () => {
     if (!text.trim() && images.length === 0) return;
     setIsSending(true);
     try {
-      const res = await fetch("/api/send-recommendation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, images }),
-      });
-      if (!res.ok) throw new Error("Failed");
+      await emailjs.send(
+        "service_z1tin89",
+        "template_m28dl54",
+        { message: text },
+        "6gCSC-bqyf7iYtozW"
+      );
       setIsSuccess(true);
       setText("");
       setImages([]);
