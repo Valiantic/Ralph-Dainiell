@@ -69,14 +69,35 @@ export default function RecommendationSection() {
   const removeImage = (index: number) =>
     setImages((prev) => prev.filter((_, i) => i !== index));
 
- const handleSend = async () => {
+const handleSend = async () => {
     if (!text.trim() && images.length === 0) return;
     setIsSending(true);
     try {
+      let imageUrls: string[] = [];
+      if (images.length > 0) {
+        imageUrls = await Promise.all(
+          images.map(async (img) => {
+            const formData = new FormData();
+            formData.append("key", "YOUR_IMGBB_API_KEY");
+            formData.append("image", img.base64.split("base64,")[1]);
+            const res = await fetch("https://api.imgbb.com/1/upload", {
+              method: "POST",
+              body: formData,
+            });
+            const data = await res.json();
+            return data.data.url;
+          })
+        );
+      }
+
+      const imageSection = imageUrls.length > 0
+        ? "\n\nAttached Images:\n" + imageUrls.join("\n")
+        : "";
+
       await emailjs.send(
         "service_z1tin89",
         "template_56zynwh",
-        { message: text },
+        { message: text + imageSection },
         "6gCSC-bqyf7iYtozW"
       );
       setIsSuccess(true);
