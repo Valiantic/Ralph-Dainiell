@@ -13,9 +13,9 @@ export default function BlogSection({ posts }: BlogSectionProps) {
       <style dangerouslySetInnerHTML={{ __html: `
         .blog-card { border-radius: 28px; border: 2px solid #111827; background-color: #fff; padding: clamp(20px, 3vw, 28px); display: flex; flex-direction: column; gap: 10px; width: 100%; height: 100%; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; }
         .blog-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
-        .blog-title { font-size: 22px; font-weight: 700; color: #000000; margin: 0; }
-        .blog-icon { width: 24px; height: 24px; object-fit: contain; }
-        .blog-desc { font-size: 16px; color: #000000; line-height: 1.6; margin: 0; font-weight: 400; }
+        .blog-title { font-size: 28px; font-weight: 700; color: #000000; margin: 0; }
+        .blog-icon { width: 28px; height: 28px; object-fit: contain; }
+        .blog-desc { font-size: 16px; color: #000000; line-height: 1.6; margin: 0; font-weight: 500; }
         .blog-post-item { border: 1.5px solid #e5e5e5; border-radius: 14px; padding: 14px 16px; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
         .blog-post-item:hover { border-color: #111; background: #f9f9f9; }
         .blog-post-title { font-size: clamp(12px, 1.4vw, 14px); font-weight: 600; margin: 0 0 4px 0; color: #111; line-height: 1.4; }
