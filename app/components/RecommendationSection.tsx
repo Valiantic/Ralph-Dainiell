@@ -104,11 +104,11 @@ export default function RecommendationSection() {
     <>
       <style dangerouslySetInnerHTML={{ __html: modalKeyframes }} />
       <div
-        style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", padding: "16px" }}
+        style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", padding: "clamp(12px, 4vw, 24px)" }}
         onClick={() => {}}
       >
         <div
-          style={{ width: "100%", maxWidth: "460px", minWidth: "360px", backgroundColor: "#fff", borderRadius: "16px", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)", padding: "24px", animation: "modalEnter 0.25s cubic-bezier(0.32,0.72,0,1) forwards", position: "relative" }}
+          style={{ width: "100%", maxWidth: "580px", backgroundColor: "#fff", borderRadius: "20px", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)", padding: "clamp(24px, 4vw, 40px)", animation: "modalEnter 0.25s cubic-bezier(0.32,0.72,0,1) forwards", position: "relative" }}
         >
           <button
             onClick={closeModal}
@@ -145,7 +145,7 @@ export default function RecommendationSection() {
             </div>
           ) : (
             <>
-              <h2 style={{ fontSize: "14px", fontWeight: 700, color: "#111827", marginBottom: "12px", lineHeight: 1.4, paddingRight: "36px" }}>
+              <h2 style={{ fontSize: "16px", fontWeight: 700, color: "#111827", marginBottom: "12px", lineHeight: 1.4, paddingRight: "36px" }}>
                 Every recommendation can lead to big impact!
               </h2>
 
@@ -153,7 +153,7 @@ export default function RecommendationSection() {
                 value={text}
                 onChange={(e) => setText(e.target.value.slice(0, 1000))}
                 placeholder="Type here..."
-                rows={5}
+                rows={7}
                 style={{ width: "100%", resize: "none", borderRadius: "12px", border: "1px solid #e5e7eb", padding: "12px", fontSize: "14px", color: "#1f2937", outline: "none", fontFamily: "inherit", boxSizing: "border-box", transition: "box-shadow 0.2s" }}
                 onFocus={(e) => (e.target.style.boxShadow = "0 0 0 2px #d1d5db")}
                 onBlur={(e) => (e.target.style.boxShadow = "none")}
