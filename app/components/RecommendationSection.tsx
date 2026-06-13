@@ -106,7 +106,7 @@ export default function RecommendationSection() {
       setImages([]);
       setSenderName("");
       setSenderEmail("");
-      setTimeout(() => { setIsSuccess(false); setIsModalOpen(false); }, 6000);
+      setTimeout(() => { setIsSuccess(false); setIsModalOpen(false); }, 10000);
     } catch {
       alert("Something went wrong. Please try again.");
     } finally {
