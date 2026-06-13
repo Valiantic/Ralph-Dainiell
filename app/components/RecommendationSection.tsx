@@ -237,8 +237,7 @@ export default function RecommendationSection() {
         .rec-title { font-size: 16px; font-weight: 700; color: #000000; margin: 0; }
         .rec-desc { font-size: 14px; color: #000000; line-height: 1.6; margin: 0; font-weight: 400; }
         .rec-icon { width: 19px; height: 18px; object-fit: contain; }
-        .rec-btn { width: auto; align-self: flex-end; padding: 6px 18px; border-radius: 10px; border: 1.5px solid #111827; font-size: 11px; font-weight: 500; color: #111827; background-color: transparent; cursor: pointer; transition: all 0.2s; margin-top: 2px; }
-        .rec-btn:hover { background-color: #111827; color: #fff; }
+        .rec-btn { width: auto; align-self: flex-end; padding: 6px 18px; border-radius: 10px; border: 1.5px solid #111827; font-size: 11px; font-weight: 500; color: #111827; background-color: transparent; cursor: pointer; transition: all 0.2s; margin-top: auto; }        .rec-btn:hover { background-color: #111827; color: #fff; }
         @media (min-width: 480px) {
           .rec-btn { padding: 6px 20px; font-size: 12px; }
         }
@@ -249,7 +248,7 @@ export default function RecommendationSection() {
         @media (min-width: 1280px) {
           .rec-title { font-size: 17px; }
           .rec-icon { width: 20px; height: 20px; }
-        }
+        }c
       ` }} />
       <div className="rec-card">
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
