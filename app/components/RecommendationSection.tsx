@@ -254,8 +254,8 @@ export default function RecommendationSection() {
           <Image
             src="/Images/Icons/recommend.png"
             alt="Recommendation"
-            width={20}
-            height={20}
+            width={22}
+            height={22}
             className="rec-icon"
             style={{ objectFit: "contain" }}
           />
