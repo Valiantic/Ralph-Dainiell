@@ -90,8 +90,9 @@ const handleSend = async () => {
       }
 
       const imageSection = imageUrls.length > 0
-        ? "\n\nAttached Images:\n" + imageUrls.join("\n")
-        : "";
+      ? "<br/><br/><b>Attached Images:</b><br/>" + 
+        imageUrls.map(url => `<img src="${url}" style="max-width:300px; margin:8px 0; display:block;" />`).join("")
+      : "";
 
       await emailjs.send(
         "service_z1tin89",
