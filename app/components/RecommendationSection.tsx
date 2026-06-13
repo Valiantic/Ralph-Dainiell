@@ -232,10 +232,10 @@ export default function RecommendationSection() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `
-        .rec-card { border-radius: 26px; border: 2px solid #111827; background-color: #fff; padding: clamp(20px, 3vw, 28px); display: flex; flex-direction: column; gap: 10px; width: 100%; height: 100%; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; }
+        .rec-card { border-radius: 28px; border: 2px solid #111827; background-color: #fff; padding: clamp(20px, 3vw, 28px); display: flex; flex-direction: column; gap: 10px; width: 100%; height: 100%; box-sizing: border-box; transition: box-shadow 0.2s ease, transform 0.2s ease; cursor: default; }
         .rec-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
-        .rec-title { font-size: 16px; font-weight: 700; color: #000000; margin: 0; }
-        .rec-desc { font-size: 16px; color: #000000; line-height: 1.6; margin: 0; font-weight: 400; }
+        .rec-title { font-size: 18px; font-weight: 700; color: #000000; margin: 0; }
+        .rec-desc { font-size: 19px; color: #000000; line-height: 1.6; margin: 0; font-weight: 500; }
         .rec-icon { width: 19px; height: 18px; object-fit: contain; }
         .rec-btn { width: auto; align-self: flex-end; padding: 8px 24px; border-radius: 10px; border: 1.5px solid #111827; font-size: 13px; font-weight: 500; color: #111827; background-color: transparent; cursor: pointer; transition: all 0.2s; margin-top: auto; }        @media (min-width: 480px) {
         .rec-btn:hover { background-color: #111827; color: #fff; }  
