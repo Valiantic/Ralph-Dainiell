@@ -25,6 +25,8 @@ export default function RecommendationSection() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [senderName, setSenderName] = useState("");
+  const [senderEmail, setSenderEmail] = useState("");
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -69,7 +71,7 @@ export default function RecommendationSection() {
   const removeImage = (index: number) =>
     setImages((prev) => prev.filter((_, i) => i !== index));
 
-const handleSend = async () => {
+  const handleSend = async () => {
     if (!text.trim() && images.length === 0) return;
     setIsSending(true);
     try {
@@ -90,19 +92,20 @@ const handleSend = async () => {
       }
 
       const imageSection = imageUrls.length > 0
-      ? "<br/><br/><b>Attached Images:</b><br/>" + 
-        imageUrls.map(url => `<img src="${url}" style="max-width:300px; margin:8px 0; display:block;" />`).join("")
-      : "";
+        ? "\n\nAttached Images:\n" + imageUrls.join("\n")
+        : "";
 
       await emailjs.send(
         "service_z1tin89",
         "template_56zynwh",
-        { message: text + imageSection },
+        { message: `From: ${senderName || "Anonymous"} (${senderEmail || "No email provided"})\n\n${text}${imageSection}` },
         "6gCSC-bqyf7iYtozW"
       );
       setIsSuccess(true);
       setText("");
       setImages([]);
+      setSenderName("");
+      setSenderEmail("");
       setTimeout(() => { setIsSuccess(false); setIsModalOpen(false); }, 6000);
     } catch {
       alert("Something went wrong. Please try again.");
@@ -114,6 +117,8 @@ const handleSend = async () => {
   const openModal = () => {
     setText("");
     setImages([]);
+    setSenderName("");
+    setSenderEmail("");
     setIsSuccess(false);
     setIsModalOpen(true);
   };
@@ -170,6 +175,19 @@ const handleSend = async () => {
               <h2 style={{ fontSize: "16px", fontWeight: 700, color: "#111827", marginBottom: "12px", lineHeight: 1.4, paddingRight: "36px" }}>
                 Every recommendation can lead to big impact!
               </h2>
+
+              <input
+                value={senderName}
+                onChange={(e) => setSenderName(e.target.value)}
+                placeholder="Your name (optional)"
+                style={{ width: "100%", borderRadius: "12px", border: "1px solid #e5e7eb", padding: "10px 12px", fontSize: "14px", marginBottom: "8px", boxSizing: "border-box", outline: "none", fontFamily: "inherit" }}
+              />
+              <input
+                value={senderEmail}
+                onChange={(e) => setSenderEmail(e.target.value)}
+                placeholder="Your email (optional)"
+                style={{ width: "100%", borderRadius: "12px", border: "1px solid #e5e7eb", padding: "10px 12px", fontSize: "14px", marginBottom: "8px", boxSizing: "border-box", outline: "none", fontFamily: "inherit" }}
+              />
 
               <textarea
                 value={text}
