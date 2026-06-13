@@ -75,7 +75,7 @@ export default function RecommendationSection() {
     try {
       await emailjs.send(
         "service_z1tin89",
-        "template_m28dl54",
+        "template_56zynwh",
         { message: text },
         "6gCSC-bqyf7iYtozW"
       );
