@@ -33,17 +33,17 @@ export const PORTFOLIO_DATA: PortfolioData = {
     { name: "Memory Management (ARC)", category: "App Architecture" },
     { name: "App Lifecycle", category: "App Architecture" },
 
-
-    { name: "REST API", category: "Networking" },
-    { name: "JSON Parsing", category: "Networking" },
+    { name: "Vapor", category: "API & Networking" },
+    { name: "REST API", category: "API & Networking" },
+    { name: "JSON Parsing", category: "API & Networking" },
     
-    { name: "Swift Data", category: "Database" },
-    { name: "Tableplus", category: "Database" },
-    { name: "MySQL", category: "Database" },
-    { name: "Supabase", category: "Database" },
-    { name: "Firebase", category: "Database" },
-    { name: "Realm", category: "Database" },
-    { name: "SQLite", category: "Database" },
+    { name: "Swift Data", category: "Database Tools" },
+    { name: "Tableplus", category: "Database Tools" },
+    { name: "MySQL", category: "Database Tools" },
+    { name: "Supabase", category: "Database Tools" },
+    { name: "Firebase", category: "Database Tools" },
+    { name: "Realm", category: "Database Tools" },
+    { name: "SQLite", category: "Database Tools" },
 
     { name: "Git", category: "Tools & Version Control" },
     { name: "GitHub", category: "Tools & Version Control" },

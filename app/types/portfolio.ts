@@ -1,7 +1,7 @@
 
 export interface Skill {
     name: string;
-    category: 'Programming Languages' | 'UI Development' |'App Architecture' | 'Networking' | 'Database'  | 'Tools & Version Control' ;
+    category: 'Programming Languages' | 'UI Development' |'App Architecture' | 'API & Networking' | 'Database Tools'  | 'Tools & Version Control' ;
 }
 
 export interface Experience {
